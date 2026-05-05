@@ -182,5 +182,5 @@ system.runInterval(() => {
     stopWoodenDoorSound();
     playWoodenDoorSound();
 
-    //playIdleAnimation();
+    playIdleAnimation();
 });
