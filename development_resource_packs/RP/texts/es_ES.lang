@@ -1,0 +1,106 @@
+## Pack Information
+pack.name=Night Games 1™
+pack.description=El add-on oficial de Night Games 1™
+
+## Blocks
+block.ng1:cloud_block=Bloque de nube
+block.ng1:abyss_block=Bloque de abismo
+block.ng1:teleportation_block=Bloque de teletransportación
+block.ng1:glitch_block=Bloque glitcheado
+
+## Extra Items
+item.ng1:coin=Moneda
+item.ng1:screwdriver=Destornillador
+item.ng1:cheese=¿Queso...?
+item.ng1:climbing_backpack=Mochila para escalar
+
+## Tasty Fishes
+item.ng1:tasty_fish=Pez delicioso
+
+item.ng1:radioactive_tasty_fish=Pez delicioso radioactivo
+item.ng1:rotten_tasty_fish=Pez delicioso podrido
+
+item.ng1:diamond_tasty_fish=Pez delicioso de diamante
+item.ng1:golden_tasty_fish=Pez delicioso de oro
+
+item.ng1:overcooked_tasty_fish=Pez delicioso quemado
+item.ng1:frozen_tasty_fish=Pez delicioso congelado
+
+item.ng1:water_tasty_fish=Pez delicioso de agua
+item.ng1:lava_tasty_fish=Pez delicioso de lava
+
+item.ng1:sugar_tasty_fish=Pez delicioso de azúcar
+item.ng1:salad_tasty_fish=Pez delicioso de ensalada
+item.ng1:chocolate_tasty_fish=Pez delicioso de chocolate
+
+item.ng1:tiny_tasty_fish=Pez delicioso pequeño
+item.ng1:big_tasty_fish=Pez delicioso grande
+
+item.spawn_egg.entity.ng1:computer.name=Huevo generador de computadora
+entity.ng1:computer.name=Computadora
+
+## Key Items
+item.ng1:key=Llave
+item.ng1:key_shard_01=Fragmento de llave
+item.ng1:key_shard_02=Fragmento de llave
+
+## Entities
+item.spawn_egg.entity.ng1:wooden_door.name=Huevo generador de puerta de madera
+entity.ng1:wooden_door.name=Puerta de madera
+
+item.spawn_egg.entity.ng1:bomb.name=Huevo generador de bomba
+entity.ng1:bomb.name=Bomba
+
+item.item.spawn_egg.entity.ng1:interact_hitbox.name=Huevo generador de hitbox de interración
+entity.interact_hitbox.name=Hitbox de interacción
+
+item.spawn_egg.entity.ng1:screen.name=Huevo generador de pantalla
+entity.screen.name=Pantalla
+
+item.spawn_egg.entity.ng1:theentity.name=Huevo generador de TheEntity
+entity.theentity.name=TheEntity
+
+item.spawn_egg.entity.ng1:rey_saul.name=Huevo generador del Rey Saúl
+entity.rey_saul.name=Rey Saúl
+
+item.spawn_egg.entity.ng1:peter_jonson.name=Huevo generador de Peter Jonson
+entity.peter_jonson.name=Peter Jonson
+
+## UNDERTALE
+item.ng1:bravery_heart=§6Valentía
+item.ng1:integrity_heart=§1Integridad
+item.ng1:justice_heart=§eJusticia
+item.ng1:kindness_heart=§aAmabilidad
+item.ng1:patience_heart=§bPaciencia
+item.ng1:perseverance_heart=§5Perseverancia
+item.ng1:toby_fox=§0Toby Fox
+
+## Group items
+ng1:itemGroup.name.keys=Llaves
+ng1:itemGroup.name.others=Otros
+ng1:itemGroup.name.undertale=UNDERTALE
+ng1:itemGroup.name.tastyFish=Peces deliciosos
+
+## Titles
+title.ng1:theentity_description=§o§aDios de los comandos
+title.ng1:time_left=§eTiempo restante:§r 
+title.ng1:no_explosion=§e(Esta bomba nunca quiso explotar...)
+title.ng1:failed_attempt=§4Código incorrecto introducido
+title.ng1:right_attempt=§2Código correcto introducido
+
+## Teleport
+teleport.ng1:level=§8Nivel: 
+teleport.ng1:finished_event=§8Donde todo comenzó...\nEste diciembre
+teleport.ng1:limbo=§l§0Limbo
+teleport.ng1:experiment=§l§0Sala de experimentos
+teleport.ng1:laboratory=§l§0Laboratorio
+teleport.ng1:trophy=§l§0Sala de trofeos
+teleport.ng1:control=§l§0Sala de control
+teleport.ng1:teadrop_farm=§l§0Huerto Tedera
+teleport.ng1:auditorium=§l§0Teatro Estrella
+teleport.ng1:castle=§l§0Castillo de Noirefer
+teleport.ng1:isles=§l§0Islas de Verena
+teleport.ng1:city=§l§0Ciudad de Leingire
+teleport.ng1:port=§l§0Puerto Leingire
+teleport.ng1:cave=§l§0Cueva Crystal
+teleport.ng1:sewers=§l§0Fortaleza

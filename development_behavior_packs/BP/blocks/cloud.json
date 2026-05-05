@@ -1,0 +1,28 @@
+{
+
+    "format_version": "1.21.60",
+
+    "minecraft:block": {
+
+        "description": {
+
+            "identifier": "ng1:cloud_block",
+
+            "menu_category": {
+
+                "category": "construction",
+                "group": "minecraft:itemGroup.name.wool"
+
+            }
+
+        },
+
+        "components": {
+
+            "minecraft:display_name": "block.ng1:cloud_block"
+
+        }
+
+    }
+
+}

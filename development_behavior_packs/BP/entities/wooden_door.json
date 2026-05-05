@@ -1,0 +1,72 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "ng1:wooden_door",
+            "spawn_category": "misc",
+            "is_experimental": false,
+            "is_spawnable": true,
+            "is_summonable": true,
+            "properties": {
+                "ng1:in_movement": {
+                    "type": "bool",
+                    "default": false
+                },
+                "ng1:is_open": {
+                    "type": "bool",
+                    "default": false
+                }
+            }
+        },
+        "components": {
+            "minecraft:physics": {
+                "has_collision": false,
+                "push_towards_closest_space": false,
+                "has_gravity": false
+            },
+            "minecraft:health": {
+                "value": 1,
+                "max": 1
+            },
+            "minecraft:rotation_axis_aligned": {}
+        },
+        "events": {
+            "ng1:open_door": {
+                "queue_command": {
+                    "command": [
+                        "playanimation @s animation.wooden_door.open",
+                        "execute if entity @s[ry=-135, rym=135] run fill ~-2 ~ ~ ~1 ~4 ~ air",
+                        "execute if entity @s[ry=45, rym=-45] run fill ~-1 ~ ~ ~2 ~4 ~ air",
+                        "execute if entity @s[ry=-45, rym=-135] run fill ~ ~ ~-2 ~ ~4 ~1 air",
+                        "execute if entity @s[ry=135, rym=45] run fill ~ ~ ~-1 ~ ~4 ~2 air"
+                    ]
+                },
+                "set_property": {
+                    "ng1:in_movement": true,
+                    "ng1:is_open": true
+                }
+            },
+            "ng1:close_door": {
+                "queue_command": {
+                    "command": [
+                        "playanimation @s animation.wooden_door.close",
+                        "execute if entity @s[ry=-135, rym=135] run fill ~-2 ~ ~ ~1 ~4 ~ barrier",
+                        "execute if entity @s[ry=45, rym=-45] run fill ~-1 ~ ~ ~2 ~4 ~ barrier",
+                        "execute if entity @s[ry=-45, rym=-135] run fill ~ ~ ~-2 ~ ~4 ~1 barrier",
+                        "execute if entity @s[ry=135, rym=45] run fill ~ ~ ~-1 ~ ~4 ~2 barrier",
+                        "setblock ~ ~1 ~ air"
+                    ]
+                },
+                "set_property":{
+                    "ng1:in_movement": true,
+                    "ng1:is_open": false
+                }
+            },
+            "ng1:not_in_movement": {
+                "set_property": {
+                    "ng1:in_movement": false
+                }
+            }
+        }
+    }
+}

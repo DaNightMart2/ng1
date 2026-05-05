@@ -1,0 +1,20 @@
+{
+    "format_version": "1.20.20",
+	"minecraft:item": {
+		"description": {
+			"identifier": "ng1:climbing_backpack",
+			"menu_category": {
+				"category": "equipment",
+				"group": "itemGroup.name.chestplate"
+			}
+		},
+		"components": {
+			"minecraft:max_stack_size": 1,
+			"minecraft:icon": "ng1:climbing_backpack",
+			"minecraft:wearable": {
+				"slot": "slot.armor.chest",
+				"protection": 2
+			}
+		}
+	}
+}

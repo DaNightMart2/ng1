@@ -1,0 +1,31 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:rey_saul",
+            "geometry": {
+                "default": "geometry.rey_saul"
+            },
+            "render_controllers": [
+                "controller.render.rey_saul"
+            ],
+            "textures": {
+                "default": "textures/entity/rey_saul/crown_pig"
+            },
+            "spawn_egg": {
+                "texture": "ng1:rey_saul_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "animations": {
+                "look_at_target": "animation.common.look_at_target"
+            },
+            "scripts": {
+                "animate": [
+                    "look_at_target"
+                ]
+            }
+        }
+    }
+}

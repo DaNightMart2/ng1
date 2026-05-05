@@ -1,0 +1,21 @@
+{
+    "format_version": "1.26.10",
+    "minecraft:recipe_shapeless": {
+        "description": {
+            "identifier": "ng1:key"
+        },
+        "tags": ["crafting_table", "altar"],
+        "ingredients": [
+            {"item": "ng1:key_shard_01"},
+            {"item": "ng1:key_shard_02"}
+        ],
+
+        "result": {
+            "item": "ng1:key"
+        },
+        "unlock": [
+            {"item": "ng1:key_shard_01"},
+            {"item": "ng1:key_shard_02"}
+        ]
+    }
+}

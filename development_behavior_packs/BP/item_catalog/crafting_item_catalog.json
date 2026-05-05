@@ -1,0 +1,79 @@
+{
+    "format_version": "1.21.60",
+    "minecraft:crafting_items_catalog": {
+        "categories": [
+            {
+                "category_name": "items",
+                "groups": [
+                    {
+                        "group_identifier": {
+                            "icon": "ng1:key",
+                            "name": "ng1:itemGroup.name.keys"
+                        },
+                        "items": [
+                            "ng1:key",
+                            "ng1:key_shard_01",
+                            "ng1:key_shard_02"
+                        ]
+                    },
+                    {
+                        "group_identifier": {
+                            "icon": "ng1:coin",
+                            "name": "ng1:itemGroup.name.others"
+                        },
+                        "items": [
+                            "ng1:coin",
+                            "ng1:screwdriver",
+                            "ng1:cheese"
+                        ]
+                    },
+
+                    {
+                        "group_identifier": {
+                            "icon": "ng1:tasty_fish",
+                            "name": "ng1:itemGroup.name.tastyFish"
+                        },
+                        "items": [
+                            "ng1:tasty_fish",
+
+                            "ng1:radioactive_tasty_fish",
+                            "ng1:rotten_tasty_fish",
+
+                            "ng1:diamond_tasty_fish",
+                            "ng1:golden_tasty_fish",
+
+                            "ng1:overcooked_tasty_fish",
+                            "ng1:frozen_tasty_fish",
+
+                            "ng1:water_tasty_fish",
+                            "ng1:lava_tasty_fish",
+
+                            "ng1:sugar_tasty_fish",
+                            "ng1:salad_tasty_fish",
+                            "ng1:chocolate_tasty_fish",
+
+                            "ng1:big_tasty_fish",
+                            "ng1:tiny_tasty_fish"
+                        ]
+                    },
+
+                    {
+                        "group_identifier": {
+                            "icon": "ng1:toby_fox",
+                            "name": "ng1:itemGroup.name.undertale"
+                        },
+                        "items": [
+                            "ng1:toby_fox",
+                            "ng1:patience_heart",
+                            "ng1:bravery_heart",
+                            "ng1:integrity_heart",
+                            "ng1:perseverance_heart",
+                            "ng1:kindness_heart",
+                            "ng1:justice_heart"
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

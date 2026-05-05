@@ -1,0 +1,66 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "ng1:bomb",
+            "is_experimental": false,
+            "is_spawnable": true,
+            "is_summonable": true,
+            "properties": {
+                "ng1:bomb_on": {
+                    "type": "bool",
+                    "default": false
+                }
+            }
+        },
+
+        "components": {
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": true,
+                "push_towards_closest_space": false
+            },
+            "minecraft:rotation_axis_aligned": {},
+            "minecraft:health": {
+                "value": 1,
+                "max": 1
+            },
+            "minecraft:collision_box": {
+                "height": 4,
+                "width": 3
+            },
+            "minecraft:is_collidable": {},
+            "minecraft:interact": {
+                "interactions": [
+                    {}
+                ]
+            }
+        },
+
+        "events": {
+            "ng1:bomb_on": {
+                "queue_command": {
+                    "command": [
+                        "playanimation @s animation.bomb_on",
+                        "playsound fire.ignite @a ~ ~1 ~ 1.0 1.0 100"
+                    ]
+                },
+                "set_property": {
+                    "ng1:bomb_on": true
+                }
+            },
+
+            "ng1:bomb_off": {
+                "queue_command": {
+                    "command": [
+                        "playanimation @s animation.bomb_off",
+                        "playsound trial_spawner.charge_activate @a ~ ~1 ~ 1.0 1.0 100"
+                    ]
+                },
+                "set_property": {
+                    "ng1:bomb_on": false
+                }
+            }
+        }
+    }
+}

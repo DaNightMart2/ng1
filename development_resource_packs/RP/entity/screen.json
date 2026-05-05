@@ -1,0 +1,23 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:screen",
+            "geometry": {
+                "default": "geometry.screen"
+            },
+            "render_controllers": [
+                "controller.render.screen"
+            ],
+            "textures": {
+                "default": "textures/entity/screen/screen"
+            },
+            "spawn_egg": {
+                "texture": "ng1:screen_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            }
+        }
+    }
+}

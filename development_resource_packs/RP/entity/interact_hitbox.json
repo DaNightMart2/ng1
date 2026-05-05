@@ -1,0 +1,23 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:interact_hitbox",
+            "geometry": {
+                "default": "geometry.interact_hitbox"
+            },
+            "render_controllers": [
+                "controller.render.interact_hitbox"
+            ],
+            "textures": {
+                "default": "textures/entity/interact_hitbox/outline"
+            },
+            "spawn_egg": {
+                "texture": "ng1:interact_hitbox_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            }
+        }
+    }
+}

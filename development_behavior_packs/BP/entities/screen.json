@@ -1,0 +1,48 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "ng1:screen",
+            "is_experimental": false,
+            "is_spawnable": true,
+            "is_summonable": true,
+            "properties": {
+                "ng1:is_hidden": {
+                    "type": "bool",
+                    "default": false
+                }
+            }
+        },
+        "components": {
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": false,
+                "push_towards_closest_space": false
+            },
+            "minecraft:health": {
+                "value": 1,
+                "max": 1
+            },
+            "minecraft:rotation_axis_aligned": {}
+        },
+
+        "events": {
+            "ng1:hide_screen": {
+                "queue_command": {
+                    "command": "playanimation @e[type=ng1:screen] animation.screen.hide"
+                },
+                "set_property": {
+                    "ng1:is_hidden": true
+                }
+            },
+            "ng1:show_screen": {
+                "queue_command": {
+                    "command": "playanimation @e[type=ng1:screen] animation.screen.show"
+                },
+                "set_property": {
+                    "ng1:is_hidden": false
+                }
+            }
+        }
+    }
+}

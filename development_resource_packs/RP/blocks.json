@@ -1,0 +1,29 @@
+{
+
+    "format_version": "1.21.40",
+
+    "ng1:cloud_block" : {
+
+        "textures": "ng1:cloud_block",
+        "sound": "cloth"
+
+    },
+
+    "ng1:abyss_block": {
+
+        "textures": "ng1:abyss_block",
+        "sound": "stone"
+
+    },
+
+    "ng1:teleportation_block" : {
+
+        "textures": "ng1:teleportation_block",
+        "sound": "stone"
+
+    },
+    "ng1:glitch_block": {
+        "textures": "ng1:glitch_block"
+    }
+
+}

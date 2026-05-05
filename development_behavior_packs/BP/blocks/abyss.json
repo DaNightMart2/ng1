@@ -1,0 +1,29 @@
+{
+
+    "format_version": "1.21.60",
+
+    "minecraft:block": {
+
+        "description": {
+
+            "identifier": "ng1:abyss_block",
+
+            "menu_category": {
+
+                "category": "construction",
+                "group": "minecraft:itemGroup.name.concrete"
+
+            }
+
+        },
+
+        "components": {
+
+            "minecraft:display_name": "block.ng1:abyss_block",
+            "minecraft:light_dampening": 15
+
+        }
+
+    }
+
+}

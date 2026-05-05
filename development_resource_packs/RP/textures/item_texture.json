@@ -1,0 +1,209 @@
+{
+
+    "texture_name": "atlas.items",
+    "resource_pack_name": "night_games_1",
+
+    "texture_data": {
+
+        // Others
+        "ng1:coin": {
+
+            "textures": "textures/items/others/coin"
+
+        },
+
+        "ng1:screwdriver": {
+
+            "textures": "textures/items/others/screwdriver"
+
+        },
+
+        "ng1:cheese": {
+
+            "textures": "textures/items/others/cheese"
+
+        },
+        "ng1:climbing_backpack": {
+            "textures": "textures/items/others/climbing_backpack"
+        },
+
+        // Tasty Fish
+        "ng1:tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/tasty_fish"
+
+        },
+
+        "ng1:radioactive_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/radioactive_tasty_fish"
+
+        },
+
+        "ng1:rotten_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/rotten_tasty_fish"
+
+        },
+
+        "ng1:diamond_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/diamond_tasty_fish"
+
+        },
+
+        "ng1:golden_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/golden_tasty_fish"
+
+        },
+
+        "ng1:overcooked_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/overcooked_tasty_fish"
+
+        },
+
+        "ng1:frozen_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/frozen_tasty_fish"
+
+        },
+
+        "ng1:water_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/water_tasty_fish"
+
+        },
+
+        "ng1:lava_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/lava_tasty_fish"
+
+        },
+
+        "ng1:sugar_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/sugar_tasty_fish"
+
+        },
+
+        "ng1:salad_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/salad_tasty_fish"
+
+        },
+
+        "ng1:chocolate_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/chocolate_tasty_fish"
+
+        },
+
+        "ng1:big_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/big_tasty_fish"
+
+        },
+
+        "ng1:tiny_tasty_fish": {
+
+            "textures": "textures/items/tasty_fish/tiny_tasty_fish"
+
+        },
+
+        // Keys
+        "ng1:key": {
+
+            "textures": "textures/items/keys/key"
+
+        },
+
+        "ng1:key_shard_01": {
+
+            "textures": "textures/items/keys/key_shard_01"
+
+        },
+
+        "ng1:key_shard_02": {
+
+            "textures": "textures/items/keys/key_shard_02"
+
+        },
+
+        // Souls 
+        "ng1:bravery_heart": {
+
+            "textures": "textures/items/undertale/bravery"
+
+        },
+
+        "ng1:integrity_heart": {
+
+            "textures": "textures/items/undertale/integrity"
+
+        },
+
+        "ng1:justice_heart": {
+
+            "textures": "textures/items/undertale/justice"
+
+        },
+
+        "ng1:kindness_heart": {
+
+            "textures": "textures/items/undertale/kindness"
+
+        },
+
+        "ng1:patience_heart": {
+
+            "textures": "textures/items/undertale/patience"
+
+        },
+
+        "ng1:perseverance_heart": {
+
+            "textures": "textures/items/undertale/perseverance"
+
+        },
+
+        "ng1:toby_fox": {
+
+            "textures": "textures/items/undertale/toby_fox"
+
+        },
+
+        // Spawn Eggs
+        "ng1:wooden_door_spawn_egg": {
+
+            "textures": "textures/blocks/stripped_spruce_log"
+
+        },
+
+        "ng1:bomb_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/bomb_spawn_egg"
+        },
+
+        "ng1:interact_hitbox_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/interact_hitbox_spawn_egg"
+        },
+        "ng1:screen_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/screen_spawn_egg"
+        },
+        "ng1:theentity_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/theentity_spawn_egg"
+        },
+        "ng1:rey_saul_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/rey_saul_spawn_egg"
+        },
+        "ng1:peter_jonson_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/peter_jonson_spawn_egg"
+        },
+        "ng1:computer_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/computer_spawn_egg"
+        }
+
+    }
+
+}

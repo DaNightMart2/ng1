@@ -1,0 +1,31 @@
+{
+    "format_version": "1.10.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:peter_jonson",
+            "geometry": {
+                "default": "geometry.peter_jonson"
+            },
+            "render_controllers": [
+                "controller.render.peter_jonson"
+            ],
+            "textures": {
+                "default": "textures/entity/peter_jonson/peter_jonson"
+            },
+            "spawn_egg": {
+                "texture": "ng1:peter_jonson_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            },
+            "animations": {
+                "look_at_target": "animation.common.look_at_target"
+            },
+            "scripts": {
+                "animate": [
+                    "look_at_target"
+                ]
+            }
+        }
+    }
+}

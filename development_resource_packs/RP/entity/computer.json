@@ -1,0 +1,28 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:computer",
+
+            "textures": {
+                "default": "textures/entity/computer/computer"
+            },
+
+            "geometry": {
+                "default": "geometry.computer"
+            },
+
+            "render_controllers": [
+                "controller.render.ng1:computer"
+            ],
+
+            "materials": {
+                "default": "entity_alphatest"
+            },
+
+            "spawn_egg": {
+                "texture": "ng1:computer_spawn_egg"
+            }
+        }
+    }
+}

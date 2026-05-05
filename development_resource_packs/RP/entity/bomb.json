@@ -1,0 +1,23 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:bomb",
+            "geometry": {
+                "default": "geometry.bomb"
+            },
+            "render_controllers": [
+                "controller.render.bomb"
+            ],
+            "textures": {
+                "default": "textures/entity/bomb/bomb"
+            },
+            "spawn_egg": {
+                "texture": "ng1:bomb_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            }
+        }
+    }
+}

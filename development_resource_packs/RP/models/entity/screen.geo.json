@@ -1,0 +1,46 @@
+{
+	"format_version": "1.12.0",
+	"minecraft:geometry": [
+		{
+			"description": {
+				"identifier": "geometry.screen",
+				"texture_width": 256,
+				"texture_height": 256,
+				"visible_bounds_width": 7,
+				"visible_bounds_height": 14.5,
+				"visible_bounds_offset": [0, 6.75, 0]
+			},
+			"bones": [
+				{
+					"name": "body",
+					"pivot": [0, 79, 13]
+				},
+				{
+					"name": "hang3",
+					"parent": "body",
+					"pivot": [0, 79, 13],
+					"cubes": [
+						{"origin": [-1, 66.75, 9], "size": [2, 13, 2], "pivot": [0, 67.75, 10], "rotation": [-17.5, 0, 0], "uv": [16, 54]}
+					]
+				},
+				{
+					"name": "hang2",
+					"parent": "hang3",
+					"pivot": [0, 68, 10],
+					"cubes": [
+						{"origin": [-1, 59, 0], "size": [2, 13, 2], "pivot": [0, 60, 1], "rotation": [-50, 0, 0], "uv": [8, 54]}
+					]
+				},
+				{
+					"name": "hang1",
+					"parent": "hang2",
+					"pivot": [0, 59.75, 0.375],
+					"cubes": [
+						{"origin": [-48, 0, -3], "size": [96, 48, 6], "uv": [0, 0]},
+						{"origin": [-1, 47, -0.25], "size": [2, 13, 2], "uv": [0, 54]}
+					]
+				}
+			]
+		}
+	]
+}

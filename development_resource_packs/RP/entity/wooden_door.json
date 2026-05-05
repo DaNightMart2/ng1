@@ -1,0 +1,23 @@
+{
+    "format_version": "1.8.0",
+    "minecraft:client_entity": {
+        "description": {
+            "identifier": "ng1:wooden_door",
+            "geometry": {
+                "default": "geometry.wooden_door"
+            },
+            "render_controllers": [
+                "controller.render.wooden_door"
+            ],
+            "textures": {
+                "default": "textures/entity/wooden_door/wood"
+            },
+            "spawn_egg": {
+                "texture": "ng1:wooden_door_spawn_egg"
+            },
+            "materials": {
+                "default": "entity_alphatest"
+            }
+        }
+    }
+}
