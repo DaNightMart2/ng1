@@ -1,8 +1,7 @@
 import { system, world, HudElement } from "@minecraft/server";
 import { positionInAreCheck } from "../helpers/global_functions";
 function hideHudElements() {
-    const allPlayers = world.getAllPlayers();
-    for (const player of allPlayers) {
+    for (const player of world.getAllPlayers()) {
         player.onScreenDisplay.setHudVisibility(0, [HudElement.AirBubbles, HudElement.Hunger]);
         player.addEffect("saturation", 1, {
             "showParticles": false, "amplifier": 1
@@ -10,8 +9,7 @@ function hideHudElements() {
     }
 }
 function invisibilityInSpawn() {
-    const allPlayers = world.getAllPlayers();
-    for (const player of allPlayers) {
+    for (const player of world.getAllPlayers()) {
         if (positionInAreCheck(player.location, { x: -19, y: 3, z: 6 }, { x: -7, y: 49, z: 18 })) {
             player.addEffect("invisibility", 5, { "showParticles": false, "amplifier": 255 });
         }
