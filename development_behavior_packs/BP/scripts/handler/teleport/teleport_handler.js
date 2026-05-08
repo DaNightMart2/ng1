@@ -1,6 +1,6 @@
 import { world, system } from "@minecraft/server";
-import { positionInAreCheck } from "../helpers/global_functions";
-import { teleportInfo } from "../helpers/teleport/teleport_helper";
+import { positionInAreCheck } from "../../helpers/global_functions";
+import { teleportInfo } from "../../helpers/teleport/teleport_helper";
 function handleActions(player, teleport) {
     if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 0) {
         player.camera.fade({

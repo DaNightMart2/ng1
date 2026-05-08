@@ -1,4 +1,4 @@
-import "./handler/general_handler";
-import "./handler/music_handler";
-import "./handler/restart_event_handler";
-import "./handler/teleport_handler";
+import "./handler/global/general_handler";
+import "./handler//global/restart_event_handler";
+import "./handler/music/music_handler";
+import "./handler/teleport/teleport_handler";

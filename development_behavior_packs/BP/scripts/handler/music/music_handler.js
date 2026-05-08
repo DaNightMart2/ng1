@@ -1,6 +1,6 @@
 import { world, system } from "@minecraft/server";
-import { positionInAreCheck } from "../helpers/global_functions";
-import { musicInfo } from "../helpers/music/music_helper";
+import { positionInAreCheck } from "../../helpers/global_functions";
+import { musicInfo } from "../../helpers/music/music_helper";
 system.runInterval(() => {
     const allPlayers = world.getAllPlayers();
     for (let player of allPlayers) {

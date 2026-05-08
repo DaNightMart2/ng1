@@ -1,22 +1,42 @@
-import { world } from "@minecraft/server";
+import { InputPermissionCategory, world } from "@minecraft/server";
+import { musicInfo } from "../../helpers/music/music_helper";
+import { teleportInfo } from "../../helpers/teleport/teleport_helper";
 function restartLang() {
-    const player = world.getAllPlayers()[0];
-    player.runCommand("tag @a remove es_ar");
-    player.runCommand("tag @a remove en_us");
-    player.runCommand("tag @a remove es_mx");
-    player.runCommand("tag @a remove en_uk");
+    for (const player of world.getAllPlayers()) {
+        player.removeTag("es_ar");
+        player.removeTag("en_us");
+        player.removeTag("es_mx");
+        player.removeTag("en_uk");
+    }
+}
+function restartTeleportMusic() {
+    for (const player of world.getAllPlayers()) {
+        for (const music of musicInfo) {
+            player.removeTag(music.tag);
+        }
+        for (const teleport of teleportInfo) {
+            player.removeTag(teleport.tag);
+        }
+    }
+}
+function restartPlayer() {
+    for (const player of world.getAllPlayers()) {
+        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, true);
+        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, true);
+        player.camera.clear();
+    }
 }
 function restartPosition() {
-    world.getAllPlayers()[0].runCommand("tp @a -12.5 45.0 7.5 0 0");
+    for (const player of world.getAllPlayers()) {
+        player.teleport({ x: -12.5, y: 45.0, z: 7.5 }, { "rotation": { x: 0, y: 0 } });
+    }
 }
 function restartScoreboard() {
-    const player = world.getAllPlayers()[0];
-    player.runCommand("scoreboard players set @a teleportTickCount 0");
-    player.runCommand("scoreboard players set level info -1");
-}
-function setScore(score, value, objective = "restart") {
-    world.scoreboard.getObjective(objective)?.setScore(score, value);
+    for (const player of world.getAllPlayers()) {
+        world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
+        world.scoreboard.getObjective("info")?.setScore("level", -1);
+    }
 }
 function resetStructures() {
-    const restartScores = world.scoreboard.getObjective("restart")?.getScores();
+    world.structureManager.place("LobbyTrapdoors", world.getDimension("overworld"), { x: 34, y: 7, z: 23 });
 }

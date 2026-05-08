@@ -1,4 +1,10 @@
 export { musicInfo };
+/**
+ * Stores all information about music playing.
+ * @param tag stores the tag to be added to the player when they're in the music playing area.
+ * @param track stores the track to play when in the music playing area.
+ * @param coordinates the beginning and ending coordinates of the music playing area.
+ */
 const musicInfo = [
     {
         tag: "limbo",
