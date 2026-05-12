@@ -42,14 +42,14 @@ function resetStructures() {
     "ng1:lobby_trapdoors", world.getDimension("overworld"), { x: 34, y: 7, z: 23 });
     world.structureManager.place(// TheEntity chains
     "ng1:regular_chains", world.getDimension("overworld"), { x: 34, y: 7, z: 23 });
-    const theEntityActor = world.getEntity("-5725191405544");
-    if (theEntityActor) { // Teleport TheEntity to cell
-        theEntityActor.teleport({ x: 115.5, y: 21.0, z: 51.0 }, { "rotation": { x: 0, y: -90 } });
-    }
-    const woodenDoorToFarm = world.getEntity("-5725191405544");
-    if (woodenDoorToFarm) { // Close wooden door to farm
-        woodenDoorToFarm.triggerEvent("ng1:close_door");
-    }
+    // const theEntityActor = world.getEntity("-5725191405544");
+    // if (theEntityActor) { // Teleport TheEntity to cell
+    //     theEntityActor.teleport({x: 115.5, y: 21.0, z: 51.0}, {"rotation": {x: 0, y: -90}});
+    // }
+    // const woodenDoorToFarm = world.getEntity("-5725191405544");
+    // if (woodenDoorToFarm) { // Close wooden door to farm
+    //     woodenDoorToFarm.triggerEvent("ng1:close_door");
+    // }
     // const woodenDoorToOutside = world.getDimension("overworld").;
     // if (woodenDoorToOutside) { // Close wooden door to outside of farm
     //     woodenDoorToOutside.triggerEvent("ng1:close_door");

@@ -39,7 +39,8 @@ function handleTags() {
     }
     for (const player of world.getAllPlayers()) {
         const scoreboardIdentity = player.scoreboardIdentity;
-        if (!scoreboardIdentity) {
+        const playerScore = world.scoreboard.getObjective("teleportTickCount")?.getScore(player);
+        if (!scoreboardIdentity || (playerScore && playerScore > 150)) {
             world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
         }
     }

@@ -19,10 +19,13 @@ function invisibilityInSpawn() {
         if (positionInAreCheck(
             player.location,
             {x: -19, y: 3, z: 6},
-            {x: -7, y: 49, z: 18})) {
-                player.addEffect("invisibility", 5,
-                    {"showParticles": false, "amplifier": 255}
-                );
+            {x: -7, y: 49, z: 18},
+        )) {
+            player.addEffect(
+                "invisibility",
+                5,
+                {"showParticles": false, "amplifier": 255}
+            );
         }
     }
 }
@@ -185,7 +188,9 @@ function playPeterJonsonIdleAnimation() {
         {"type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"]}
     )[0];
 
-    peter_jonson_actor.teleport(peter_jonson_hitbox.location);
+    if (peter_jonson_hitbox && peter_jonson_actor) {
+        peter_jonson_actor.teleport(peter_jonson_hitbox.location);
+    }
 }
 
 let particleTimer = 5;

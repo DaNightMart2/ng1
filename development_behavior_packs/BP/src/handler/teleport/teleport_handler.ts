@@ -12,11 +12,12 @@ function handleActions(player: Player, teleport: {
         player.camera.fade({
             "fadeTime": {"fadeInTime": 1.0, "holdTime": 4.0, "fadeOutTime": 1.0},
             "fadeColor": {"red": 1, "green": 1, "blue": 1}
-        })
+        });
     }
 
     else if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 20) {
-        player.teleport(teleport.toCoordinates,
+        player.teleport(
+            teleport.toCoordinates,
             {"rotation": teleport.rotation}
         );
     }
@@ -30,18 +31,19 @@ function handleActions(player: Player, teleport: {
             "titleraw @s subtitle {\"rawtext\": [" +
             "{\"translate\": \"teleport.ng1:level\"}," +
             "{\"text\": \"§o§l§h" + level + "\"}]}"
-        )
+        );
+
     } else if (level <= 0) {
         player.runCommand(
             "titleraw @s subtitle {\"rawtext\": [" +
             "{\"translate\": \"teleport.ng1:level\"}, {\"text\": \"§o§l§hTutorial\"}]}"
-        )
+        );
 
     } else if (level >= 6) {
         player.runCommand(
             "titleraw @s subtitle {\"rawtext\": [" +
             "{\"translate\": \"teleport.ng1:finished_event\"}]}"
-        )
+        );
     }
 
     if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 15) {
@@ -64,7 +66,8 @@ function handleTags() {
 
     for (const player of world.getAllPlayers()) {
         const scoreboardIdentity = player.scoreboardIdentity
-        if (!scoreboardIdentity) {
+        const playerScore = world.scoreboard.getObjective("teleportTickCount")?.getScore(player);
+        if (!scoreboardIdentity || (playerScore && playerScore > 150)) {
             world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
         }
     }
@@ -81,7 +84,7 @@ function handleTags() {
             if (positionInAreCheck (
                 player.location,
                 teleport.fromCoordinates[0],
-                teleport.fromCoordinates[1]
+                teleport.fromCoordinates[1],
             )) {
                 player.addTag(teleport.tag);
             } else if (typeof timeTeleporting === "number" && timeTeleporting >= 150) {

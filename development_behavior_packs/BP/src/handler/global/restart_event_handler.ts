@@ -1,4 +1,4 @@
-import { Dimension, InputPermissionCategory, Player, system, world } from "@minecraft/server";
+import { InputPermissionCategory, Player, system, world } from "@minecraft/server";
 import { musicInfo } from "../../helpers/music/music_helper";
 import { teleportInfo } from "../../helpers/teleport/teleport_helper";
 
@@ -24,8 +24,14 @@ function restartTeleportMusic() {
 
 function restartPlayer() {
     for (const player of world.getAllPlayers()) {
-        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, true);
-        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, true);
+        player.inputPermissions.setPermissionCategory(
+            InputPermissionCategory.Movement,
+            true
+        );
+        player.inputPermissions.setPermissionCategory(
+            InputPermissionCategory.Camera,
+            true
+        );
         player.camera.clear();
     }
 }
@@ -56,15 +62,15 @@ function resetStructures() {
         {x: 34, y: 7, z: 23}
     );
 
-    const theEntityActor = world.getEntity("-5725191405544");
-    if (theEntityActor) { // Teleport TheEntity to cell
-        theEntityActor.teleport({x: 115.5, y: 21.0, z: 51.0}, {"rotation": {x: 0, y: -90}});
-    }
+    // const theEntityActor = world.getEntity("-5725191405544");
+    // if (theEntityActor) { // Teleport TheEntity to cell
+    //     theEntityActor.teleport({x: 115.5, y: 21.0, z: 51.0}, {"rotation": {x: 0, y: -90}});
+    // }
 
-    const woodenDoorToFarm = world.getEntity("-5725191405544");
-    if (woodenDoorToFarm) { // Close wooden door to farm
-        woodenDoorToFarm.triggerEvent("ng1:close_door");
-    }
+    // const woodenDoorToFarm = world.getEntity("-5725191405544");
+    // if (woodenDoorToFarm) { // Close wooden door to farm
+    //     woodenDoorToFarm.triggerEvent("ng1:close_door");
+    // }
 
     // const woodenDoorToOutside = world.getDimension("overworld").;
     // if (woodenDoorToOutside) { // Close wooden door to outside of farm

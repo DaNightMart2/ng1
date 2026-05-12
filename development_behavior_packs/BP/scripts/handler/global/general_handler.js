@@ -142,7 +142,9 @@ function playPeterJonsonIdleAnimation() {
     }
     const peter_jonson_hitbox = dimension.getEntities({ "type": "ng1:interact_hitbox", "name": "peter_hitbox" })[0];
     const peter_jonson_actor = dimension.getEntities({ "type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"] })[0];
-    peter_jonson_actor.teleport(peter_jonson_hitbox.location);
+    if (peter_jonson_hitbox && peter_jonson_actor) {
+        peter_jonson_actor.teleport(peter_jonson_hitbox.location);
+    }
 }
 let particleTimer = 5;
 let multiplier = 1;

@@ -9,7 +9,7 @@ system.runInterval(() => {
             if (positionInAreCheck(
                 player.location,
                 music.coordinates[0],
-                music.coordinates[1]
+                music.coordinates[1],
             )) {
                 if (!player.hasTag(music.tag)) {
                     player.playMusic(music.track, {"loop": true, fade: 1.0});

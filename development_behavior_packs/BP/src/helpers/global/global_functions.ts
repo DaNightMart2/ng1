@@ -10,7 +10,7 @@ export { positionInAreCheck };
 function positionInAreCheck (
     position: Vector3,
     firstPoint: Vector3,
-    secondPoint: Vector3
+    secondPoint: Vector3,
 ): boolean {
     if (
         // +1 and -1 is used to ensure full block detection
