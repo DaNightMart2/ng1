@@ -1,5 +1,5 @@
 import { world, system, Player, Vector3, Vector2 } from "@minecraft/server";
-import { positionInAreCheck } from "../../helpers/global_functions";
+import { positionInAreCheck } from "../../helpers/global/global_functions";
 import { teleportInfo } from "../../helpers/teleport/teleport_helper";
 
 function handleActions(player: Player, teleport: {

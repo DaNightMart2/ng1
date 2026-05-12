@@ -1,5 +1,5 @@
 import { system, world, HudElement } from "@minecraft/server";
-import { positionInAreCheck } from "../../helpers/global_functions";
+import { positionInAreCheck } from "../../helpers/global/global_functions";
 function hideHudElements() {
     for (const player of world.getAllPlayers()) {
         player.onScreenDisplay.setHudVisibility(0, [HudElement.AirBubbles, HudElement.Hunger]);

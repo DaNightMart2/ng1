@@ -1,5 +1,5 @@
 import { world, system } from "@minecraft/server";
-import { positionInAreCheck } from "../../helpers/global_functions";
+import { positionInAreCheck } from "../../helpers/global/global_functions";
 import { musicInfo } from "../../helpers/music/music_helper";
 
 system.runInterval(() => {
