@@ -1,4 +1,4 @@
-import { system, world, HudElement, Player } from "@minecraft/server";
+import { system, world, HudElement, Dimension } from "@minecraft/server";
 import { positionInAreCheck } from "../../helpers/global_functions";
 
 function hideHudElements() {
@@ -36,44 +36,58 @@ world.afterEvents.playerInteractWithEntity.subscribe(data => {
 });
 
 function bombUnloaded() {
-    playerActor.runCommand("playanimation @e[" +
-    "type=ng1:bomb, has_property={ng1:bomb_on=true} " +
-    "] animation.bomb_on");
+    const bombs = dimension.getEntities(
+        {"type": "ng1:bomb"}
+    );
+    for (const bomb of bombs) {
+        if (bomb.getProperty("ng1:bomb_on")) {
+            bomb.playAnimation("animation.bomb_on");
+        }
+    }
 }
 
 function bombParticle() {
     if (particleTimer <= 0) {
-        playerActor.runCommand(
-        "execute as @e[" +
-        "type=ng1:bomb, " +
-        "has_property={ng1:bomb_on=true}, " +
-        "ry=-135, rym=135] " +
-        "at @s run particle minecraft:basic_flame_particle "+
-        "~-0.4 ~4.4 ~");
+        const bombs = dimension.getEntities(
+            {"type": "ng1:bomb"}
+        );
+        for (const bomb of bombs) {
+            if (bomb.getProperty("ng1:bomb_on")) {
+                const bombYrotation = bomb.getRotation().y;
 
-        playerActor.runCommand(
-        "execute as @e[" +
-        "type=ng1:bomb, " +
-        "has_property={ng1:bomb_on=true}, " +
-        "ry=45, rym=-45] " +
-        "at @s run particle minecraft:basic_flame_particle "+
-        "~0.4 ~4.4 ~");
+                if (bombYrotation === -180) {
+                    dimension.spawnParticle("minecraft:basic_flame_particle", {
+                        x: bomb.location.x - 0.4,
+                        y: bomb.location.y + 4.4,
+                        z: bomb.location.z
+                    });
+                }
 
-        playerActor.runCommand(
-        "execute as @e[" +
-        "type=ng1:bomb, " +
-        "has_property={ng1:bomb_on=true}, " +
-        "ry=-45, rym=-135] " +
-        "at @s run particle minecraft:basic_flame_particle "+
-        "~ ~4.4 ~-0.4");
+                else if (bombYrotation === 0) {
+                    dimension.spawnParticle("minecraft:basic_flame_particle", {
+                        x: bomb.location.x + 0.4,
+                        y: bomb.location.y + 4.4,
+                        z: bomb.location.z
+                    });
+                }
 
-        playerActor.runCommand(
-        "execute as @e[" +
-        "type=ng1:bomb, " +
-        "has_property={ng1:bomb_on=true}, " +
-        "ry=135, rym=45] " +
-        "at @s run particle minecraft:basic_flame_particle "+
-        "~ ~4.4 ~0.4");
+                else if (bombYrotation === -90) {
+                    dimension.spawnParticle("minecraft:basic_flame_particle", {
+                        x: bomb.location.x,
+                        y: bomb.location.y + 4.4,
+                        z: bomb.location.z - 0.4
+                    });
+                }
+
+                else if (bombYrotation === 90) {
+                    dimension.spawnParticle("minecraft:basic_flame_particle", {
+                        x: bomb.location.x,
+                        y: bomb.location.y + 4.4,
+                        z: bomb.location.z + 0.4
+                    });
+                }
+            }
+        }
         particleTimer = 5;
     } else {
         particleTimer--;
@@ -81,26 +95,39 @@ function bombParticle() {
 }
 
 function screenUnloaded() {
-    playerActor.runCommand("playanimation @e[" +
-    "type=ng1:screen, has_property={ng1:is_hidden=true}] " +
-    "animation.screen.is_hidden");
+    const screens = dimension.getEntities(
+        {"type": "ng1:screen"}
+    );
+    for (const screen of screens) {
+        if (screen.getProperty("ng1:is_hidden")) {
+            screen.playAnimation("animation.screen.is_hidden");
+        }
+    }
 }
 
-// Wooden door function
 function keepWoodenDoorOpen() {
-    playerActor.runCommand("playanimation @e[" +
-    "type=ng1:screen, has_property={ng1:is_open=true}] " +
-    "animation.wooden_door.is_open");
+    const wooden_doors = dimension.getEntities(
+        {"type": "ng1:wooden_door"}
+    );
+    for (const wooden_door of wooden_doors) {
+        if (wooden_door.getProperty("ng1:is_open")) {
+            wooden_door.playAnimation("animation.screen.is_open");
+        }
+    }
 }
 
 function stopWoodenDoorSound() {
     if (stopSound > 0) {
         stopSound--
     } else {
-        playerActor.runCommand("event entity @e[" +
-        "type=ng1:wooden_door, " +
-        "has_property={ng1:in_movement=true}]" +
-        "ng1:not_in_movement");
+        const wooden_doors = dimension.getEntities(
+            {"type": "ng1:wooden_door"}
+        );
+        for (const wooden_door of wooden_doors) {
+            if (wooden_door.getProperty("ng1:in_movement")) {
+                wooden_door.triggerEvent("ng1:not_in_movement");
+            }
+        }
         stopSound = 125;
     }
 }
@@ -111,18 +138,25 @@ function playWoodenDoorSound() {
         if (chance >= 0 && chance <= 0.1 * multiplier) {
             multiplier = 1;
 
-            playerActor.runCommand("execute at @e[" +
-            "type=ng1:wooden_door, " +
-            "has_property={ng1:in_movement=true}] " +
-            "run playsound fall.wood @a ~ ~1 ~ 1.0 1.0 0");
-
+            const wooden_doors = dimension.getEntities(
+                {"type": "ng1:wooden_door"}
+            );
+            for (const wooden_door of wooden_doors) {
+                if (wooden_door.getProperty("ng1:in_movement")) {
+                    dimension.playSound("fall.wood", wooden_door.location)
+                }
+            }
         } else {
             multiplier++;
 
-            playerActor.runCommand("execute at @e[" +
-            "type=ng1:wooden_door, " +
-            "has_property={ng1:in_movement=true}] " +
-            "run playsound place.wood @a ~ ~1 ~ 1.0 1.0 0");
+            const wooden_doors = dimension.getEntities(
+                {"type": "ng1:wooden_door"}
+            );
+            for (const wooden_door of wooden_doors) {
+                if (wooden_door.getProperty("ng1:in_movement")) {
+                    dimension.playSound("place.wood", wooden_door.location)
+                }
+            }
         }
 
         soundTimer = 12.5;
@@ -131,20 +165,27 @@ function playWoodenDoorSound() {
     }
 }
 
-function playIdleAnimation() {
+function playPeterJonsonIdleAnimation() {
     if (animationCooldown <= 0) {
-        playerActor.runCommand("playanimation @e["+
-        "type=ng1:peter_jonson] " +
-        "animation.peter_jonson.idle");
+        const peter_jonsons = dimension.getEntities(
+            {"type": "ng1:peter_jonson"}
+        );
+        for (const peter_jonson of peter_jonsons) {
+            peter_jonson.playAnimation("animation.peter_jonson.idle");
+        }
         animationCooldown = 90;
     } else {
         animationCooldown--;
     }
 
-    playerActor.runCommand("tp @e[type=ng1:peter_jonson, tag=FarmOwner] " +
-    "@e[type=ng1:interact_hitbox, name=peter_hitbox]");
-    playerActor.runCommand("execute as @e[type=ng1:peter_jonson," +
-    "tag=FarmOwner] at @s run tp @s ~ ~ ~ facing @p");
+    const peter_jonson_hitbox = dimension.getEntities(
+        {"type": "ng1:interact_hitbox", "name": "peter_hitbox"}
+    )[0];
+    const peter_jonson_actor = dimension.getEntities(
+        {"type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"]}
+    )[0];
+
+    peter_jonson_actor.teleport(peter_jonson_hitbox.location);
 }
 
 let particleTimer = 5;
@@ -155,23 +196,25 @@ let stopSound = 125;
 
 let animationCooldown = 0;
 
-let playerActor: Player;
+let dimension: Dimension;
+system.runTimeout(() => {
+    dimension = world.getDimension("overworld");
+});
 
 system.runInterval(() => {
-    if (typeof playerActor !== typeof Player) {
-        playerActor = world.getAllPlayers()[0];
+    if (dimension) {
+        hideHudElements();
+        invisibilityInSpawn();
+
+        bombUnloaded();
+        bombParticle();
+
+        screenUnloaded();
+
+        keepWoodenDoorOpen();
+        stopWoodenDoorSound();
+        playWoodenDoorSound();
+
+        playPeterJonsonIdleAnimation();
     }
-    hideHudElements();
-    invisibilityInSpawn();
-
-    bombUnloaded();
-    bombParticle();
-
-    screenUnloaded();
-
-    keepWoodenDoorOpen();
-    stopWoodenDoorSound();
-    playWoodenDoorSound();
-
-    playIdleAnimation();
 });

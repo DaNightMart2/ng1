@@ -23,7 +23,7 @@ function handleActions(player: Player, teleport: {
 
     player.runCommand("title @s times 10 100 20");
 
-    const level: number = world.scoreboard.getObjective("info")?.getScore("level") || 0;
+    const level = world.scoreboard.getObjective("info")?.getScore("level") || 0;
 
     if (level >= 1 && level <= 5) {
         player.runCommand(
@@ -61,16 +61,12 @@ function handleTags() {
     if (!world.scoreboard.getObjective("teleportTickCount")) {
         world.scoreboard.addObjective("teleportTickCount");
     }
-    const notAddedPlayers = world.getPlayers({"scoreOptions": [{
-        "exclude": true,
-        "objective":
-        "teleportTickCount",
-        "minScore": 0,
-        "maxScore": 150}
-    ]});
 
-    if (notAddedPlayers.length > 0) {
-        world.scoreboard.getObjective("teleportTickCount")?.setScore(notAddedPlayers[0], 0);
+    for (const player of world.getAllPlayers()) {
+        const scoreboardIdentity = player.scoreboardIdentity
+        if (!scoreboardIdentity) {
+            world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
+        }
     }
 
     for (let player of world.getAllPlayers()) {

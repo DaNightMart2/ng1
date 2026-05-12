@@ -37,15 +37,11 @@ function handleTags() {
     if (!world.scoreboard.getObjective("teleportTickCount")) {
         world.scoreboard.addObjective("teleportTickCount");
     }
-    const notAddedPlayers = world.getPlayers({ "scoreOptions": [{
-                "exclude": true,
-                "objective": "teleportTickCount",
-                "minScore": 0,
-                "maxScore": 150
-            }
-        ] });
-    if (notAddedPlayers.length > 0) {
-        world.scoreboard.getObjective("teleportTickCount")?.setScore(notAddedPlayers[0], 0);
+    for (const player of world.getAllPlayers()) {
+        const scoreboardIdentity = player.scoreboardIdentity;
+        if (!scoreboardIdentity) {
+            world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
+        }
     }
     for (let player of world.getAllPlayers()) {
         const timeTeleporting = world.scoreboard.
