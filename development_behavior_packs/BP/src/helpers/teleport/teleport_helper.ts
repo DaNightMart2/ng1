@@ -43,7 +43,7 @@ const teleportInfo = [
     },
 
     {
-        tag: "ToLaboratory01",
+        tag: "ToLaboratory02",
         fromCoordinates: [{x: 20, y: 7, z: -1}, {x: 27, y: 11, z: 0}],
         toCoordinates: {x: 86, y: 5, z: 157},
         rotation: {x: 0, y: 180},
@@ -57,7 +57,7 @@ const teleportInfo = [
     },
 
     {
-        tag: "ToLaboratory02",
+        tag: "ToLaboratory03",
         fromCoordinates: [{x: 84, y: 5, z: 162}, {x: 88, y: 10, z: 164}],
         toCoordinates: {x: 103.5, y: 5.1, z: 131.0},
         rotation: {x: 0, y: 180},
@@ -71,7 +71,7 @@ const teleportInfo = [
     },
 
     {
-        tag: "ToLaboratory03",
+        tag: "ToLaboratory04",
         fromCoordinates: [{x: 56, y: 6, z: 132}, {x: 56, y: 10, z: 141}],
         toCoordinates: {x: 69.5, y: 5.1, z: 131.0},
         rotation: {x: 0, y: 180},
@@ -127,7 +127,7 @@ const teleportInfo = [
     },
 
     {
-        tag: "ToLaboratory04",
+        tag: "ToLaboratory05",
         fromCoordinates: [{x: 220, y: 9, z: 91}, {x: 224, y: 14, z: 93}],
         toCoordinates: {x: 86.5, y: 20.1, z: 165.0},
         rotation: {x: 0, y: 180},

@@ -40,8 +40,11 @@ function restartScoreboard() {
 function resetStructures() {
     world.structureManager.place(// Path to experiment trapdoors
     "ng1:lobby_trapdoors", world.getDimension("overworld"), { x: 34, y: 7, z: 23 });
-    world.structureManager.place(// TheEntity chains
-    "ng1:regular_chains", world.getDimension("overworld"), { x: 34, y: 7, z: 23 });
+    // world.structureManager.place( // TheEntity chains
+    //     "ng1:regular_chains",
+    //     world.getDimension("overworld"),
+    //     // Coordinates (missing)
+    // );
     // const theEntityActor = world.getEntity("-5725191405544");
     // if (theEntityActor) { // Teleport TheEntity to cell
     //     theEntityActor.teleport({x: 115.5, y: 21.0, z: 51.0}, {"rotation": {x: 0, y: -90}});
@@ -92,7 +95,7 @@ const waitForRestart = system.runTimeout(() => {
             playerActor = player;
             restartLang();
             restartTeleportMusic();
-            restartPlayer();
+            //restartPlayer();
             restartScoreboard();
             resetStructures();
         }

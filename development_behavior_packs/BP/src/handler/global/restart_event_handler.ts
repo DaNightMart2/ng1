@@ -56,11 +56,11 @@ function resetStructures() {
         {x: 34, y: 7, z: 23}
     );
 
-    world.structureManager.place( // TheEntity chains
-        "ng1:regular_chains",
-        world.getDimension("overworld"),
-        {x: 34, y: 7, z: 23}
-    );
+    // world.structureManager.place( // TheEntity chains
+    //     "ng1:regular_chains",
+    //     world.getDimension("overworld"),
+    //     // Coordinates (missing)
+    // );
 
     // const theEntityActor = world.getEntity("-5725191405544");
     // if (theEntityActor) { // Teleport TheEntity to cell
@@ -119,7 +119,7 @@ const waitForRestart = system.runTimeout(() => {
             playerActor = player;
             restartLang();
             restartTeleportMusic();
-            restartPlayer();
+            //restartPlayer();
             restartScoreboard();
             resetStructures();
         }

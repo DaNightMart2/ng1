@@ -1,4 +1,4 @@
-import { Player, system, world } from "@minecraft/server";
+import { InputPermissionCategory, Player, system } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { splitText } from "../../helpers/dialog/dialog_helper";
 
@@ -18,8 +18,7 @@ export { dialogPackage };
  * @param firstOfPackage if an open animation should be played when the dialog shows.
  * Of type boolean. Defaults to false.
  */
-type responseNumer = 0 | 1 | 2
-type dialogPackage = [string | string[2], string, string, string, responseNumer?, boolean?];
+type dialogPackage = [string | string[], string, string, string, (0|1|2)?, boolean?];
 
 let dialogQueue: Record<string, dialogPackage[]> = {};
 
@@ -38,10 +37,17 @@ function queueDialog (
     }
     dialogQueue[player.id].push(dialogPackage);
 
-    
-
-    if (dialogPackage[5] === true) {
+    if (dialogPackage[5]) {
         showDialog(player, 0);
+
+        player.inputPermissions.setPermissionCategory(
+            InputPermissionCategory.Movement,
+            false
+        );
+        player.inputPermissions.setPermissionCategory(
+            InputPermissionCategory.Camera,
+            false
+        );
     }
 }
 
@@ -50,56 +56,91 @@ function queueDialog (
  * @param player player ID to get package from.
  * @param response the response to the last option package. Cancelled or none is zero, buttons are one and two.
  */
-function showDialog(
+function showDialog (
     player: Player,
     response: number = 0,
 ) {
-
-    if (dialogQueue[player.id][0][4] !== response) {
+    if (dialogQueue[player.id][0][4] && dialogQueue[player.id][0][4] !== response) {
         dialogQueue[player.id].splice(0, 1);
-        showDialog(player, response);
+        if (dialogQueue[player.id].length > 0) {
+            showDialog(player, response);
+        } else {
+            player.inputPermissions.setPermissionCategory(
+                InputPermissionCategory.Movement,
+                true
+            );
+            player.inputPermissions.setPermissionCategory(
+                InputPermissionCategory.Camera,
+                true
+            );
+        }
         return;
     }
+
+    let soundPlayingIndex = 0;
+    const sound = dialogQueue[player.id][0][3];
+    const dialogSound = system.runInterval(() => {
+        if (soundPlayingIndex < 3) {
+            player.playSound(sound);
+            soundPlayingIndex++;
+        } else {
+            system.clearRun(dialogSound);
+        }
+    }, 3);
 
     const dialogForm = new ActionFormData;
 
     dialogForm.button(
         dialogQueue[player.id][0][1], // characterName
-        dialogQueue[player.id][0][1], // characterImage
+        dialogQueue[player.id][0][2] // characterImage
     );
 
-    if (dialogQueue[player.id][0][4]) {
+    if (dialogQueue[player.id][0][5] || typeof dialogQueue[player.id][0][5] !== "string") {
         dialogForm.title("true"); // Send playanimation commands (through .title,
         // as it is not necessary for anything else)
     }
 
-    let [dialogPackage] = dialogQueue[player.id].splice(0, 1);
+    let dialogPackage = dialogQueue[player.id][0];
 
     if (typeof dialogPackage[0] === "string") {
         dialogForm.body(splitText(dialogPackage[0], 40, 3));
         dialogForm.button(""); // Empty buttons (otherwise it bugs)
         dialogForm.button("");
-    } else {
-        dialogForm.button(dialogPackage[0]); // Button 1
-        dialogForm.button(dialogPackage[1]); // Button 2
+        dialogQueue[player.id].splice(0, 1);
+    }
+    
+    else {
+        dialogForm.button(dialogPackage[0][0]); // Button 1
+        dialogForm.button(dialogPackage[0][1]); // Button 2
     }
 
     dialogForm.show(player).then(response => {
+        system.clearRun(dialogSound);
         if (dialogQueue[player.id].length > 0) {
             if (response.canceled) {
                 showDialog(player, 1);
-            } else if (response.selection) {
+            }
+            
+            else if (response.selection) {
+
+                if (typeof dialogPackage[0] !== "string") {
+                    dialogQueue[player.id].splice(0, 1);
+                }
+
                 showDialog(player, response.selection);
             }
-        }
-    })
-}
 
-system.runTimeout(() => {
-    for (const player of world.getAllPlayers()) {
-        queueDialog(player, ["1", "1", "", "", 0, true]);
-        queueDialog(player, ["2", "2", "", ""]);
-        queueDialog(player, ["3", "3", "", ""]);
-        queueDialog(player, ["4", "4", "", ""]);
-    }
-});
+        }
+        
+        else {
+            player.inputPermissions.setPermissionCategory(
+                InputPermissionCategory.Movement,
+                true
+            );
+            player.inputPermissions.setPermissionCategory(
+                InputPermissionCategory.Camera,
+                true
+            );
+        }
+    });
+}
