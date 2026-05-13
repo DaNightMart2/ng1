@@ -1,4 +1,5 @@
-export { teleportInfo };
+export { teleportInfo, };
+
 /**
  * Stores all information about teleports.
  * @param tag stores the tag to be added to the player when they're in the teleport area.

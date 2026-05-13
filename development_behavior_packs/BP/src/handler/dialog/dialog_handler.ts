@@ -1,146 +1,166 @@
-import { InputPermissionCategory, Player, system } from "@minecraft/server";
-import { ActionFormData } from "@minecraft/server-ui";
-import { splitText } from "../../helpers/dialog/dialog_helper";
+import { InputPermissionCategory, Player, system, } from "@minecraft/server";
+import { ActionFormData, ActionFormResponse, } from "@minecraft/server-ui";
+import { splitText, } from "../../helpers/dialog/dialog_helper";
 
-export { dialogPackage };
+export { traverseTree, dialogueTree, dialoguePackage, };
+
 /**
  * Package to send a dialog with.
- * @param text text or options to show in the dialog box.
+ * @param payload text or options to show in the dialog box.
  * Of type string (for text) or two element string array (for options).
  * @param characterName the name of the character to show in the dialog box. 
  * Of type string.
- * @param characterImage texture file reference for the character's image to show
+ * @param characterImagePath texture file path for the character's image to show
  * in the dialog box. Of type string.
- * @param sound sound name reference to play when showin the dialog. Of type string.
- * @param requiredPreviousResponse which response does the player need to have for
- * the dialog to show. Of type responseNumber (0 | 1 | 2). Zero if none required.
- * Defaults to zero.
- * @param firstOfPackage if an open animation should be played when the dialog shows.
- * Of type boolean. Defaults to false.
+ * @param soundName sound name reference to play when showing the dialogue. Of type string.
  */
-type dialogPackage = [string | string[], string, string, string, (0|1|2)?, boolean?];
-
-let dialogQueue: Record<string, dialogPackage[]> = {};
-
-export { queueDialog };
-/**
- * Adds a dialog package to be rendered when available.
- * @param player player ID to add the package to.
- * @param dialogPackage package to be added, is of type dialogPackage.
- */
-function queueDialog (
-    player: Player,
-    dialogPackage: dialogPackage,
-) {
-    if (!Object.keys(dialogQueue).includes(player.id)) {
-        dialogQueue[player.id] = [];
-    }
-    dialogQueue[player.id].push(dialogPackage);
-
-    if (dialogPackage[5]) {
-        showDialog(player, 0);
-
-        player.inputPermissions.setPermissionCategory(
-            InputPermissionCategory.Movement,
-            false
-        );
-        player.inputPermissions.setPermissionCategory(
-            InputPermissionCategory.Camera,
-            false
-        );
-    }
+type dialoguePackage = {
+    payload: string | string[],
+    characterName: string,
+    characterImagePath: string,
+    soundName: string,
 }
 
 /**
- * Shows first queue dialog package.
- * @param player player ID to get package from.
- * @param response the response to the last option package. Cancelled or none is zero, buttons are one and two.
+ * Dialogue tree to be proccessed.
+ * @param dialogList the full list of dialogues to show (in tree order).
+ * Of type dialoguePackage.
+ * @param next the list of (possible) continuations from each dialogue. Of type array
+ * of arrays of numbers. The numbers array can either:
+ * - Have no numbers (end the sequence).
+ * - Have one number (shows the nth dialogue).
+ * - Have two numbers (show the nth or yth dialogue ased on response; if exited,
+ * it reopens the dialogue).
+ * - Have three numbers (show the nth or yth dialogue based on response, and show
+ * the zth dialogue if exited).
  */
-function showDialog (
+type dialogueTree = {
+    dialogueList: dialoguePackage[],
+    next: number[][],
+}
+
+/**
+ * Handles showing dialogues, playing SFX and enabling/disabling movement.
+ * @param player player to show the dialogue to.
+ * @param dialoguePackage dialogue package to show. Of type dialoguePackage
+ * @param playAnimation if to play the open animation or not. Of type boolean.
+ * Defaults to false.
+ */
+function showDialogue (
     player: Player,
-    response: number = 0,
-) {
-    if (dialogQueue[player.id][0][4] && dialogQueue[player.id][0][4] !== response) {
-        dialogQueue[player.id].splice(0, 1);
-        if (dialogQueue[player.id].length > 0) {
-            showDialog(player, response);
-        } else {
-            player.inputPermissions.setPermissionCategory(
-                InputPermissionCategory.Movement,
-                true
-            );
-            player.inputPermissions.setPermissionCategory(
-                InputPermissionCategory.Camera,
-                true
-            );
-        }
-        return;
+    dialoguePackage: dialoguePackage,
+    playAnimation: boolean = false,
+): Promise<ActionFormResponse> {
+    setMovement(player, false);
+
+    const {
+        payload,
+        characterName,
+        characterImagePath,
+        soundName,
+    } = dialoguePackage;
+
+    if (typeof payload === "string" || (typeof payload !== "string" && playAnimation)) {
+        let soundPlayingIndex = 0;
+        const dialogueSound = system.runInterval(() => {
+            if (soundPlayingIndex < 3) {
+                player.playSound(soundName);
+                soundPlayingIndex++;
+            } else {
+                system.clearRun(dialogueSound);
+            }
+        }, 3);
     }
 
-    let soundPlayingIndex = 0;
-    const sound = dialogQueue[player.id][0][3];
-    const dialogSound = system.runInterval(() => {
-        if (soundPlayingIndex < 3) {
-            player.playSound(sound);
-            soundPlayingIndex++;
-        } else {
-            system.clearRun(dialogSound);
-        }
-    }, 3);
+    const dialogueForm = new ActionFormData;
 
-    const dialogForm = new ActionFormData;
+    dialogueForm.button(characterName, characterImagePath);
 
-    dialogForm.button(
-        dialogQueue[player.id][0][1], // characterName
-        dialogQueue[player.id][0][2] // characterImage
-    );
-
-    if (dialogQueue[player.id][0][5] || typeof dialogQueue[player.id][0][5] !== "string") {
-        dialogForm.title("true"); // Send playanimation commands (through .title,
-        // as it is not necessary for anything else)
+    if (playAnimation) {
+        dialogueForm.title("true"); // Send playanimation commands (through .title,
+                                    // as it is not necessary for anything else)
     }
 
-    let dialogPackage = dialogQueue[player.id][0];
-
-    if (typeof dialogPackage[0] === "string") {
-        dialogForm.body(splitText(dialogPackage[0], 40, 3));
-        dialogForm.button(""); // Empty buttons (otherwise it bugs)
-        dialogForm.button("");
-        dialogQueue[player.id].splice(0, 1);
+    if (typeof payload === "string") {
+        dialogueForm.body(splitText(payload, 40, 3));
+        dialogueForm.button(""); // Empty buttons (otherwise it bugs)
+        dialogueForm.button("");
     }
     
     else {
-        dialogForm.button(dialogPackage[0][0]); // Button 1
-        dialogForm.button(dialogPackage[0][1]); // Button 2
+        dialogueForm.button(payload[0]); // Button 1
+        dialogueForm.button(payload[1]); // Button 2
     }
 
-    dialogForm.show(player).then(response => {
-        system.clearRun(dialogSound);
-        if (dialogQueue[player.id].length > 0) {
-            if (response.canceled) {
-                showDialog(player, 1);
-            }
-            
-            else if (response.selection) {
+    return dialogueForm.show(player);
+}
 
-                if (typeof dialogPackage[0] !== "string") {
-                    dialogQueue[player.id].splice(0, 1);
-                }
+enum Response {
+    FIRST = 0,
+    SECOND = 1,
+    CANCEL = 2,
+};
 
-                showDialog(player, response.selection);
-            }
+let buttonFirst = true;
+/**
+ * Adds a dialogue tree to be rendered when available.
+ * @param player player ID to add the tree to.
+ * @param dialogueTree dialogue tree to be proccessed. Of type dialogueTree.
+ * -1 on next means it's the last dialogue, therefore it stops the chain.
+ * @param index index of the dialogue in the dialogue list. Of type number.
+ */
+async function traverseTree (
+    player: Player,
+    dialogueTree: dialogueTree,
+    index: number,
+ ) {
 
+    let playAnimation = false;
+    if (typeof dialogueTree.dialogueList[index].payload === "string") {
+        if (index === 0) {
+            playAnimation = true;
         }
-        
-        else {
-            player.inputPermissions.setPermissionCategory(
-                InputPermissionCategory.Movement,
-                true
-            );
-            player.inputPermissions.setPermissionCategory(
-                InputPermissionCategory.Camera,
-                true
-            );
+    } else {
+        if (buttonFirst) {
+            playAnimation = true;
         }
-    });
+    }
+
+    const responsePromise = (await showDialogue(player, dialogueTree.dialogueList[index], playAnimation));
+        let response = Response.CANCEL;
+        if (responsePromise.selection) {
+            player.playSound("block.click");
+            response = responsePromise.selection-1; // Buttons are not zero-based,
+                                                    // arrays are, therefore, -1.
+        } else {
+            if (dialogueTree.next[index].length === 1) { // If only text
+                response = Response.FIRST;
+            }
+        }
+
+        if (dialogueTree.next[index][response] !== -1) { // Dialogue -1 means there're no dialogues left.
+            if (response !== Response.CANCEL || (
+                response === Response.CANCEL && dialogueTree.next[index].length === 3
+                // If there's an exit message.
+            )) {
+                buttonFirst = true;
+                traverseTree(player, dialogueTree, dialogueTree.next[index][response]);
+            } else {
+                buttonFirst = false;
+                traverseTree(player, dialogueTree, index);
+            }
+        } else {
+            setMovement(player, true);
+        }
+}
+
+function setMovement(player: Player, enable: boolean) {
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Movement,
+        enable
+    );
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Camera,
+        enable
+    );
 }

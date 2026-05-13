@@ -1,45 +1,41 @@
 import { world } from "@minecraft/server";
 import { traverseTree, dialoguePackage } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations } from "./saul_translations";
+import { payloadTranslations } from "./peter_translations";
 
-function saul_dialog_package (
+function peter_dialog_package (
     text: string | string[],
     expresion: string,
 ): dialoguePackage {
     return {
         payload: text,
-        characterName: "Rey Saúl",
-        characterImagePath: "textures/ui/faces/saul/" + expresion ,
-        soundName: "mob.pig.say",
+        characterName: "Peter Jonson",
+        characterImagePath: "textures/ui/faces/Jonson/" + expresion ,
+        soundName: "mob.villager.talk",
     };
 }
 
 enum Expression {
-    DISSAPOINTED = "dissapointed",
-    EMBARASSED = "embarassed",
-    EXCITED_QUESTIONING = "excited-questioning",
-    EXCITED = "excited",
-    EXTREMELY_SCARED_QUESTIONING = "extremely_scared-questioning",
-    EXTREMELY_SCARED = "extremely_scared",
-    INHALING = "inhaling",
+    ANGRY = "angry",
+    BLUFFING = "bluffing",
+    EXCITEDLY_WONDERING = "excitedly_wondering",
+    HAPPILY_EVIL = "happily_evil",
     NEUTRAL = "neutral",
-    PLEASED = "pleased",
-    SET = "set",
+    REALLY_ANGRY = "really_angry",
 }
 
 world.afterEvents.playerInteractWithEntity.subscribe(data => {
     if (data.target.typeId === "ng1:interact_hitbox") {
-        if (data.target.nameTag === "saul_hitbox") {
+        if (data.target.nameTag === "peter_hitbox") {
             const player = data.player
 
             traverseTree(
                 player,
                 {
                     dialogueList: [
-                        saul_dialog_package(
+                        peter_dialog_package(
                             payloadTranslations[0][lang(player)],
-                            Expression.EXTREMELY_SCARED
+                            Expression.NEUTRAL
                         ),
                     ],
                     next: [[-1]],

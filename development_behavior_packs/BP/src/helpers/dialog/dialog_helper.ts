@@ -1,4 +1,7 @@
-export { splitText };
+import { Player, } from "@minecraft/server";
+
+export { splitText, lang, };
+
 /**
  * Cuts text and characterName so that they fit correctly in the UI.
  * @param text text to split.
@@ -31,4 +34,21 @@ function splitText(
     }
 
     return splitText.join("\n");
+}
+
+type language = "es_ar" | "en_us" | "es_mx" | "en_uk";
+const languages: language[] = [
+    "es_ar",
+    "en_us",
+    "es_mx",
+    "en_uk"
+]
+
+function lang(player: Player) {
+    for (const language of languages) {
+        if (player.hasTag(language)) {
+            return language;
+        }
+    }
+    return languages[0];
 }

@@ -1,87 +1,102 @@
-import { InputPermissionCategory, system } from "@minecraft/server";
-import { ActionFormData } from "@minecraft/server-ui";
-import { splitText } from "../../helpers/dialog/dialog_helper";
-let dialogQueue = {};
-export { queueDialog };
+import { InputPermissionCategory, system, } from "@minecraft/server";
+import { ActionFormData, } from "@minecraft/server-ui";
+import { splitText, } from "../../helpers/dialog/dialog_helper";
+export { traverseTree, };
 /**
- * Adds a dialog package to be rendered when available.
- * @param player player ID to add the package to.
- * @param dialogPackage package to be added, is of type dialogPackage.
+ * Handles showing dialogues, playing SFX and enabling/disabling movement.
+ * @param player player to show the dialogue to.
+ * @param dialoguePackage dialogue package to show. Of type dialoguePackage
+ * @param playAnimation if to play the open animation or not. Of type boolean.
+ * Defaults to false.
  */
-function queueDialog(player, dialogPackage) {
-    if (!Object.keys(dialogQueue).includes(player.id)) {
-        dialogQueue[player.id] = [];
+function showDialogue(player, dialoguePackage, playAnimation = false) {
+    setMovement(player, false);
+    const { payload, characterName, characterImagePath, soundName, } = dialoguePackage;
+    if (typeof payload === "string" || (typeof payload !== "string" && playAnimation)) {
+        let soundPlayingIndex = 0;
+        const dialogueSound = system.runInterval(() => {
+            if (soundPlayingIndex < 3) {
+                player.playSound(soundName);
+                soundPlayingIndex++;
+            }
+            else {
+                system.clearRun(dialogueSound);
+            }
+        }, 3);
     }
-    dialogQueue[player.id].push(dialogPackage);
-    if (dialogPackage[5]) {
-        showDialog(player, 0);
-        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, false);
-        player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, false);
-    }
-}
-/**
- * Shows first queue dialog package.
- * @param player player ID to get package from.
- * @param response the response to the last option package. Cancelled or none is zero, buttons are one and two.
- */
-function showDialog(player, response = 0) {
-    if (dialogQueue[player.id][0][4] && dialogQueue[player.id][0][4] !== response) {
-        dialogQueue[player.id].splice(0, 1);
-        if (dialogQueue[player.id].length > 0) {
-            showDialog(player, response);
-        }
-        else {
-            player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, true);
-            player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, true);
-        }
-        return;
-    }
-    let soundPlayingIndex = 0;
-    const sound = dialogQueue[player.id][0][3];
-    const dialogSound = system.runInterval(() => {
-        if (soundPlayingIndex < 3) {
-            player.playSound(sound);
-            soundPlayingIndex++;
-        }
-        else {
-            system.clearRun(dialogSound);
-        }
-    }, 3);
-    const dialogForm = new ActionFormData;
-    dialogForm.button(dialogQueue[player.id][0][1], // characterName
-    dialogQueue[player.id][0][2] // characterImage
-    );
-    if (dialogQueue[player.id][0][5] || typeof dialogQueue[player.id][0][5] !== "string") {
-        dialogForm.title("true"); // Send playanimation commands (through .title,
+    const dialogueForm = new ActionFormData;
+    dialogueForm.button(characterName, characterImagePath);
+    if (playAnimation) {
+        dialogueForm.title("true"); // Send playanimation commands (through .title,
         // as it is not necessary for anything else)
     }
-    let dialogPackage = dialogQueue[player.id][0];
-    if (typeof dialogPackage[0] === "string") {
-        dialogForm.body(splitText(dialogPackage[0], 40, 3));
-        dialogForm.button(""); // Empty buttons (otherwise it bugs)
-        dialogForm.button("");
-        dialogQueue[player.id].splice(0, 1);
+    if (typeof payload === "string") {
+        dialogueForm.body(splitText(payload, 40, 3));
+        dialogueForm.button(""); // Empty buttons (otherwise it bugs)
+        dialogueForm.button("");
     }
     else {
-        dialogForm.button(dialogPackage[0][0]); // Button 1
-        dialogForm.button(dialogPackage[0][1]); // Button 2
+        dialogueForm.button(payload[0]); // Button 1
+        dialogueForm.button(payload[1]); // Button 2
     }
-    dialogForm.show(player).then(response => {
-        system.clearRun(dialogSound);
-        if (dialogQueue[player.id].length > 0) {
-            if (response.canceled) {
-                showDialog(player, 1);
-            }
-            else if (response.selection) {
-                if (typeof dialogPackage[0] !== "string") {
-                    dialogQueue[player.id].splice(0, 1);
-                }
-                showDialog(player, response.selection);
-            }
+    return dialogueForm.show(player);
+}
+var Response;
+(function (Response) {
+    Response[Response["FIRST"] = 0] = "FIRST";
+    Response[Response["SECOND"] = 1] = "SECOND";
+    Response[Response["CANCEL"] = 2] = "CANCEL";
+})(Response || (Response = {}));
+;
+let buttonFirst = true;
+/**
+ * Adds a dialogue tree to be rendered when available.
+ * @param player player ID to add the tree to.
+ * @param dialogueTree dialogue tree to be proccessed. Of type dialogueTree.
+ * -1 on next means it's the last dialogue, therefore it stops the chain.
+ * @param index index of the dialogue in the dialogue list. Of type number.
+ */
+async function traverseTree(player, dialogueTree, index) {
+    let playAnimation = false;
+    if (typeof dialogueTree.dialogueList[index].payload === "string") {
+        if (index === 0) {
+            playAnimation = true;
+        }
+    }
+    else {
+        if (buttonFirst) {
+            playAnimation = true;
+        }
+    }
+    const responsePromise = (await showDialogue(player, dialogueTree.dialogueList[index], playAnimation));
+    let response = Response.CANCEL;
+    if (responsePromise.selection) {
+        player.playSound("block.click");
+        response = responsePromise.selection - 1; // Buttons are not zero-based,
+        // arrays are, therefore, -1.
+    }
+    else {
+        if (dialogueTree.next[index].length === 1) { // If only text
+            response = Response.FIRST;
+        }
+    }
+    if (dialogueTree.next[index][response] !== -1) { // Dialogue -1 means there're no dialogues left.
+        if (response !== Response.CANCEL || (response === Response.CANCEL && dialogueTree.next[index].length === 3
+        // If there's an exit message.
+        )) {
+            buttonFirst = true;
+            traverseTree(player, dialogueTree, dialogueTree.next[index][response]);
         }
         else {
-            player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, true);
-            player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, true);
+            buttonFirst = false;
+            traverseTree(player, dialogueTree, index);
         }
-    });
+    }
+    else {
+        setMovement(player, true);
+    }
+}
+function setMovement(player, enable) {
+    player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, enable);
+    player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, enable);
 }

@@ -1,4 +1,5 @@
-export { musicInfo };
+export { musicInfo, };
+
 /**
  * Stores all information about music playing.
  * @param tag stores the tag to be added to the player when they're in the music playing area.

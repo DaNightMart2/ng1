@@ -1,4 +1,4 @@
-export { splitText };
+export { splitText, lang, };
 /**
  * Cuts text and characterName so that they fit correctly in the UI.
  * @param text text to split.
@@ -23,4 +23,18 @@ function splitText(text, maxLengthPerLine = 40, maxLines = 3) {
         return "[UI][error]-dialog_helper.ts parameter 'text' is too long | Error code: waffle.";
     }
     return splitText.join("\n");
+}
+const languages = [
+    "es_ar",
+    "en_us",
+    "es_mx",
+    "en_uk"
+];
+function lang(player) {
+    for (const language of languages) {
+        if (player.hasTag(language)) {
+            return language;
+        }
+    }
+    return languages[0];
 }

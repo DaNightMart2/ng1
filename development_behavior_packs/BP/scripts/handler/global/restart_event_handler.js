@@ -1,6 +1,6 @@
-import { InputPermissionCategory, system, world } from "@minecraft/server";
-import { musicInfo } from "../../helpers/music/music_helper";
-import { teleportInfo } from "../../helpers/teleport/teleport_helper";
+import { InputPermissionCategory, system, world, } from "@minecraft/server";
+import { musicInfo, } from "../../helpers/music/music_helper";
+import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 function restartLang() {
     for (const player of world.getAllPlayers()) {
         player.removeTag("es_ar");
@@ -95,7 +95,7 @@ const waitForRestart = system.runTimeout(() => {
             playerActor = player;
             restartLang();
             restartTeleportMusic();
-            //restartPlayer();
+            restartPlayer();
             restartScoreboard();
             resetStructures();
         }

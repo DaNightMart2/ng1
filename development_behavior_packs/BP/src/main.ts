@@ -1,3 +1,5 @@
+import "./dialogues/saul/saul_dialogues";
+
 import "./handler/dialog/dialog_handler";
 
 import "./handler/global/general_handler";

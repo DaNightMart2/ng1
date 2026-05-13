@@ -1,4 +1,4 @@
-export { positionInAreCheck };
+export { positionInAreCheck, };
 /**
  * Checks if a position is inside a certain area.
  * @param position position for the check.
