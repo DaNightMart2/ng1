@@ -2,6 +2,7 @@ import { InputPermissionCategory, system, } from "@minecraft/server";
 import { ActionFormData, } from "@minecraft/server-ui";
 import { splitText, } from "../../helpers/dialog/dialog_helper";
 export { traverseTree, };
+let stopSound = false;
 /**
  * Handles showing dialogues, playing SFX and enabling/disabling movement.
  * @param player player to show the dialogue to.
@@ -10,19 +11,10 @@ export { traverseTree, };
  * Defaults to false.
  */
 function showDialogue(player, dialoguePackage, playAnimation = false) {
-    setMovement(player, false);
-    const { payload, characterName, characterImagePath, soundName, } = dialoguePackage;
-    if (typeof payload === "string" || (typeof payload !== "string" && playAnimation)) {
-        let soundPlayingIndex = 0;
-        const dialogueSound = system.runInterval(() => {
-            if (soundPlayingIndex < 3) {
-                player.playSound(soundName);
-                soundPlayingIndex++;
-            }
-            else {
-                system.clearRun(dialogueSound);
-            }
-        }, 3);
+    const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
+    if (dialogue.type === "text" || playAnimation) {
+        stopSound = false;
+        playSound(player, soundName);
     }
     const dialogueForm = new ActionFormData;
     dialogueForm.button(characterName, characterImagePath);
@@ -30,25 +22,26 @@ function showDialogue(player, dialoguePackage, playAnimation = false) {
         dialogueForm.title("true"); // Send playanimation commands (through .title,
         // as it is not necessary for anything else)
     }
-    if (typeof payload === "string") {
-        dialogueForm.body(splitText(payload, 40, 3));
+    if (dialogue.type === "text") {
+        dialogueForm.body(splitText(dialogue.payload, 40, 3));
         dialogueForm.button(""); // Empty buttons (otherwise it bugs)
         dialogueForm.button("");
     }
     else {
-        dialogueForm.button(payload[0]); // Button 1
-        dialogueForm.button(payload[1]); // Button 2
+        dialogueForm.button(dialogue.payload[0]); // Button 1
+        dialogueForm.button(dialogue.payload[1]); // Button 2
     }
-    return dialogueForm.show(player);
+    let responsePromise = dialogueForm.show(player);
+    return responsePromise.then((response) => {
+        stopSound = true;
+        if (dialogue.type === "text")
+            return 0;
+        if (!response.selection)
+            return 2;
+        player.playSound("block.click");
+        return response.selection - 1;
+    });
 }
-var Response;
-(function (Response) {
-    Response[Response["FIRST"] = 0] = "FIRST";
-    Response[Response["SECOND"] = 1] = "SECOND";
-    Response[Response["CANCEL"] = 2] = "CANCEL";
-})(Response || (Response = {}));
-;
-let buttonFirst = true;
 /**
  * Adds a dialogue tree to be rendered when available.
  * @param player player ID to add the tree to.
@@ -56,45 +49,37 @@ let buttonFirst = true;
  * -1 on next means it's the last dialogue, therefore it stops the chain.
  * @param index index of the dialogue in the dialogue list. Of type number.
  */
-async function traverseTree(player, dialogueTree, index) {
-    let playAnimation = false;
-    if (typeof dialogueTree.dialogueList[index].payload === "string") {
-        if (index === 0) {
-            playAnimation = true;
-        }
+async function traverseTree(player, dialogueTree, index, firstTimeShown = true) {
+    if (index === 0)
+        setMovement(player, false);
+    const dialoguePackage = dialogueTree.dialogueList[index];
+    let playAnimation = (dialoguePackage.dialogue.type === "text" && index === 0) ||
+        (dialoguePackage.dialogue.type === "options" && firstTimeShown);
+    const selection = await showDialogue(player, dialoguePackage, playAnimation);
+    if (dialogueTree.next[index][selection] === -1) { // Dialogue -1 means there're no dialogues left.
+        setMovement(player, true);
+        return;
+    }
+    if (selection < dialogueTree.next[index].length) {
+        traverseTree(player, dialogueTree, dialogueTree.next[index][selection]);
     }
     else {
-        if (buttonFirst) {
-            playAnimation = true;
-        }
+        traverseTree(player, dialogueTree, index, false);
     }
-    const responsePromise = (await showDialogue(player, dialogueTree.dialogueList[index], playAnimation));
-    let response = Response.CANCEL;
-    if (responsePromise.selection) {
-        player.playSound("block.click");
-        response = responsePromise.selection - 1; // Buttons are not zero-based,
-        // arrays are, therefore, -1.
-    }
-    else {
-        if (dialogueTree.next[index].length === 1) { // If only text
-            response = Response.FIRST;
-        }
-    }
-    if (dialogueTree.next[index][response] !== -1) { // Dialogue -1 means there're no dialogues left.
-        if (response !== Response.CANCEL || (response === Response.CANCEL && dialogueTree.next[index].length === 3
-        // If there's an exit message.
-        )) {
-            buttonFirst = true;
-            traverseTree(player, dialogueTree, dialogueTree.next[index][response]);
+}
+function playSound(player, soundName) {
+    let soundPlayingIndex = 0;
+    const dialogueSound = system.runInterval(() => {
+        if (stopSound)
+            system.clearRun(dialogueSound);
+        if (soundPlayingIndex < 3) {
+            player.playSound(soundName);
+            soundPlayingIndex++;
         }
         else {
-            buttonFirst = false;
-            traverseTree(player, dialogueTree, index);
+            system.clearRun(dialogueSound);
         }
-    }
-    else {
-        setMovement(player, true);
-    }
+    }, 3);
 }
 function setMovement(player, enable) {
     player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, enable);

@@ -1,14 +1,20 @@
-import { world } from "@minecraft/server";
-import { traverseTree, dialoguePackage } from "../../handler/dialog/dialog_handler";
+import { world, } from "@minecraft/server";
+import { traverseTree, dialoguePackage, dialogueOptions, dialogueText, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations } from "./saul_translations";
+import { payloadTranslations, } from "./saul_translations";
 
 function saul_dialog_package (
     text: string | string[],
     expresion: string,
 ): dialoguePackage {
+    let dialogue: dialogueText | dialogueOptions;
+    if (typeof text === "string")
+        dialogue = {type: "text", payload: text}
+    else
+        dialogue = {type: "options", payload: text}
+
     return {
-        payload: text,
+        dialogue: dialogue,
         characterName: "Rey Saúl",
         characterImagePath: "textures/ui/faces/saul/" + expresion ,
         soundName: "mob.pig.say",
@@ -39,7 +45,7 @@ world.afterEvents.playerInteractWithEntity.subscribe(data => {
                     dialogueList: [
                         saul_dialog_package(
                             payloadTranslations[0][lang(player)],
-                            Expression.EXTREMELY_SCARED
+                            Expression.EXTREMELY_SCARED,
                         ),
                     ],
                     next: [[-1]],

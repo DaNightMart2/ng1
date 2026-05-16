@@ -20,15 +20,14 @@ function splitText(text, maxLengthPerLine = 40, maxLines = 3) {
     }
     splitText.push(line_progress);
     if (splitText.length > maxLines) {
-        return "[UI][error]-dialog_helper.ts parameter 'text' is too long | Error code: waffle.";
+        return "| [UI][error]-dialog_helper.ts.\n| Parameter 'text' is too long.\n| Error code: waffle.";
     }
     return splitText.join("\n");
 }
 const languages = [
     "es_ar",
-    "en_us",
+    "en",
     "es_mx",
-    "en_uk"
 ];
 function lang(player) {
     for (const language of languages) {

@@ -1,10 +1,15 @@
-import { world } from "@minecraft/server";
-import { traverseTree } from "../../handler/dialog/dialog_handler";
+import { world, } from "@minecraft/server";
+import { traverseTree, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations } from "./saul_translations";
+import { payloadTranslations, } from "./saul_translations";
 function saul_dialog_package(text, expresion) {
+    let dialogue;
+    if (typeof text === "string")
+        dialogue = { type: "text", payload: text };
+    else
+        dialogue = { type: "options", payload: text };
     return {
-        payload: text,
+        dialogue: dialogue,
         characterName: "Rey Saúl",
         characterImagePath: "textures/ui/faces/saul/" + expresion,
         soundName: "mob.pig.say",

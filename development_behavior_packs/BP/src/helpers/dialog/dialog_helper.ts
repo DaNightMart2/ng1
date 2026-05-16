@@ -30,21 +30,20 @@ function splitText(
     splitText.push(line_progress);
 
     if (splitText.length > maxLines) {
-        return "[UI][error]-dialog_helper.ts parameter 'text' is too long | Error code: waffle.";
+        return "| [UI][error]-dialog_helper.ts.\n| Parameter 'text' is too long.\n| Error code: waffle.";
     }
 
     return splitText.join("\n");
 }
 
-type language = "es_ar" | "en_us" | "es_mx" | "en_uk";
+type language = "es_ar" | "en" | "es_mx";
 const languages: language[] = [
     "es_ar",
-    "en_us",
+    "en",
     "es_mx",
-    "en_uk"
 ]
 
-function lang(player: Player) {
+function lang(player: Player): language {
     for (const language of languages) {
         if (player.hasTag(language)) {
             return language;

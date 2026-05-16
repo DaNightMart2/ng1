@@ -1,16 +1,21 @@
-import { world } from "@minecraft/server";
-import { traverseTree, dialoguePackage } from "../../handler/dialog/dialog_handler";
+import { world, } from "@minecraft/server";
+import { traverseTree, dialoguePackage, dialogueText, dialogueOptions, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations } from "./peter_translations";
+import { payloadTranslations, } from "./peter_translations";
 
 function peter_dialog_package (
     text: string | string[],
     expresion: string,
 ): dialoguePackage {
+    let dialogue: dialogueText | dialogueOptions;
+    if (typeof text === "string")
+        dialogue = {type: "text", payload: text}
+    else
+        dialogue = {type: "options", payload: text}
     return {
-        payload: text,
+        dialogue: dialogue,
         characterName: "Peter Jonson",
-        characterImagePath: "textures/ui/faces/Jonson/" + expresion ,
+        characterImagePath: "textures/ui/faces/jonson/" + expresion ,
         soundName: "mob.villager.talk",
     };
 }

@@ -1,8 +1,18 @@
-import { InputPermissionCategory, Player, system, } from "@minecraft/server";
-import { ActionFormData, ActionFormResponse, } from "@minecraft/server-ui";
+import { InputPermissionCategory, ItemStopUseOnAfterEvent, Player, system, } from "@minecraft/server";
+import { ActionFormData, } from "@minecraft/server-ui";
 import { splitText, } from "../../helpers/dialog/dialog_helper";
 
-export { traverseTree, dialogueTree, dialoguePackage, };
+export { traverseTree, dialogueTree, dialoguePackage, dialogueText, dialogueOptions, };
+
+type dialogueText = {
+    type: "text",
+    payload: string,
+};
+
+type dialogueOptions = {
+    type: "options",
+    payload: string[],
+}
 
 /**
  * Package to send a dialog with.
@@ -15,7 +25,7 @@ export { traverseTree, dialogueTree, dialoguePackage, };
  * @param soundName sound name reference to play when showing the dialogue. Of type string.
  */
 type dialoguePackage = {
-    payload: string | string[],
+    dialogue: dialogueText | dialogueOptions,
     characterName: string,
     characterImagePath: string,
     soundName: string,
@@ -39,6 +49,7 @@ type dialogueTree = {
     next: number[][],
 }
 
+let stopSound = false;
 /**
  * Handles showing dialogues, playing SFX and enabling/disabling movement.
  * @param player player to show the dialogue to.
@@ -46,62 +57,47 @@ type dialogueTree = {
  * @param playAnimation if to play the open animation or not. Of type boolean.
  * Defaults to false.
  */
-function showDialogue (
+function showDialogue(
     player: Player,
     dialoguePackage: dialoguePackage,
     playAnimation: boolean = false,
-): Promise<ActionFormResponse> {
-    setMovement(player, false);
+): Promise<number> {
+    const {dialogue, characterName, characterImagePath, soundName} = dialoguePackage;
 
-    const {
-        payload,
-        characterName,
-        characterImagePath,
-        soundName,
-    } = dialoguePackage;
-
-    if (typeof payload === "string" || (typeof payload !== "string" && playAnimation)) {
-        let soundPlayingIndex = 0;
-        const dialogueSound = system.runInterval(() => {
-            if (soundPlayingIndex < 3) {
-                player.playSound(soundName);
-                soundPlayingIndex++;
-            } else {
-                system.clearRun(dialogueSound);
-            }
-        }, 3);
+    if (dialogue.type === "text" || playAnimation) {
+        stopSound = false;
+        playSound(player, soundName);
     }
 
     const dialogueForm = new ActionFormData;
-
     dialogueForm.button(characterName, characterImagePath);
 
     if (playAnimation) {
         dialogueForm.title("true"); // Send playanimation commands (through .title,
-                                    // as it is not necessary for anything else)
+        // as it is not necessary for anything else)
     }
 
-    if (typeof payload === "string") {
-        dialogueForm.body(splitText(payload, 40, 3));
+    if (dialogue.type === "text") {
+        dialogueForm.body(splitText(dialogue.payload, 40, 3));
         dialogueForm.button(""); // Empty buttons (otherwise it bugs)
         dialogueForm.button("");
     }
-    
+
     else {
-        dialogueForm.button(payload[0]); // Button 1
-        dialogueForm.button(payload[1]); // Button 2
+        dialogueForm.button(dialogue.payload[0]); // Button 1
+        dialogueForm.button(dialogue.payload[1]); // Button 2
     }
 
-    return dialogueForm.show(player);
+    let responsePromise = dialogueForm.show(player);
+    return responsePromise.then((response) => {
+        stopSound = true;
+        if (dialogue.type === "text") return 0;
+        if (!response.selection) return 2;
+        player.playSound("block.click");
+        return response.selection - 1;
+    })
 }
 
-enum Response {
-    FIRST = 0,
-    SECOND = 1,
-    CANCEL = 2,
-};
-
-let buttonFirst = true;
 /**
  * Adds a dialogue tree to be rendered when available.
  * @param player player ID to add the tree to.
@@ -109,58 +105,52 @@ let buttonFirst = true;
  * -1 on next means it's the last dialogue, therefore it stops the chain.
  * @param index index of the dialogue in the dialogue list. Of type number.
  */
-async function traverseTree (
+async function traverseTree(
     player: Player,
     dialogueTree: dialogueTree,
     index: number,
- ) {
+    firstTimeShown: boolean = true,
+) {
+    if (index === 0) setMovement(player, false);
 
-    let playAnimation = false;
-    if (typeof dialogueTree.dialogueList[index].payload === "string") {
-        if (index === 0) {
-            playAnimation = true;
-        }
-    } else {
-        if (buttonFirst) {
-            playAnimation = true;
-        }
+    const dialoguePackage = dialogueTree.dialogueList[index];
+    let playAnimation = (dialoguePackage.dialogue.type === "text" && index === 0) || 
+        (dialoguePackage.dialogue.type === "options" && firstTimeShown);
+
+    const selection = await showDialogue(player, dialoguePackage, playAnimation);
+
+    if (dialogueTree.next[index][selection] === -1) { // Dialogue -1 means there're no dialogues left.
+        setMovement(player, true);
+        return;
     }
 
-    const responsePromise = (await showDialogue(player, dialogueTree.dialogueList[index], playAnimation));
-        let response = Response.CANCEL;
-        if (responsePromise.selection) {
-            player.playSound("block.click");
-            response = responsePromise.selection-1; // Buttons are not zero-based,
-                                                    // arrays are, therefore, -1.
-        } else {
-            if (dialogueTree.next[index].length === 1) { // If only text
-                response = Response.FIRST;
-            }
-        }
+    if (selection < dialogueTree.next[index].length) {
+        traverseTree(player, dialogueTree, dialogueTree.next[index][selection]);
+    } else {
+        traverseTree(player, dialogueTree, index, false);
+    }
+}
 
-        if (dialogueTree.next[index][response] !== -1) { // Dialogue -1 means there're no dialogues left.
-            if (response !== Response.CANCEL || (
-                response === Response.CANCEL && dialogueTree.next[index].length === 3
-                // If there's an exit message.
-            )) {
-                buttonFirst = true;
-                traverseTree(player, dialogueTree, dialogueTree.next[index][response]);
-            } else {
-                buttonFirst = false;
-                traverseTree(player, dialogueTree, index);
-            }
+function playSound(player: Player, soundName: string) {
+    let soundPlayingIndex = 0;
+    const dialogueSound = system.runInterval(() => {
+        if (stopSound) system.clearRun(dialogueSound);
+        if (soundPlayingIndex < 3) {
+            player.playSound(soundName);
+            soundPlayingIndex++;
         } else {
-            setMovement(player, true);
+            system.clearRun(dialogueSound);
         }
+    }, 3);
 }
 
 function setMovement(player: Player, enable: boolean) {
     player.inputPermissions.setPermissionCategory(
         InputPermissionCategory.Movement,
-        enable
+        enable,
     );
     player.inputPermissions.setPermissionCategory(
         InputPermissionCategory.Camera,
-        enable
+        enable,
     );
 }

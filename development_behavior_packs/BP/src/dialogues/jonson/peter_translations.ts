@@ -3,8 +3,7 @@ export { payloadTranslations };
 const payloadTranslations = [
     {
         "es_ar": "",
-        "en_us": "",
+        "en": "",
         "es_mx": "",
-        "en_uk": ""
     }
-]
+];
