@@ -118,7 +118,7 @@
         "type": "panel",
         "controls": [
             {
-                "second_option@server_form.single_option_panel": {
+                "first_option@server_form.single_option_panel": {
                     "offset": ["100px", "42%"],
                     "$index": 1
                 }
@@ -127,6 +127,18 @@
                 "second_option@server_form.single_option_panel": {
                     "offset": ["400px", "42%"],
                     "$index": 2
+                }
+            },
+            {
+                "third_option@server_form.single_option_panel": {
+                    "offset": ["250px-25%c", "20%"],
+                    "$index": 3
+                }
+            },
+            {
+                "fourth_option@server_form.single_option_panel": {
+                    "offset": ["250px-25%c", "70%"],
+                    "$index": 4
                 }
             }
         ]

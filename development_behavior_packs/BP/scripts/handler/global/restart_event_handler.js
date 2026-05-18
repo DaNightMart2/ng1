@@ -4,9 +4,8 @@ import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 function restartLang() {
     for (const player of world.getAllPlayers()) {
         player.removeTag("es_ar");
-        player.removeTag("en_us");
+        player.removeTag("en");
         player.removeTag("es_mx");
-        player.removeTag("en_uk");
     }
 }
 function restartTeleportMusic() {
@@ -28,7 +27,7 @@ function restartPlayer() {
 }
 function restartPosition() {
     for (const player of world.getAllPlayers()) {
-        player.teleport({ x: -12.5, y: 45.0, z: 7.5 }, { "rotation": { x: 0, y: 0 } });
+        player.teleport({ x: -12.5, y: 46.0, z: 7.5 }, { "rotation": { x: 0, y: 0 } });
     }
 }
 function restartScoreboard() {

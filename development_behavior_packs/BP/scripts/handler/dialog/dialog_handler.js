@@ -6,11 +6,12 @@ let stopSound = false;
 /**
  * Handles showing dialogues, playing SFX and enabling/disabling movement.
  * @param player player to show the dialogue to.
- * @param dialoguePackage dialogue package to show. Of type dialoguePackage
+ * @param dialoguePackage dialogue package to show. Of type dialoguePackage.
+ * @param tags tags to add to the player or remove from them. Of type array of arrays of strings. Optional parameter. If the value start with a -, it will be removed, if it start with a +, it will be added, if it start with none, it default to a +.
  * @param playAnimation if to play the open animation or not. Of type boolean.
  * Defaults to false.
  */
-function showDialogue(player, dialoguePackage, playAnimation = false) {
+function showDialogue(player, dialoguePackage, playAnimation, tags) {
     const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
     if (dialogue.type === "text" || playAnimation) {
         stopSound = false;
@@ -26,25 +27,54 @@ function showDialogue(player, dialoguePackage, playAnimation = false) {
         dialogueForm.body(splitText(dialogue.payload, 40, 3));
         dialogueForm.button(""); // Empty buttons (otherwise it bugs)
         dialogueForm.button("");
+        dialogueForm.button("");
+        dialogueForm.button("");
     }
     else {
-        dialogueForm.button(dialogue.payload[0]); // Button 1
-        dialogueForm.button(dialogue.payload[1]); // Button 2
+        if (dialogue.payload.length >= 1) {
+            dialogueForm.button(dialogue.payload[0]); // Button 1
+            if (dialogue.payload.length >= 2) {
+                dialogueForm.button(dialogue.payload[1]); // Button 2
+            }
+            if (dialogue.payload.length >= 3) {
+                dialogueForm.button(dialogue.payload[2]); // Button 3
+            }
+            if (dialogue.payload.length >= 4) {
+                dialogueForm.button(dialogue.payload[3]); // Button 4
+            }
+        }
     }
     let responsePromise = dialogueForm.show(player);
     return responsePromise.then((response) => {
         stopSound = true;
+        if (tags) {
+            if (dialogue.type === "text") {
+                for (const tag of tags[0]) {
+                    tagDetection(player, tag);
+                }
+            }
+            else {
+                if (response.selection) {
+                    for (const tag of tags[response.selection - 1]) {
+                        tagDetection(player, tag);
+                    }
+                }
+            }
+        }
         if (dialogue.type === "text")
             return 0;
-        if (!response.selection)
-            return 2;
-        player.playSound("block.click");
-        return response.selection - 1;
+        if (response.selection) {
+            player.playSound("block.click");
+            return response.selection - 1;
+        }
+        else {
+            return dialogue.payload.length;
+        }
     });
 }
 /**
  * Adds a dialogue tree to be rendered when available.
- * @param player player ID to add the tree to.
+ * @param player player to add the tree to.
  * @param dialogueTree dialogue tree to be proccessed. Of type dialogueTree.
  * -1 on next means it's the last dialogue, therefore it stops the chain.
  * @param index index of the dialogue in the dialogue list. Of type number.
@@ -52,16 +82,20 @@ function showDialogue(player, dialoguePackage, playAnimation = false) {
 async function traverseTree(player, dialogueTree, index, firstTimeShown = true) {
     if (index === 0)
         setMovement(player, false);
-    const dialoguePackage = dialogueTree.dialogueList[index];
-    let playAnimation = (dialoguePackage.dialogue.type === "text" && index === 0) ||
-        (dialoguePackage.dialogue.type === "options" && firstTimeShown);
-    const selection = await showDialogue(player, dialoguePackage, playAnimation);
-    if (dialogueTree.next[index][selection] === -1) { // Dialogue -1 means there're no dialogues left.
+    const dialogueNode = dialogueTree[index];
+    let playAnimation = (dialogueNode.dialoguePackage.dialogue.type === "text" && index === 0) ||
+        (dialogueNode.dialoguePackage.dialogue.type === "options" && firstTimeShown);
+    const selection = await showDialogue(player, dialogueNode.dialoguePackage, playAnimation, dialogueNode.tags);
+    if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
         setMovement(player, true);
         return;
     }
-    if (selection < dialogueTree.next[index].length) {
-        traverseTree(player, dialogueTree, dialogueTree.next[index][selection]);
+    if (selection < dialogueNode.next.length) {
+        for (let i = 0; i < dialogueTree.length; i++) {
+            if (dialogueTree[i].name === dialogueNode.next[selection]) {
+                traverseTree(player, dialogueTree, i);
+            }
+        }
     }
     else {
         traverseTree(player, dialogueTree, index, false);
@@ -84,4 +118,17 @@ function playSound(player, soundName) {
 function setMovement(player, enable) {
     player.inputPermissions.setPermissionCategory(InputPermissionCategory.Movement, enable);
     player.inputPermissions.setPermissionCategory(InputPermissionCategory.Camera, enable);
+}
+function tagDetection(player, tag) {
+    if (tag[0] === "-") {
+        player.removeTag(tag.substring(1, tag.length));
+    }
+    else {
+        if (tag[0] === "+") {
+            player.addTag(tag.substring(1, tag.length));
+        }
+        else {
+            player.addTag(tag);
+        }
+    }
 }

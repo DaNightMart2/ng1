@@ -1,4 +1,4 @@
-export { payloadTranslations, };
+export { payloadTranslations, nameTranslations };
 
 const payloadTranslations = [
     {
@@ -95,3 +95,11 @@ const payloadTranslations = [
         "es_ar": "Tienen que hacer lo que dice Peter, oink. ¡Necesito volver a mi ciudad, oink!",
     },
 ];
+
+const nameTranslations = {
+    saul: {
+        "es_ar": "Rey Saúl",
+        "en": "King Saúl",
+        "es_mx": "Rey Saúl",
+    },
+}

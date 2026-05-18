@@ -1,29 +1,17 @@
-import { system, world, } from "@minecraft/server";
+import { system, world } from "@minecraft/server";
 import { traverseTree, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations, nameTranslations } from "./lang_translations";
+import { payloadTranslations, } from "./config_translations";
 import { positionInAreCheck, } from "../../helpers/global/global_functions";
-/**
- * Automatically defines the dialog package using the characters information and the provided text.
- * @param player player to check the language from. Of type player.
- * @param textIdentifier text to show or number to get the text translation to show. Of type string or number.
- */
-function lang_dialog_package(player, textIdentifier) {
+function lang_dialog_package(text) {
     let dialogue;
-    let text;
-    if (typeof textIdentifier === "number") {
-        text = payloadTranslations[textIdentifier][lang(player)];
-    }
-    else {
-        text = textIdentifier;
-    }
     if (typeof text === "string")
         dialogue = { type: "text", payload: text };
     else
         dialogue = { type: "options", payload: text };
     return {
         dialogue: dialogue,
-        characterName: nameTranslations.system[lang(player)],
+        characterName: "§o§lSystem",
         characterImagePath: "textures/ui/faces/system/others/console",
         soundName: "click_on.metal_pressure_plate",
     };
@@ -47,18 +35,18 @@ const languageChoosing = system.runInterval(() => {
                 traverseTree(player, [
                     {
                         name: "nextDialogTutorial",
-                        dialoguePackage: lang_dialog_package(player, 0),
+                        dialoguePackage: lang_dialog_package(payloadTranslations[0][lang(player)]),
                         next: ["eng__spa"],
                     },
                     {
                         name: "eng__spa",
-                        dialoguePackage: lang_dialog_package(player, 1),
+                        dialoguePackage: lang_dialog_package(payloadTranslations[1][lang(player)]),
                         next: ["", "ar__mx"],
                         tags: [["en"], []],
                     },
                     {
                         name: "ar__mx",
-                        dialoguePackage: lang_dialog_package(player, 2),
+                        dialoguePackage: lang_dialog_package(payloadTranslations[2][lang(player)]),
                         next: ["", ""],
                         tags: [["es_ar"], ["es_mx"]],
                     }

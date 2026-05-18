@@ -1,13 +1,27 @@
-import { world, } from "@minecraft/server";
+import { Player, world, } from "@minecraft/server";
 import { traverseTree, dialoguePackage, dialogueOptions, dialogueText, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations, } from "./saul_translations";
+import { payloadTranslations, nameTranslations, } from "./saul_translations";
 
+/**
+ * Automatically defines the dialog package using the characters information and the provided text.
+ * @param player player to check the language from. Of type player.
+ * @param textIdentifier text to show or number to get the text translation to show. Of type string or number.
+ */
 function saul_dialog_package (
-    text: string | string[],
-    expresion: string,
+    player: Player,
+    textIdentifier: number | string,
+    expression: string,
 ): dialoguePackage {
     let dialogue: dialogueText | dialogueOptions;
+
+    let text: string | string[];
+    if (typeof textIdentifier === "number") {
+        text = payloadTranslations[textIdentifier][lang(player)];
+    } else {
+        text = textIdentifier;
+    }
+
     if (typeof text === "string")
         dialogue = {type: "text", payload: text}
     else
@@ -15,8 +29,8 @@ function saul_dialog_package (
 
     return {
         dialogue: dialogue,
-        characterName: "Rey Saúl",
-        characterImagePath: "textures/ui/faces/saul/" + expresion ,
+        characterName: nameTranslations.saul[lang(player)],
+        characterImagePath: "textures/ui/faces/saul/" + expression ,
         soundName: "mob.pig.say",
     };
 }
@@ -38,21 +52,6 @@ world.afterEvents.playerInteractWithEntity.subscribe(data => {
     if (data.target.typeId === "ng1:interact_hitbox") {
         if (data.target.nameTag === "saul_hitbox") {
             const player = data.player
-
-            traverseTree(
-                player,
-                {
-                    dialogueList: [
-                        saul_dialog_package(
-                            payloadTranslations[0][lang(player)],
-                            Expression.EXTREMELY_SCARED,
-                        ),
-                    ],
-                    next: [[-1]],
-                },
-                0,
-            );
-
         }
     }
 });

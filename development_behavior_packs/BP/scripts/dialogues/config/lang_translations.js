@@ -1,4 +1,4 @@
-export { payloadTranslations, nameTranslations };
+export { payloadTranslations };
 const payloadTranslations = [
     {
         "es_ar": "Presioná :xbox_face_button_down:, :ps4_face_button_down: o cualquier parte de la pantalla para continuar.",
@@ -15,11 +15,9 @@ const payloadTranslations = [
         "en": ["Argentina (Bs. As.)", "Mexico"],
         "es_mx": ["Argentina (Bs. As.)", "México"],
     },
+    {
+        "es_ar": "ES_AR Placeholder",
+        "en": "EN Placeholder",
+        "es_mx": "ES_MX Placeholder",
+    }
 ];
-const nameTranslations = {
-    system: {
-        "es_ar": "§o§lSistema",
-        "en": "§o§lSystem",
-        "es_mx": "§o§lSistema",
-    },
-};
