@@ -31,16 +31,13 @@ function showDialogue(player, dialoguePackage, playAnimation, tags) {
         dialogueForm.button("");
     }
     else {
-        if (dialogue.payload.length >= 1) {
-            dialogueForm.button(dialogue.payload[0]); // Button 1
-            if (dialogue.payload.length >= 2) {
-                dialogueForm.button(dialogue.payload[1]); // Button 2
+        const buttons = dialogue.payload;
+        for (let i = 0; i < 4; i++) {
+            if (i < buttons.length) {
+                dialogueForm.button(buttons[i]);
             }
-            if (dialogue.payload.length >= 3) {
-                dialogueForm.button(dialogue.payload[2]); // Button 3
-            }
-            if (dialogue.payload.length >= 4) {
-                dialogueForm.button(dialogue.payload[3]); // Button 4
+            else {
+                dialogueForm.button(""); // Empty buttons (otherwise it bugs)
             }
         }
     }
@@ -72,6 +69,7 @@ function showDialogue(player, dialoguePackage, playAnimation, tags) {
         }
     });
 }
+let test = 0;
 /**
  * Adds a dialogue tree to be rendered when available.
  * @param player player to add the tree to.
@@ -80,6 +78,10 @@ function showDialogue(player, dialoguePackage, playAnimation, tags) {
  * @param index index of the dialogue in the dialogue list. Of type number.
  */
 async function traverseTree(player, dialogueTree, index, firstTimeShown = true) {
+    // console.log(test);
+    test = 1;
+    if (!player.isValid)
+        return; // Return if player left the game
     if (index === 0)
         setMovement(player, false);
     const dialogueNode = dialogueTree[index];
@@ -88,6 +90,7 @@ async function traverseTree(player, dialogueTree, index, firstTimeShown = true) 
     const selection = await showDialogue(player, dialogueNode.dialoguePackage, playAnimation, dialogueNode.tags);
     if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
         setMovement(player, true);
+        test = 0;
         return;
     }
     if (selection < dialogueNode.next.length) {

@@ -11,7 +11,7 @@ function hideHudElements() {
 function invisibilityInSpawn() {
     for (const player of world.getAllPlayers()) {
         if (positionInAreCheck(player.location, { x: -19, y: 3, z: 6 }, { x: -7, y: 49, z: 18 })) {
-            player.addEffect("invisibility", 5, { "showParticles": false, "amplifier": 255 });
+            player.addEffect("invisibility", 20, { "showParticles": false, "amplifier": 255 });
         }
     }
 }

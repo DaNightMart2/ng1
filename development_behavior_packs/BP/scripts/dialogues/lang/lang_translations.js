@@ -1,21 +1,21 @@
 export { payloadTranslations, nameTranslations };
-const payloadTranslations = [
-    {
+const payloadTranslations = {
+    nextDialogTutorial: {
         "es_ar": "Presioná :xbox_face_button_down:, :ps4_face_button_down: o cualquier parte de la pantalla para continuar.",
         "en": "Press :xbox_face_button_down:, :ps4_face_button_down: or any part of the screen to continue.",
         "es_mx": "Presiona :xbox_face_button_down:, :ps4_face_button_down: o cualquier parte de la pantalla para continuar.",
     },
-    {
+    eng__spa: {
         "es_ar": ["Inglés", "Español"],
         "en": ["English", "Spanish"],
         "es_mx": ["Inglés", "Español"],
     },
-    {
+    ar__mx: {
         "es_ar": ["Argentina (Bs. As.)", "México"],
         "en": ["Argentina (Bs. As.)", "Mexico"],
         "es_mx": ["Argentina (Bs. As.)", "México"],
     },
-];
+};
 const nameTranslations = {
     system: {
         "es_ar": "§o§lSistema",

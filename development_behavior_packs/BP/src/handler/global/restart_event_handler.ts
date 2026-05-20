@@ -7,6 +7,7 @@ function restartLang() {
         player.removeTag("es_ar");
         player.removeTag("en");
         player.removeTag("es_mx");
+        player.removeTag("choosing_lang");
     }
 }
 

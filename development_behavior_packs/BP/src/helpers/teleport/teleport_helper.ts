@@ -11,7 +11,7 @@ const teleportInfo = [
     {
         tag: "ToLimbo01",
         fromCoordinates: [{x: -19, y: 3, z: 6}, {x: -7, y: 3, z: 18}],
-        toCoordinates: {x: 35.0, y: 20.5, z: 21.0},
+        toCoordinates: {x: 35.0, y: 21.6, z: 24.0},
         rotation: {x: 0, y: 0},
     },
 

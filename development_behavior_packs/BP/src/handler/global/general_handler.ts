@@ -23,7 +23,7 @@ function invisibilityInSpawn() {
         )) {
             player.addEffect(
                 "invisibility",
-                5,
+                20,
                 {"showParticles": false, "amplifier": 255}
             );
         }

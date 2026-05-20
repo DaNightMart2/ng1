@@ -6,16 +6,16 @@ import { positionInAreCheck, } from "../../helpers/global/global_functions";
 /**
  * Automatically defines the dialog package using the characters information and the provided text.
  * @param player player to check the language from. Of type player.
- * @param textIdentifier text to show or number to get the text translation to show. Of type string or number.
+ * @param translationIdentifier key of the translation to get the text from. Of type key of type of payload translations.
  */
-function lang_dialog_package(player, textIdentifier) {
+function lang_dialog_package(player, translationIdentifier) {
     let dialogue;
     let text;
-    if (typeof textIdentifier === "number") {
-        text = payloadTranslations[textIdentifier][lang(player)];
+    if (translationIdentifier.charAt(0) === ";") {
+        text = translationIdentifier;
     }
     else {
-        text = textIdentifier;
+        text = payloadTranslations[translationIdentifier][lang(player)];
     }
     if (typeof text === "string")
         dialogue = { type: "text", payload: text };
@@ -36,29 +36,29 @@ const languageChoosing = system.runInterval(() => {
         }
     }
     for (const player of world.getAllPlayers()) {
-        if (languageChoosingPlayers.includes(player))
-            return;
         if (!languageChosen(player)) {
             if (player.isInWater) {
-                if (positionInAreCheck(player.location, { x: -19, y: 3, z: 6 }, { x: -7, y: 4, z: 18 })) {
-                    player.teleport({ x: -13.5, y: 40, z: 12.5 }, { "rotation": { x: 90, y: 0 } });
+                if (positionInAreCheck(player.location, { x: -20, y: 3, z: 6 }, { x: -7, y: 4, z: 18 })) {
+                    player.teleport({ x: -14.5, y: 40, z: 12.5 }, { "rotation": { x: 90, y: 0 } });
                 }
+                if (languageChoosingPlayers.includes(player))
+                    return;
                 languageChoosingPlayers.push(player);
                 traverseTree(player, [
                     {
                         name: "nextDialogTutorial",
-                        dialoguePackage: lang_dialog_package(player, 0),
+                        dialoguePackage: lang_dialog_package(player, "nextDialogTutorial"),
                         next: ["eng__spa"],
                     },
                     {
                         name: "eng__spa",
-                        dialoguePackage: lang_dialog_package(player, 1),
+                        dialoguePackage: lang_dialog_package(player, "eng__spa"),
                         next: ["", "ar__mx"],
                         tags: [["en"], []],
                     },
                     {
                         name: "ar__mx",
-                        dialoguePackage: lang_dialog_package(player, 2),
+                        dialoguePackage: lang_dialog_package(player, "ar__mx"),
                         next: ["", ""],
                         tags: [["es_ar"], ["es_mx"]],
                     }

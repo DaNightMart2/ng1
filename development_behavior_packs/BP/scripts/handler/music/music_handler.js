@@ -20,3 +20,12 @@ system.runInterval(() => {
         }
     }
 });
+world.afterEvents.playerSpawn.subscribe(data => {
+    if (data.initialSpawn) {
+        system.runTimeout(() => {
+            for (const music of musicInfo) {
+                data.player.removeTag(music.tag);
+            }
+        }, 300);
+    }
+});

@@ -88,16 +88,12 @@ function showDialogue(
     }
 
     else {
-        if (dialogue.payload.length >= 1) {
-            dialogueForm.button(dialogue.payload[0]); // Button 1
-            if (dialogue.payload.length >= 2) {
-                dialogueForm.button(dialogue.payload[1]); // Button 2
-            }
-            if (dialogue.payload.length >= 3) {
-                dialogueForm.button(dialogue.payload[2]); // Button 3
-            }
-            if (dialogue.payload.length >= 4) {
-                dialogueForm.button(dialogue.payload[3]); // Button 4
+        const buttons = dialogue.payload;
+        for (let i = 0; i < 4; i++) {
+            if (i < buttons.length) {
+                dialogueForm.button(buttons[i]);
+            } else {
+                dialogueForm.button(""); // Empty buttons (otherwise it bugs)
             }
         }
     }
@@ -128,6 +124,8 @@ function showDialogue(
     })
 }
 
+let test = 0;
+
 /**
  * Adds a dialogue tree to be rendered when available.
  * @param player player to add the tree to.
@@ -141,6 +139,10 @@ async function traverseTree(
     index: number,
     firstTimeShown: boolean = true,
 ) {
+    // console.log(test);
+    test = 1;
+    if (!player.isValid) return; // Return if player left the game
+
     if (index === 0) setMovement(player, false);
 
     const dialogueNode = dialogueTree[index];
@@ -151,6 +153,7 @@ async function traverseTree(
 
     if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
         setMovement(player, true);
+        test = 0;
         return;
     }
 
