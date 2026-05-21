@@ -1,8 +1,23 @@
-import { InputPermissionCategory, Player, system, } from "@minecraft/server";
-import { ActionFormData, } from "@minecraft/server-ui";
-import { splitText, } from "../../helpers/dialog/dialog_helper";
+import { Player, } from "@minecraft/server";
+import { setMovement, playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { showDialogue, } from "../../helpers/dialog/showDialogue";
 
-export { traverseTree, dialoguePackage, dialogueText, dialogueOptions, };
+export { queueDialogue, dialoguePackage, dialogueText, dialogueOptions, };
+
+let dialogQueue: Record<string, dialogueTree[]> = {}
+/**
+ * Adds a dialogue tree to the queue of dialogues.
+ * @param player player to add the tree to. Of type player.
+ * @param dialogueTrue tree to add to the queue. Of type dialogueTree.
+ */
+function queueDialogue(player: Player, dialogueTree: dialogueTree) {
+    if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
+
+    dialogQueue[player.id].push(dialogueTree);
+    if (dialogQueue[player.id].length === 1) {
+        traverseTree(player, 0);
+    }
+}
 
 type dialogueText = {
     type: "text",
@@ -12,23 +27,6 @@ type dialogueText = {
 type dialogueOptions = {
     type: "options",
     payload: string[],
-}
-
-/**
- * Package to send a dialog with.
- * @param payload text or options to show in the dialog box.
- * Of type string (for text) or two element string array (for options).
- * @param characterName the name of the character to show in the dialog box. 
- * Of type string.
- * @param characterImagePath texture file path for the character's image to show
- * in the dialog box. Of type string.
- * @param soundName sound name reference to play when showing the dialogue. Of type string.
- */
-type dialoguePackage = {
-    dialogue: dialogueText | dialogueOptions,
-    characterName: string,
-    characterImagePath: string,
-    soundName: string,
 }
 
 /**
@@ -49,157 +47,73 @@ type dialogueNode = {
     tags?: string[][],
 };
 
-let stopSound = false;
+type dialogueTree = dialogueNode[];
+
 /**
- * Handles showing dialogues, playing SFX and enabling/disabling movement.
- * @param player player to show the dialogue to.
- * @param dialoguePackage dialogue package to show. Of type dialoguePackage.
- * @param tags tags to add to the player or remove from them. Of type array of arrays of strings. Optional parameter. If the value start with a -, it will be removed, if it start with a +, it will be added, if it start with none, it default to a +.
- * @param playAnimation if to play the open animation or not. Of type boolean.
- * Defaults to false.
+ * Package to send a dialog with.
+ * @param payload text or options to show in the dialog box.
+ * Of type string (for text) or two element string array (for options).
+ * @param characterName the name of the character to show in the dialog box. 
+ * Of type string.
+ * @param characterImagePath texture file path for the character's image to show
+ * in the dialog box. Of type string.
+ * @param soundName sound name reference to play when showing the dialogue. Of type string.
  */
-function showDialogue(
-    player: Player,
-    dialoguePackage: dialoguePackage,
-    playAnimation: boolean,
-    tags?: string[][],
-): Promise<number> {
-    const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
-
-    if (dialogue.type === "text" || playAnimation) {
-        stopSound = false;
-        playSound(player, soundName);
-    }
-
-    const dialogueForm = new ActionFormData;
-    dialogueForm.button(characterName, characterImagePath);
-
-    if (playAnimation) {
-        dialogueForm.title("true"); // Send playanimation commands (through .title,
-        // as it is not necessary for anything else)
-    }
-
-    if (dialogue.type === "text") {
-        dialogueForm.body(splitText(dialogue.payload, 40, 3));
-        dialogueForm.button(""); // Empty buttons (otherwise it bugs)
-        dialogueForm.button("");
-        dialogueForm.button("");
-        dialogueForm.button("");
-    }
-
-    else {
-        const buttons = dialogue.payload;
-        for (let i = 0; i < 4; i++) {
-            if (i < buttons.length) {
-                dialogueForm.button(buttons[i]);
-            } else {
-                dialogueForm.button(""); // Empty buttons (otherwise it bugs)
-            }
-        }
-    }
-
-    let responsePromise = dialogueForm.show(player);
-    return responsePromise.then((response) => {
-        stopSound = true;
-        if (tags) {
-            if (dialogue.type === "text") {
-                for (const tag of tags[0]) {
-                    tagDetection(player, tag);
-                }
-            } else {
-                if (response.selection) {
-                    for (const tag of tags[response.selection - 1]) {
-                        tagDetection(player, tag);
-                    }
-                }
-            }
-        }
-        if (dialogue.type === "text") return 0;
-        if (response.selection) {
-            player.playSound("block.click");
-            return response.selection - 1;
-        } else {
-            return dialogue.payload.length;
-        }
-    })
+type dialoguePackage = {
+    dialogue: dialogueText | dialogueOptions,
+    characterName: string,
+    characterImagePath: string,
+    soundName: string,
 }
-
-let test = 0;
 
 /**
  * Adds a dialogue tree to be rendered when available.
  * @param player player to add the tree to.
- * @param dialogueTree dialogue tree to be proccessed. Of type dialogueTree.
- * -1 on next means it's the last dialogue, therefore it stops the chain.
  * @param index index of the dialogue in the dialogue list. Of type number.
  */
 async function traverseTree(
     player: Player,
-    dialogueTree: dialogueNode[],
     index: number,
     firstTimeShown: boolean = true,
 ) {
-    // console.log(test);
-    test = 1;
+    const dialogueTree = dialogQueue[player.id][0];
+
     if (!player.isValid) return; // Return if player left the game
 
     if (index === 0) setMovement(player, false);
 
     const dialogueNode = dialogueTree[index];
     let playAnimation = (dialogueNode.dialoguePackage.dialogue.type === "text" && index === 0) ||
-        (dialogueNode.dialoguePackage.dialogue.type === "options" && firstTimeShown);
+    (dialogueNode.dialoguePackage.dialogue.type === "options" && firstTimeShown);
 
-    const selection = await showDialogue(player, dialogueNode.dialoguePackage, playAnimation, dialogueNode.tags);
+    try {
+        const selection = await showDialogue(
+            player,
+            dialogueNode.dialoguePackage,
+            playAnimation,
+            dialogueNode.tags
+        );
 
-    if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
-        setMovement(player, true);
-        test = 0;
-        return;
-    }
-
-    if (selection < dialogueNode.next.length) {
-        for (let i = 0; i < dialogueTree.length; i++) {
-            if (dialogueTree[i].name === dialogueNode.next[selection]) {
-                traverseTree(player, dialogueTree, i);
+        if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
+            setMovement(player, true);
+            playersOnDialogueExt(-1);
+            dialogQueue[player.id].splice(0, 1);
+            if (dialogQueue[player.id].length > 0) {
+                traverseTree(player, 0);
             }
+            return;
         }
-    } else {
-        traverseTree(player, dialogueTree, index, false);
-    }
-}
 
-function playSound(player: Player, soundName: string) {
-    let soundPlayingIndex = 0;
-    const dialogueSound = system.runInterval(() => {
-        if (stopSound) system.clearRun(dialogueSound);
-        if (soundPlayingIndex < 3) {
-            player.playSound(soundName);
-            soundPlayingIndex++;
+        if (selection < dialogueNode.next.length) {
+            for (let i = 0; i < dialogueTree.length; i++) {
+                if (dialogueTree[i].name === dialogueNode.next[selection]) {
+                    traverseTree(player, i);
+                }
+            }
         } else {
-            system.clearRun(dialogueSound);
+            traverseTree(player, index, false);
         }
-    }, 3);
-}
-
-function setMovement(player: Player, enable: boolean) {
-    player.inputPermissions.setPermissionCategory(
-        InputPermissionCategory.Movement,
-        enable,
-    );
-    player.inputPermissions.setPermissionCategory(
-        InputPermissionCategory.Camera,
-        enable,
-    );
-}
-
-function tagDetection(player: Player, tag: string) {
-    if (tag[0] === "-") {
-        player.removeTag(tag.substring(1, tag.length));
-    } else {
-        if (tag[0] === "+") {
-            player.addTag(tag.substring(1, tag.length));
-        } else {
-            player.addTag(tag);
-        }
+    } catch (_) {
+        playersOnDialogueExt(-1);
     }
 }

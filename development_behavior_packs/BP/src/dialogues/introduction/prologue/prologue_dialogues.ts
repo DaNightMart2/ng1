@@ -1,7 +1,8 @@
-import { Player, } from "@minecraft/server";
-import { dialoguePackage, dialogueText, dialogueOptions, } from "../../../handler/dialog/dialog_handler";
+import { Player, system, world, } from "@minecraft/server";
+import { dialoguePackage, dialogueText, dialogueOptions, queueDialogue, } from "../../../handler/dialog/dialog_handler";
 import { lang, } from "../../../helpers/dialog/dialog_helper";
-import { payloadTranslations } from "./prologue_translations";
+import { payloadTranslations, } from "./prologue_translations";
+import { positionInAreCheck, } from "../../../helpers/global/global_functions";
 
 /**
  * Automatically defines the dialog package using the characters information and the provided text.
@@ -14,12 +15,8 @@ function prologue_dialog_package(
 ): dialoguePackage {
     let dialogue: dialogueText | dialogueOptions;
 
-    let text: string | string[];
-    if (translationIdentifier.charAt(0) === ";") {
-        text = translationIdentifier;
-    } else {
-        text = payloadTranslations[translationIdentifier][lang(player)];
-    }
+    let text = payloadTranslations[translationIdentifier][lang(player)];
+    text = text.replaceAll("[PLAYERNAME]", player.name);
 
     if (typeof text === "string")
         dialogue = { type: "text", payload: text }
@@ -29,6 +26,76 @@ function prologue_dialog_package(
         dialogue: dialogue,
         characterName: "",
         characterImagePath: "",
-        soundName: "click_on.metal_pressure_plate",
+        soundName: "block.click",
     };
 }
+
+system.runInterval(() => {
+    for (const player of world.getAllPlayers()) {
+        if (positionInAreCheck(player.location, {x: -19, y: 3, z: 8}, {x: -7, y: 5, z: 18})) {
+            player.teleport({x: player.location.x, y: 5, z: player.location.z});
+
+            queueDialogue(
+                player,
+                [
+                    {
+                        name: "blancuivre_tragedy",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "1_blancuivre_tragedy",
+                        ),
+                        next: ["enemy_city"],
+                    },
+                    {
+                        name: "enemy_city",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "2_enemy_city",
+                        ),
+                        next: ["noirefer"],
+                    },
+                    {
+                        name: "noirefer",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "3_noirefer",
+                        ),
+                        next: ["limbo"],
+                    },
+                    {
+                        name: "limbo",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "4_limbo",
+                        ),
+                        next: ["new_home"],
+                    },
+                    {
+                        name: "new_home",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "5_new_home",
+                        ),
+                        next: ["you"],
+                    },
+                    {
+                        name: "you",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "6_you",
+                        ),
+                        next: ["long_day"],
+                    },
+                    {
+                        name: "long_day",
+                        dialoguePackage: prologue_dialog_package(
+                            player,
+                            "7_long_day",
+                        ),
+                        next: [""],
+                    },
+                ],
+            );
+        }
+    }
+});

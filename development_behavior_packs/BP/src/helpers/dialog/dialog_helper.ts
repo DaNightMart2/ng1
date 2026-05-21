@@ -1,6 +1,21 @@
-import { Player, } from "@minecraft/server";
+import { Player, InputPermissionCategory, } from "@minecraft/server";
 
-export { splitText, lang, };
+export { splitText, lang, tagDetection, setMovement, showGlobalDialogue, playersOnDialogueExt, };
+
+let playersOnDialogue = 0;
+
+/**
+ * Returns true if no players have a dialog open in their screens.
+ */
+function showGlobalDialogue(): boolean {
+    if (playersOnDialogue <= 0) return true;
+    return false;
+}
+
+function playersOnDialogueExt(increment?: number): number {
+    if (increment) playersOnDialogue += increment;
+    return playersOnDialogue;
+}
 
 /**
  * Cuts text and characterName so that they fit correctly in the UI.
@@ -50,4 +65,27 @@ function lang(player: Player): language {
         }
     }
     return languages[0];
+}
+
+function setMovement(player: Player, enable: boolean) {
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Movement,
+        enable,
+    );
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Camera,
+        enable,
+    );
+}
+
+function tagDetection(player: Player, tag: string) {
+    if (tag[0] === "-") {
+        player.removeTag(tag.substring(1, tag.length));
+    } else {
+        if (tag[0] === "+") {
+            player.addTag(tag.substring(1, tag.length));
+        } else {
+            player.addTag(tag);
+        }
+    }
 }

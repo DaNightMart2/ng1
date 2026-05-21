@@ -1,5 +1,10 @@
 import { Player, system, world, } from "@minecraft/server";
-import { traverseTree, dialoguePackage, dialogueOptions, dialogueText, } from "../../../handler/dialog/dialog_handler";
+import {
+    queueDialogue,
+    dialoguePackage,
+    dialogueOptions,
+    dialogueText,
+} from "../../../handler/dialog/dialog_handler";
 import { lang, } from "../../../helpers/dialog/dialog_helper";
 import { payloadTranslations, nameTranslations, } from "./lang_translations";
 import { positionInAreCheck, } from "../../../helpers/global/global_functions";
@@ -7,7 +12,7 @@ import { positionInAreCheck, } from "../../../helpers/global/global_functions";
 /**
  * Automatically defines the dialog package using the characters information and the provided text.
  * @param player player to check the language from. Of type player.
- * @param translationIdentifier key of the translation to get the text from. If started with ';', it will show the string itself. Of type key of type of payload translations or string.
+ * @param translationIdentifier key of the translation to get the text from. Of type key of type of payload translations.
  */
 function lang_dialog_package(
     player: Player,
@@ -15,12 +20,7 @@ function lang_dialog_package(
 ): dialoguePackage {
     let dialogue: dialogueText | dialogueOptions;
 
-    let text: string | string[];
-    if (translationIdentifier.charAt(0) === ";") {
-        text = translationIdentifier;
-    } else {
-        text = payloadTranslations[translationIdentifier][lang(player)];
-    }
+    const text = payloadTranslations[translationIdentifier][lang(player)];
 
     if (typeof text === "string")
         dialogue = { type: "text", payload: text, }
@@ -42,30 +42,29 @@ system.runInterval(() => {
         ) {
             player.addTag("choosing_lang");
 
-            traverseTree(
+            queueDialogue(
                 player,
                 [
                     {
                         name: "eng__spa",
                         dialoguePackage: lang_dialog_package(
                             player,
-                            "eng__spa",
+                            "1_eng__spa",
                         ),
                         next: ["", "ar__mx"],
-                        tags: [["en", "-choosing_lang"], ["-en"]],
+                        tags: [["en", "-choosing_lang"], []],
                     },
 
                     {
                         name: "ar__mx",
                         dialoguePackage: lang_dialog_package(
                             player,
-                            "ar__mx",
+                            "2_ar__mx",
                         ),
                         next: ["", "", "eng__spa"],
                         tags: [["es_ar", "-choosing_lang"], ["es_mx", "-choosing_lang"]],
                     }
                 ],
-                0,
             );
         }
     }
