@@ -12,6 +12,9 @@ block.ng1:glitch_block=Glitch Block
 item.ng1:coin=Coin
 item.ng1:screwdriver=Screwdriver
 item.ng1:cheese=Cheese...?
+item.ng1:milanesa=Milanesa
+item.ng1:vasquito=§cEl Vasquito
+
 item.ng1:climbing_backpack=Climbing Backpack
 
 ## Tasty Fishes

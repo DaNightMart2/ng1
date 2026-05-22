@@ -23,6 +23,12 @@
             "textures": "textures/items/others/cheese"
 
         },
+        "ng1:milanesa": {
+            "textures": "textures/items/others/milanesa"
+        },
+        "ng1:vasquito": {
+            "textures": "textures/items/others/vasquito"
+        },
         "ng1:climbing_backpack": {
             "textures": "textures/items/others/climbing_backpack"
         },

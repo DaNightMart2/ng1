@@ -22,7 +22,11 @@
                     {}
                 ]
             },
-            "minecraft:pushable_by_entity": {}
+            "minecraft:pushable_by_entity": {},
+            "minecraft:collision_box": {
+                "height": 0.5,
+                "width": 0.5
+            }
         }
     }
 }

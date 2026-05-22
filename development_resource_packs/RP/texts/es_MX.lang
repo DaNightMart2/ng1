@@ -12,6 +12,10 @@ block.ng1:glitch_block=Bloque glitcheado
 item.ng1:coin=Moneda
 item.ng1:screwdriver=Destornillador
 item.ng1:cheese=¿Queso...?
+item.ng1:milanesa=Milanesa
+item.ng1:vasquito=§cEl Vasquito
+
+
 item.ng1:climbing_backpack=Mochila para escalar
 
 ## Tasty Fishes

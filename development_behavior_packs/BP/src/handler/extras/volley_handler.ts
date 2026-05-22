@@ -1,4 +1,4 @@
-import { world, system, Dimension, Entity, EntitySwingSource, ItemStack, EntityComponent, BlockExplodeAfterEvent, } from "@minecraft/server";
+import { world, system, Dimension, Entity, EntitySwingSource, } from "@minecraft/server";
 import { positionInAreCheck, } from "../../helpers/global/global_functions";
 
 let dimension: Dimension;
@@ -40,7 +40,7 @@ function ballKnockback(player: Entity, ball: Entity, force?: boolean) {
             y_addition = 0.2;
         } else {
             x_addition = 0.1;
-            y_addition = 0.1;
+            y_addition = 0.07;
         }
 
         const ballY = ball.getRotation().y;
@@ -56,7 +56,7 @@ function ballKnockback(player: Entity, ball: Entity, force?: boolean) {
 
         if (!ball.tryTeleport({
             x: ball.location.x + x_rotation_add,
-            y: ball.location.y + y_addition,
+            y: ball.location.y + y_addition * Math.max(0, (-world.getAllPlayers()[0].getRotation().x + 20) / 50),
             z: ball.location.z + (x_addition - (x_addition*2 / 180) * Math.abs(ballY))
         }, {"checkForBlocks": true})) {
             system.clearRun(knockBack);
@@ -89,7 +89,7 @@ world.afterEvents.playerSwingStart.subscribe(data => {
         const player = data.player;
 
         player.runCommand("clear @s ng1:volley_ball_spawn_egg 0 1");
-        const ball = dimension.spawnEntity("ng1:volley_ball", {x: player.location.x, y: player.location.y+1 , z: player.location.z}, {"initialRotation": player.getRotation().y});
+        const ball = dimension.spawnEntity("ng1:volley_ball", {x: player.location.x, y: player.location.y + 1.8, z: player.location.z}, {"initialRotation": player.getRotation().y});
         ballKnockback(player, ball, player.isSneaking);
     }
 });
