@@ -6,6 +6,9 @@ import "./handler/global/general_handler";
 import "./handler/music/music_handler";
 import "./handler/teleport/teleport_handler";
 
+// Extras
+import "./handler/extras/volley_handler";
+
 // Dialogues
 import "./dialogues/jonson/peter_dialogues";
 

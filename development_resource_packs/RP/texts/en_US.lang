@@ -66,6 +66,9 @@ entity.peter_jonson.name=Peter Jonson
 item.spawn_egg.entity.ng1:computer.name=Computer Spawn Egg
 entity.ng1:computer.name=Computer
 
+item.spawn_egg.entity.ng1:volley_ball.name=Volley Ball
+entity.ng1:volley_ball.name=Volley Ball
+
 ## UNDERTALE
 item.ng1:bravery_heart=§6Bravery
 item.ng1:integrity_heart=§1Integrity
@@ -82,6 +85,8 @@ ng1:itemGroup.name.undertale=UNDERTALE
 ng1:itemGroup.name.tastyFish=Tasty Fish
 
 ## Titles
+title.ng1:volley_ball_far_away=§4You're too far away from volleyball area.
+
 title.ng1:theentity_description=§o§aGod of Commands
 title.ng1:time_left=§eTime Left:§r 
 title.ng1:no_explosion=§e(This bomb never did want to explode...)

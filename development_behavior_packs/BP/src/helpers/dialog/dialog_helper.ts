@@ -1,19 +1,23 @@
-import { Player, InputPermissionCategory, } from "@minecraft/server";
+import { Player, } from "@minecraft/server";
 
-export { splitText, lang, tagDetection, setMovement, showGlobalDialogue, playersOnDialogueExt, };
+export { splitText, lang, tagDetection, showGlobalDialogue, playersOnDialogueExt, };
 
 let playersOnDialogue = 0;
-
 /**
  * Returns true if no players have a dialog open in their screens.
  */
 function showGlobalDialogue(): boolean {
-    if (playersOnDialogue <= 0) return true;
+    if (playersOnDialogue === 0) return true;
     return false;
 }
 
-function playersOnDialogueExt(increment?: number): number {
-    if (increment) playersOnDialogue += increment;
+/**
+ * Returns the playersOnDialogue function, and add or removes one from it.
+ * @param addition defines if to add or remove one from the variable. Of type boolean. Is optional.
+ */
+function playersOnDialogueExt(addition?: boolean): number {
+    if (addition) playersOnDialogue++;
+    else if (!addition) playersOnDialogue--;
     return playersOnDialogue;
 }
 
@@ -58,6 +62,9 @@ const languages: language[] = [
     "es_mx",
 ]
 
+/**
+ * Returns the language of the player based on their tags. Returns "es_ar", "en" or "es_mx". Defaults to "es_ar".
+ */
 function lang(player: Player): language {
     for (const language of languages) {
         if (player.hasTag(language)) {
@@ -67,17 +74,11 @@ function lang(player: Player): language {
     return languages[0];
 }
 
-function setMovement(player: Player, enable: boolean) {
-    player.inputPermissions.setPermissionCategory(
-        InputPermissionCategory.Movement,
-        enable,
-    );
-    player.inputPermissions.setPermissionCategory(
-        InputPermissionCategory.Camera,
-        enable,
-    );
-}
-
+/**
+ * Adds or removes a players tag.
+ * @param player player to modify tags. Of type player.
+ * @param tag tag to add to or remove from the player. Of type string. If string starts with '-', removes tag, otherwise adds it.
+ */
 function tagDetection(player: Player, tag: string) {
     if (tag[0] === "-") {
         player.removeTag(tag.substring(1, tag.length));

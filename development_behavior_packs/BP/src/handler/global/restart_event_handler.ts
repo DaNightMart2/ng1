@@ -11,6 +11,13 @@ function restartLang() {
     }
 }
 
+function restartAllTags() {
+    for (const player of world.getAllPlayers()) {
+        player.removeTag("dialog-prologue_start");
+        player.removeTag("dialog-prologue_end");
+    }
+}
+
 function restartTeleportMusic() {
     for (const player of world.getAllPlayers()) {
         for (const music of musicInfo) {
@@ -118,6 +125,7 @@ const waitForRestart = system.runTimeout(() => {
             system.clearRun(waitForRestart);
             playerActor = player;
             restartLang();
+            restartAllTags();
             restartTeleportMusic();
             restartPlayer();
             restartScoreboard();

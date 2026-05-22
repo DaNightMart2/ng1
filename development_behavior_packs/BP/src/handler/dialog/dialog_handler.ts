@@ -1,5 +1,6 @@
 import { Player, } from "@minecraft/server";
-import { setMovement, playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { setMovement, } from "../../helpers/global/global_functions";
 import { showDialogue, } from "../../helpers/dialog/showDialogue";
 
 export { queueDialogue, dialoguePackage, dialogueText, dialogueOptions, };
@@ -96,7 +97,7 @@ async function traverseTree(
 
         if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
             setMovement(player, true);
-            playersOnDialogueExt(-1);
+            playersOnDialogueExt(false);
             dialogQueue[player.id].splice(0, 1);
             if (dialogQueue[player.id].length > 0) {
                 traverseTree(player, 0);
@@ -114,6 +115,6 @@ async function traverseTree(
             traverseTree(player, index, false);
         }
     } catch (_) {
-        playersOnDialogueExt(-1);
+        playersOnDialogueExt(false);
     }
 }

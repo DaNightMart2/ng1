@@ -1,5 +1,5 @@
 import { Player, world, } from "@minecraft/server";
-import { traverseTree, dialoguePackage, dialogueOptions, dialogueText, } from "../../handler/dialog/dialog_handler";
+import { queueDialogue, dialoguePackage, dialogueOptions, dialogueText, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
 import { payloadTranslations, nameTranslations, } from "./saul_translations";
 

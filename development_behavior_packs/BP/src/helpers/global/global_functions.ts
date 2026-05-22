@@ -1,6 +1,6 @@
-import { Vector3, } from "@minecraft/server";
+import { Vector3, Player, InputPermissionCategory, } from "@minecraft/server";
 
-export { positionInAreCheck, };
+export { positionInAreCheck, setMovement, };
 
 /**
  * Checks if a position is inside a certain area.
@@ -22,4 +22,20 @@ function positionInAreCheck (
         return true;
     }
     return false;
+}
+
+/**
+ * Sets a players movement as enabled or disabled.
+ * @param player player to modify movement of. Of type player.
+ * @param enable if to enable or disable input. Of type boolean.
+ */
+function setMovement(player: Player, enable: boolean) {
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Movement,
+        enable,
+    );
+    player.inputPermissions.setPermissionCategory(
+        InputPermissionCategory.Camera,
+        enable,
+    );
 }

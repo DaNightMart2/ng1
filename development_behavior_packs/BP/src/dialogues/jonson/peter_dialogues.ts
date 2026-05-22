@@ -1,35 +1,30 @@
 import { world, Player, } from "@minecraft/server";
-import { traverseTree, dialoguePackage, dialogueText, dialogueOptions, } from "../../handler/dialog/dialog_handler";
+import { queueDialogue, dialoguePackage, dialogueText, dialogueOptions, } from "../../handler/dialog/dialog_handler";
 import { lang, } from "../../helpers/dialog/dialog_helper";
 import { payloadTranslations, } from "./peter_translations";
 
 /**
  * Automatically defines the dialog package using the characters information and the provided text.
  * @param player player to check the language from. Of type player.
- * @param textIdentifier text to show or number to get the text translation to show. Of type string or number.
+ * @param translationIdentifier key of the translation to get the text from. Of type key of type of payload translations.
  */
-function peter_dialog_package (
+function peter_dialog_package(
     player: Player,
-    textIdentifier: number | string,
+    translationIdentifier: keyof typeof payloadTranslations,
     expression: string,
 ): dialoguePackage {
     let dialogue: dialogueText | dialogueOptions;
 
-    let text: string | string[];
-    if (typeof textIdentifier === "number") {
-        text = payloadTranslations[textIdentifier][lang(player)];
-    } else {
-        text = textIdentifier;
-    }
+    const text = payloadTranslations[translationIdentifier][lang(player)];
 
     if (typeof text === "string")
-        dialogue = {type: "text", payload: text}
+        dialogue = { type: "text", payload: text, }
     else
-        dialogue = {type: "options", payload: text}
+        dialogue = { type: "options", payload: text, }
     return {
         dialogue: dialogue,
         characterName: "Peter Jonson",
-        characterImagePath: "textures/ui/faces/jonson/" + expression ,
+        characterImagePath: "textures/ui/faces/jonson/" + expression,
         soundName: "mob.villager.talk",
     };
 }

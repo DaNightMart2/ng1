@@ -202,6 +202,9 @@
         },
         "ng1:computer_spawn_egg": {
             "textures": "textures/items/spawn_eggs/computer_spawn_egg"
+        },
+        "ng1:volley_ball_spawn_egg": {
+            "textures": "textures/items/spawn_eggs/volley_ball_spawn_egg"
         }
 
     }

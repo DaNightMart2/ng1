@@ -18,7 +18,7 @@ const payloadTranslations = {
     },
     "4_limbo": {
         "es_ar": "Este grupo llegó a Limbo, un punto medio entre todas las ubicaciones de Noirefer.",
-        "en": "This grup arrived To Limbo, a middle point between all Noirefer locations.",
+        "en": "This group arrived to Limbo, a middle point between all Noirefer locations.",
         "es_mx": "Este grupo llegó a Limbo, un punto medio entre todas las ubicaciones de Noirefer.",
     },
     "5_new_home": {

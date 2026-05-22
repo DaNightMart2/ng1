@@ -1,0 +1,28 @@
+{
+    "format_version": "1.13.0",
+    "minecraft:entity": {
+        "description": {
+            "identifier": "ng1:volley_ball",
+            "is_experimental": false,
+            "is_spawnable": true,
+            "is_summonable": true
+        },
+        "components": {
+            "minecraft:health": {
+                "value": 999999999,
+                "max": 999999999
+            },
+            "minecraft:physics": {
+                "has_collision": true,
+                "has_gravity": true,
+                "push_towards_closest_space": true
+            },
+            "minecraft:interact": {
+                "interactions": [
+                    {}
+                ]
+            },
+            "minecraft:pushable_by_entity": {}
+        }
+    }
+}

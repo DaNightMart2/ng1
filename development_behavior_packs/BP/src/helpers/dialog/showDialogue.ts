@@ -20,7 +20,7 @@ function showDialogue(
     playAnimation: boolean,
     tags?: string[][],
 ): Promise<number> {
-    playersOnDialogueExt(1);
+    playersOnDialogueExt(true);
 
     const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
 
