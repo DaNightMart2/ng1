@@ -10,9 +10,11 @@ import "./handler/teleport/teleport_handler";
 import "./handler/extras/volley_handler";
 
 // Dialogues
-import "./dialogues/jonson/peter_dialogues";
+import "./dialogues/config/config_dialogues";
 
 import "./dialogues/introduction/lang/lang_dialogues";
 import "./dialogues/introduction/prologue/prologue_dialogues";
 
 import "./dialogues/saul/saul_dialogues";
+
+import "./dialogues/jonson/peter_dialogues";

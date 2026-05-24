@@ -1,4 +1,4 @@
-export { payloadTranslations };
+export { payloadTranslations, };
 
 const payloadTranslations = {
     name: {

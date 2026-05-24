@@ -3,20 +3,20 @@ export { payloadTranslations, nameTranslations, };
 const payloadTranslations = {
     "1_eng__spa": {
         "es_ar": ["English", "Español"],
-        "en": ["English???", ""],
-        "es_mx": ["Error", "No deberías estar viendo esto"],
+        "en": ["English", "Español"],
+        "es_mx": ["English", "Español"],
     },
     "2_ar__mx": {
         "es_ar": ["Argentina (Bs. As.)", "México"],
-        "en": ["Error", "You sholdn't be seeing this"],
+        "en": ["Argentina (Bs. As.)", "México"],
         "es_mx": ["Argentina (Bs. As.)", "México"],
     },
 }
 
 const nameTranslations = {
     system: {
-        "es_ar": "§o§lSistema",
-        "en": "§o§lSystem",
-        "es_mx": "§o§lSistema",
+        "es_ar": "§lSistema",
+        "en": "§lSystem",
+        "es_mx": "§lSistema",
     },
 }

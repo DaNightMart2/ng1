@@ -6,31 +6,25 @@ import { payloadTranslations, nameTranslations, } from "./saul_translations";
 /**
  * Automatically defines the dialog package using the characters information and the provided text.
  * @param player player to check the language from. Of type player.
- * @param textIdentifier text to show or number to get the text translation to show. Of type string or number.
+ * @param translationIdentifier key of the translation to get the text from. Of type key of type of payload translations.
  */
-function saul_dialog_package (
+function saul_dialog_package(
     player: Player,
-    textIdentifier: number | string,
+    translationIdentifier: keyof typeof payloadTranslations,
     expression: string,
 ): dialoguePackage {
     let dialogue: dialogueText | dialogueOptions;
 
-    let text: string | string[];
-    if (typeof textIdentifier === "number") {
-        text = payloadTranslations[textIdentifier][lang(player)];
-    } else {
-        text = textIdentifier;
-    }
+    const text = payloadTranslations[translationIdentifier][lang(player)];
 
     if (typeof text === "string")
-        dialogue = {type: "text", payload: text}
+        dialogue = { type: "text", payload: text, }
     else
-        dialogue = {type: "options", payload: text}
-
+        dialogue = { type: "options", payload: text, }
     return {
         dialogue: dialogue,
         characterName: nameTranslations.saul[lang(player)],
-        characterImagePath: "textures/ui/faces/saul/" + expression ,
+        characterImagePath: "textures/ui/faces/saul/" + expression,
         soundName: "mob.pig.say",
     };
 }

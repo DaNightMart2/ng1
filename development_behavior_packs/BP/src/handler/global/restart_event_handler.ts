@@ -1,4 +1,4 @@
-import { InputPermissionCategory, Player, system, world, } from "@minecraft/server";
+import { InputPermissionCategory, system, world, } from "@minecraft/server";
 import { musicInfo, } from "../../helpers/music/music_helper";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 
@@ -56,11 +56,13 @@ function restartScoreboard() {
     }
 }
 
-function resetStructures() {
+function restartStructures() {
+    const dimension = world.getDimension("overworld");
+
     world.structureManager.place( // Path to experiment trapdoors
         "ng1:lobby_trapdoors",
-        world.getDimension("overworld"),
-        {x: 34, y: 7, z: 23}
+        dimension,
+        {x: 34, y: 7, z: 23},
     );
 
     // world.structureManager.place( // TheEntity chains
@@ -113,23 +115,40 @@ function resetStructures() {
     "setblock 185 15 143 lever[\"lever_direction\"=\"south\", \"open_bit\"=false] destroy"
     "setblock 191 20 126 spruce_fence_gate[\"minecraft:cardinal_direction\"=\"east\", \"open_bit\"=false] destroy"
 
-    playerActor.runCommand(
-        "kill @e[type=ng1:interact_hitbox, name=tutorialBomb]"
-    );
+    const tutorialBombs = dimension.getEntities({"type": "ng1:interact_hitbox", "name": "tutorialBomb"});
+    for (const tutorialBomb of tutorialBombs) {
+        tutorialBomb.remove();
+    }
 }
 
-let playerActor: Player;
-const waitForRestart = system.runTimeout(() => {
-    for (const player of world.getAllPlayers()) {
-        if (player.hasTag("restart")) {
-            system.clearRun(waitForRestart);
-            playerActor = player;
-            restartLang();
+/**
+ * Restarts that always happen when /reloading.
+ */
+system.runTimeout(() => {
+    restartPlayer();
+    restartTeleportMusic();
+});
+
+/**
+ * Restart that can be choosen when /reloading.
+ */
+system.runInterval(() => {
+    for (const player of world.getPlayers({"tags": ["admin"]})) {
+        if (player.hasTag("restart-events")) {
             restartAllTags();
-            restartTeleportMusic();
-            restartPlayer();
             restartScoreboard();
-            resetStructures();
+            restartStructures();
+            player.runCommand("tag @a remove restart-events");
+        }
+
+        if (player.hasTag("restart-lang")) {
+            restartLang();
+            player.runCommand("tag @a remove restart-lang");
+        }
+
+        if (player.hasTag("restart-pos")) {
+            restartPosition();
+            player.runCommand("tag @a remove restart-pos");
         }
     }
 });
