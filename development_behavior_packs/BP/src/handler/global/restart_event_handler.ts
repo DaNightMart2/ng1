@@ -1,4 +1,4 @@
-import { system, world, } from "@minecraft/server";
+import { Dimension, system, world, } from "@minecraft/server";
 import { musicInfo, } from "../../helpers/music/music_helper";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 
@@ -51,7 +51,7 @@ function restartScoreboard() {
     }
 }
 
-function restartStructuresEntities() {
+function restartStructures() {
     const dimension = world.getDimension("overworld");
 
     world.structureManager.place( // Path to experiment trapdoors
@@ -123,6 +123,64 @@ function restartStructuresEntities() {
     }
 }
 
+let restartedEntities = {
+    screen: false,
+    path_to_farm: false,
+    path_to_outside: false,
+    path_to_limbo: false,
+}
+function restartEntities() {
+    const dimension = world.getDimension("overworld");
+
+    for (const screen of dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]})) {
+        screen.remove();
+    }
+    for (const wooden_door of dimension.getEntities({"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]})) {
+        wooden_door.remove();
+    }
+
+    system.runInterval(() => {
+        if (!restartedEntities.screen) {
+            try {
+                const screen = dimension.spawnEntity("ng1:screen", {x: 129.0, y: 6.5, z: 51.0}, {"initialRotation": 90});
+                screen.addTag("ng1:screen");
+                restartedEntities.screen = true;
+            } catch (_) {}
+        }
+
+        if (!restartedEntities.path_to_farm) {
+            try {
+                const wooden_door_farm = dimension.spawnEntity("ng1:wooden_door", {x: 47.5, y: 7.0, z: 48.5}, {"initialRotation": 180});
+                wooden_door_farm.addTag("ng1:wooden_door_farm");
+                wooden_door_farm.addTag("ng1:wooden_door");
+                wooden_door_farm.triggerEvent("ng1:close_door")
+                restartedEntities.path_to_farm = true;
+            } catch (_) {}
+        }
+
+        if (!restartedEntities.path_to_outside) {
+            try {
+                const wooden_door_outside = dimension.spawnEntity("ng1:wooden_door", {x: 188.5, y: 14.0, z: 142.5}, {"initialRotation": 180});
+                wooden_door_outside.addTag("ng1:wooden_door_outside");
+                wooden_door_outside.addTag("ng1:wooden_door");
+                wooden_door_outside.triggerEvent("ng1:close_door");
+                restartedEntities.path_to_outside = true;
+            } catch (_) {}
+        }
+
+        if (!restartedEntities.path_to_limbo) {
+            try {
+                const wooden_door_limbo = dimension.spawnEntity("ng1:wooden_door", {x: 187.5, y: 14.0, z: 110.5}, {"initialRotation": 0});
+                wooden_door_limbo.addTag("ng1:wooden_door_limbo");
+                wooden_door_limbo.addTag("ng1:wooden_door");
+                wooden_door_limbo.triggerEvent("ng1:open_door");
+                wooden_door_limbo.playAnimation("animation.wooden_door.open");
+                restartedEntities.path_to_limbo = true;
+            } catch (_) {}
+        }
+    });
+};
+
 /**
  * Restart that can be choosen when /reloading.
  */
@@ -130,7 +188,8 @@ system.runInterval(() => {
     for (const player of world.getPlayers({"tags": ["admin"]})) {
         if (player.hasTag("restart-event")) {
             restartScoreboard();
-            restartStructuresEntities();
+            restartStructures();
+            restartEntities();
             restartAllTags();
             restartPlayer();
             restartTeleportMusic();

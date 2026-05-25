@@ -28,19 +28,19 @@
 
         "events": {
             "ng1:hide_screen": {
-                "queue_command": {
-                    "command": "playanimation @e[type=ng1:screen] animation.screen.hide"
-                },
                 "set_property": {
                     "ng1:is_hidden": true
+                },
+                "queue_command": {
+                    "command": "playanimation @s animation.screen.hide"
                 }
             },
             "ng1:show_screen": {
-                "queue_command": {
-                    "command": "playanimation @e[type=ng1:screen] animation.screen.show"
-                },
                 "set_property": {
                     "ng1:is_hidden": false
+                },
+                "queue_command": {
+                    "command": "playanimation @s animation.screen.show"
                 }
             }
         }

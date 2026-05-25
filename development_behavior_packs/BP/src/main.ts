@@ -20,9 +20,9 @@ import "./dialogues/saul/saul_dialogues";
 import "./dialogues/jonson/peter_dialogues";
 
 // Events
-import "./events/tutorial/doors";
+import "./events/tutorial/global/doors";
 
-import "./events/tutorial/pregame";
+import "./events/tutorial/pregame/limbo_sequence";
 
-import "./events/tutorial/theentity/spawn";
-import "./events/tutorial/theentity/battle";
+import "./events/tutorial/pregame/theentity/spawn";
+import "./events/tutorial/pregame/theentity/battle";

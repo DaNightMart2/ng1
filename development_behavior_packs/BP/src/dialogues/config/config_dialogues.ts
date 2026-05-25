@@ -89,16 +89,6 @@ function config(player: Player) {
     );
 };
 
-world.afterEvents.playerSpawn.subscribe(data => {
-    if (data.initialSpawn) {
-        system.runTimeout(() => {
-            for (const player of world.getPlayers({"tags": ["admin"]})) {
-                config(player);
-            }
-        }, 1000);
-    }
-})
-
 system.runTimeout(() => {
     for (const player of world.getPlayers({"tags": ["admin"]})) {
         config(player);

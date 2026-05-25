@@ -1,5 +1,5 @@
 import { EasingType, system, world, } from "@minecraft/server";
-import { setMovement, positionInAreCheck, } from "../../helpers/global/global_functions";
+import { setMovement, positionInAreCheck, } from "../../../helpers/global/global_functions";
 
 function showCutscene() {
     const dimension = world.getDimension("overworld");
@@ -58,7 +58,7 @@ system.runInterval(() => {
         if (positionInAreCheck(
             player.location,
             {x: 10, y: 3, z: -2},
-            {x: 63, y: 45, z: 53}
+            {x: 63, y: 45, z: 53},
         )) {
             InLimbo++;
         }
@@ -71,7 +71,7 @@ system.runInterval(() => {
     try {
         sectionConcat = globalVariables?.getScore("sectionConcat");
     } catch (_) {
-        sectionConcat = globalVariables?.addScore("sectionConcat", 100)
+        sectionConcat = globalVariables?.addScore("sectionConcat", 100);
     }
     try {
         timer = globalVariables?.getScore("timer");
@@ -85,7 +85,7 @@ system.runInterval(() => {
                 globalVariables?.addScore("timer", -1);
             } else {
                 globalVariables?.setScore("sectionConcat", 101);
-                globalVariables?.setScore("timer", 6000);
+                globalVariables?.setScore("timer", 1200);
                 showCutscene();
             }
         }

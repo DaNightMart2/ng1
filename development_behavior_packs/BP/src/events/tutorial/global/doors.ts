@@ -1,6 +1,6 @@
 import { system, world, } from "@minecraft/server";
 
-function exp_shortcut(state: boolean) {
+function modify_doors(state: boolean) {
     const dimension = world.getDimension("overworld");
 
     let result = ""
@@ -17,6 +17,21 @@ function exp_shortcut(state: boolean) {
     world.structureManager.place("ng1:exp_barricaded_door/" + result, dimension, {x: 105, y: 3, z: 49});
 }
 
+function modify_screen(state: boolean) {
+    const dimension = world.getDimension("overworld");
+
+    for (const screen of dimension.getEntities({
+        "type": "ng1:screen",
+        "tags": ["ng1:screen"],
+    })) {
+        if (state && screen.getProperty("ng1:is_hidden")) {
+            screen.triggerEvent("ng1:show_screen");
+        } else if (!state && !screen.getProperty("ng1:is_hidden")) {
+            screen.triggerEvent("ng1:hide_screen");
+        }
+    }
+}
+
 system.runInterval(() => {
     let sectionConcat
     try {
@@ -25,8 +40,14 @@ system.runInterval(() => {
         sectionConcat = 0;
     }
     if (typeof sectionConcat === "number" && sectionConcat >= 110) {
-        exp_shortcut(true);
+        modify_doors(true);
     } else {
-        exp_shortcut(false);
+        modify_doors(false);
+    }
+
+    if (typeof sectionConcat === "number" && sectionConcat >= 102) {
+        modify_screen(true);
+    } else {
+        modify_screen(false);
     }
 });
