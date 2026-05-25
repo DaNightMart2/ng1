@@ -18,3 +18,11 @@ import "./dialogues/introduction/prologue/prologue_dialogues";
 import "./dialogues/saul/saul_dialogues";
 
 import "./dialogues/jonson/peter_dialogues";
+
+// Events
+import "./events/tutorial/doors";
+
+import "./events/tutorial/pregame";
+
+import "./events/tutorial/theentity/spawn";
+import "./events/tutorial/theentity/battle";

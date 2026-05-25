@@ -1,12 +1,11 @@
-import { InputPermissionCategory, system, world, } from "@minecraft/server";
+import { system, world, } from "@minecraft/server";
 import { musicInfo, } from "../../helpers/music/music_helper";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 
 function restartLang() {
     for (const player of world.getAllPlayers()) {
-        player.removeTag("es_ar");
         player.removeTag("en");
-        player.removeTag("es_mx");
+        player.removeTag("es");
         player.removeTag("choosing_lang");
     }
 }
@@ -31,14 +30,9 @@ function restartTeleportMusic() {
 
 function restartPlayer() {
     for (const player of world.getAllPlayers()) {
-        player.inputPermissions.setPermissionCategory(
-            InputPermissionCategory.Movement,
-            true
-        );
-        player.inputPermissions.setPermissionCategory(
-            InputPermissionCategory.Camera,
-            true
-        );
+        for (let i = 0; i <= 12; i++) {
+            player.inputPermissions.setPermissionCategory(i, true);
+        }
         player.camera.clear();
     }
 }
@@ -52,17 +46,25 @@ function restartPosition() {
 function restartScoreboard() {
     for (const player of world.getAllPlayers()) {
         world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
-        world.scoreboard.getObjective("info")?.setScore("level", -1);
+        world.scoreboard.getObjective("globalVariables")?.setScore("sectionConcat", 100);
+        world.scoreboard.getObjective("globalVariables")?.setScore("timer", 1200);
     }
 }
 
-function restartStructures() {
+function restartStructuresEntities() {
     const dimension = world.getDimension("overworld");
 
     world.structureManager.place( // Path to experiment trapdoors
-        "ng1:lobby_trapdoors",
+        "ng1:lobby_trapdoors/close",
         dimension,
         {x: 34, y: 7, z: 23},
+    );
+    dimension.playSound("open.wooden_trapdoor", {x: 35.0, y: 8.0, z: 24.0});
+
+    world.structureManager.place(
+        "ng1:exp_closed_exit/closed",
+        dimension,
+        {x: 154, y: 9, z: 49},
     );
 
     // world.structureManager.place( // TheEntity chains
@@ -122,23 +124,17 @@ function restartStructures() {
 }
 
 /**
- * Restarts that always happen when /reloading.
- */
-system.runTimeout(() => {
-    restartPlayer();
-    restartTeleportMusic();
-});
-
-/**
  * Restart that can be choosen when /reloading.
  */
 system.runInterval(() => {
     for (const player of world.getPlayers({"tags": ["admin"]})) {
-        if (player.hasTag("restart-events")) {
-            restartAllTags();
+        if (player.hasTag("restart-event")) {
             restartScoreboard();
-            restartStructures();
-            player.runCommand("tag @a remove restart-events");
+            restartStructuresEntities();
+            restartAllTags();
+            restartPlayer();
+            restartTeleportMusic();
+            player.runCommand("tag @a remove restart-event");
         }
 
         if (player.hasTag("restart-lang")) {

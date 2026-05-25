@@ -1,32 +1,27 @@
 export { payloadTranslations, nameTranslations, };
 
 const payloadTranslations = {
-    "1_events": {
-        "es_ar": "¿Querés reiniciar los eventos?",
-        "en": "Do you want to restart events?",
-        "es_mx": "¿Querés reiniciar los eventos?",
+    "0_yes_no": {
+        "en": ["Yes", "No"],
+        "es": ["Sí", "No"],
+    },
+    "1_event": {
+        "en": "Do you want to restart structures, scoreboards and entities?",
+        "es": "¿Quieres reiniciar todo el evento?",
     },
     "2_lang": {
-        "es_ar": "¿Querés reiniciar las localizaciones?",
-        "en": "Do you want to restart localizations?",
-        "es_mx": "¿Querés reiniciar las localizaciones?",
+        "en": "Do you want to restart language selection?",
+        "es": "¿Quieres reiniciar la selección de idiomas?",
     },
     "3_pos": {
-        "es_ar": "¿Querés reiniciar las posiciones?",
         "en": "Do you want to restart positions?",
-        "es_mx": "¿Querés reiniciar las posiciones?",
-    },
-    "0_yes_no": {
-        "es_ar": ["Sí", "No"],
-        "en": ["Yes", "No"],
-        "es_mx": ["Sí", "No"],
+        "es": "¿Quieres reiniciar las posiciones?",
     },
 }
 
 const nameTranslations = {
     system: {
-        "es_ar": "§lSistema",
         "en": "§lSystem",
-        "es_mx": "§lSistema",
+        "es": "§lSistema",
     },
 }

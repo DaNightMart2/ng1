@@ -1,6 +1,5 @@
 import { system, world, HudElement, Dimension, } from "@minecraft/server";
 import { positionInAreCheck, } from "../../helpers/global/global_functions";
-import { playersOnDialogueExt } from "../../helpers/dialog/dialog_helper";
 
 function hideHudElements() {
     for (const player of world.getAllPlayers()) {

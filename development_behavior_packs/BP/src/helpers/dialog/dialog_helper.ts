@@ -55,15 +55,14 @@ function splitText(
     return splitText.join("\n");
 }
 
-type language = "es_ar" | "en" | "es_mx";
+type language = "en" | "es";
 const languages: language[] = [
-    "es_ar",
     "en",
-    "es_mx",
+    "es"
 ]
 
 /**
- * Returns the language of the player based on their tags. Returns "es_ar", "en" or "es_mx". Defaults to "es_ar".
+ * Returns the language of the player based on their tags. Returns "es" or "en". Defaults to "en".
  */
 function lang(player: Player): language {
     for (const language of languages) {

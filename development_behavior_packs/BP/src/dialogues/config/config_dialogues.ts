@@ -28,65 +28,79 @@ function config_dialog_package(
     };
 }
 
+function config(player: Player) {
+    queueDialogue(
+        player,
+        [
+            {
+                name: "event",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "1_event",
+                ),
+                next: ["event_question"],
+            },
+            {
+                name: "event_question",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "0_yes_no",
+                ),
+                next: ["lang", "lang", ""],
+                tags: [["restart-event"], []],
+            },
+
+            {
+                name: "lang",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "2_lang",
+                ),
+                next: ["lang_question"],
+            },
+            {
+                name: "lang_question",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "0_yes_no",
+                ),
+                next: ["pos", "pos", ""],
+                tags: [["restart-lang"], []],
+            },
+
+            {
+                name: "pos",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "3_pos",
+                ),
+                next: ["pos_question"],
+            },
+            {
+                name: "pos_question",
+                dialoguePackage: config_dialog_package(
+                    player,
+                    "0_yes_no",
+                ),
+                next: ["", "", ""],
+                tags: [["restart-pos"], []],
+            },
+        ],
+    );
+};
+
+world.afterEvents.playerSpawn.subscribe(data => {
+    if (data.initialSpawn) {
+        system.runTimeout(() => {
+            for (const player of world.getPlayers({"tags": ["admin"]})) {
+                config(player);
+            }
+        }, 1000);
+    }
+})
+
 system.runTimeout(() => {
     for (const player of world.getPlayers({"tags": ["admin"]})) {
-        queueDialogue(
-            player,
-            [
-                {
-                    name: "events",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "1_events",
-                    ),
-                    next: ["events_question"],
-                },
-                {
-                    name: "events_question",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "0_yes_no",
-                    ),
-                    next: ["lang", "lang"],
-                    tags: [["restart-events"], [""]],
-                },
-
-                {
-                    name: "lang",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "2_lang",
-                    ),
-                    next: ["lang_question"],
-                },
-                {
-                    name: "lang_question",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "0_yes_no",
-                    ),
-                    next: ["pos", "pos"],
-                    tags: [["restart-lang"], [""]],
-                },
-
-                {
-                    name: "pos",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "3_pos",
-                    ),
-                    next: ["pos_question"],
-                },
-                {
-                    name: "pos_question",
-                    dialoguePackage: config_dialog_package(
-                        player,
-                        "0_yes_no",
-                    ),
-                    next: ["", ""],
-                    tags: [["restart-pos"], [""]],
-                },
-            ],
-        );
+        config(player);
     }
 });

@@ -17,12 +17,12 @@ const musicInfo = [
     {
         tag: "experiment",
         track: "ng1:barrier",
-        coordinates: [{x: 102, y:3, z: 27}, {x: 156, y: 16, z: 64}],
+        coordinates: [{x: 102, y: 3, z: 27}, {x: 156, y: 18, z: 74}],
         information: "Barrier - UNDERTALE OST - Toby Fox",
     },
 
     {
-        tag: "lobby",
+        tag: "laboratory",
         track: "ng1:home",
         coordinates: [{x: 39, y:2, z: 84}, {x: 124, y: 45, z: 160}],
         information: "Home - UNDERTALE OST - Toby Fox",

@@ -1,4 +1,4 @@
-import { Player, system, world, } from "@minecraft/server";
+import { InputPermissionCategory, Player, system, world, } from "@minecraft/server";
 import { dialoguePackage, dialogueText, dialogueOptions, queueDialogue, } from "../../../handler/dialog/dialog_handler";
 import { lang, } from "../../../helpers/dialog/dialog_helper";
 import { payloadTranslations, } from "./prologue_translations";
@@ -32,13 +32,18 @@ function prologue_dialog_package(
 
 system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
-        if (positionInAreCheck(player.location, {x: -19, y: 3, z: 8}, {x: -7, y: 8, z: 18})) {
+        if (positionInAreCheck(player.location, {x: -19, y: 4.1, z: 8}, {x: -7, y: 4.1, z: 18})) {
             if (!player.hasTag("dialog-prologue_end")) {
-                player.teleport({x: player.location.x, y: 8, z: player.location.z});
-                player.camera.fade({"fadeColor": {"red": 0, "green": 0, "blue": 0}, "fadeTime": {"fadeInTime": 1, "fadeOutTime": 1, "holdTime": 1}});
+                player.teleport({x: player.location.x, y: 4.1, z: player.location.z});
+                player.camera.fade({"fadeColor": {"red": 1, "green": 1, "blue": 1}, "fadeTime": {"fadeInTime": 1, "fadeOutTime": 1, "holdTime": 1}});
+            } else {
+                system.runTimeout(() => {
+                    player.inputPermissions.setPermissionCategory(InputPermissionCategory.Jump, true);
+                }, 60);
             }
             if (!player.hasTag("dialog-prologue_start")) {
                 player.addTag("dialog-prologue_start");
+                player.inputPermissions.setPermissionCategory(InputPermissionCategory.Jump, false);
 
                 queueDialogue(
                     player,

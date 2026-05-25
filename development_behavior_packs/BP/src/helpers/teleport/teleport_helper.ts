@@ -46,7 +46,7 @@ const teleportInfo = [
     {
         tag: "ToLaboratory02",
         fromCoordinates: [{x: 20, y: 7, z: -1}, {x: 27, y: 11, z: 0}],
-        toCoordinates: {x: 86, y: 5, z: 157},
+        toCoordinates: {x: 86.5, y: 5, z: 157},
         rotation: {x: 0, y: 180},
     },
 
