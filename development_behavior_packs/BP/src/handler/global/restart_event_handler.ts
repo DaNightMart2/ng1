@@ -174,7 +174,6 @@ function restartEntities() {
                 wooden_door_limbo.addTag("ng1:wooden_door_limbo");
                 wooden_door_limbo.addTag("ng1:wooden_door");
                 wooden_door_limbo.triggerEvent("ng1:open_door");
-                wooden_door_limbo.playAnimation("animation.wooden_door.open");
                 restartedEntities.path_to_limbo = true;
             } catch (_) {}
         }

@@ -40,7 +40,7 @@ world.afterEvents.playerInteractWithEntity.subscribe(data => {
 
 function bombUnloaded() {
     const bombs = dimension.getEntities(
-        {"type": "ng1:bomb"}
+        { "type": "ng1:bomb", }
     );
     for (const bomb of bombs) {
         if (bomb.getProperty("ng1:bomb_on")) {
@@ -103,7 +103,10 @@ function screenUnloaded() {
     );
     for (const screen of screens) {
         if (screen.getProperty("ng1:is_hidden")) {
-            screen.playAnimation("animation.screen.is_hidden");
+            system.runTimeout(() => {
+                if (!screen.isValid) return;
+                screen.playAnimation("animation.screen.is_hidden");
+            }, 36);
         }
     }
 }
@@ -113,7 +116,7 @@ function keepWoodenDoorOpen() {
         {"type": "ng1:wooden_door"}
     );
     for (const wooden_door of wooden_doors) {
-        if (wooden_door.getProperty("ng1:is_open")) {
+        if (wooden_door.getProperty("ng1:is_open") && !wooden_door.getProperty("ng1:in_movement")) {
             wooden_door.playAnimation("animation.screen.is_open");
         }
     }
