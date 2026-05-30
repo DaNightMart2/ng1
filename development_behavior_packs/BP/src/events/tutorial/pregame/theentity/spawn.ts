@@ -1,5 +1,5 @@
-import { world, system, EasingType, } from "@minecraft/server";
-import { positionInAreCheck, } from "../../../../helpers/global/global_functions";
+import { world, system, EasingType, HudVisibility, HudElement, } from "@minecraft/server";
+import { positionInAreCheck, setMovement, } from "../../../../helpers/global/global_functions";
 
 function showCutscene() {
     const dimension = world.getDimension("overworld");
@@ -13,6 +13,9 @@ function showCutscene() {
         player.playMusic("ng1:gogys_sacrifice", {"loop": true, "fade": 1.0, "volume": 1.0});
 
         system.runTimeout(() => {
+            setMovement(player, false);
+            player.onScreenDisplay.setHudVisibility(HudVisibility.Hide);
+            player.camera.setFov({"fov": 70});
             player.camera.setCamera("minecraft:free", {"location": {x: 122.0, y: 8.0, z: 51.0}, "rotation": {x: 0, y: -90}});
             // Camera looking at screen
 
@@ -21,21 +24,30 @@ function showCutscene() {
                 // Camera on screen
 
                 system.runTimeout(() => {
-                    player.camera.setCamera("minecraft:free", {"location": {x: 135.0, y: 23.0, z: 51.0}, "rotation": {x: 0, y: 90}}); // Camera looking at TheEntity
+                    player.camera.setCamera("minecraft:free", {"location": {x: 136.0, y: 22.8, z: 51.0}, "rotation": {x: 0, y: 90}}); // Camera looking at TheEntity
 
-                    player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 23.0, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 5.0, "easeType": EasingType.OutCubic}});
+                    player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 22.8, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 5.0, "easeType": EasingType.OutCubic}});
                     // Camera on TheEntity
 
                     system.runTimeout(() => {
-                        player.playSound("dig.chain", {"volume": 1.0, "location": {x: 1185.5, y: 23.0, z: 51.0}});
-                        // Chain breaking SFX
-                    }, 130);
+                        player.playSound("dig.chain", {"volume": 1.0, "location": {x: 115.2, y: 22.8, z: 51.0}});
+                        player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 22.3, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 0.4, "easeType": EasingType.OutBounce}});
+                        player.camera.setFov({"easeOptions": {"easeTime": 0.4, "easeType": EasingType.InBounce}, "fov": 40});
+                        dimension.spawnParticle("minecraft:campfire_smoke_particle", {x: 117.5, y: 21.0, z: 51.0});
+                        // Chain breaking
+
+                        system.runTimeout(() => {
+                            player.camera.setFov({"easeOptions": {"easeTime": 0.2, "easeType": EasingType.OutBounce}, "fov": 70});
+                        }, 10);
+                    }, 165);
 
                     system.runTimeout(() => {
-                        player.camera.clear(); // Clear camera
-
-                    }, 240);
-                }, 100);
+                        setMovement(player, true);
+                        player.camera.clear();
+                        player.onScreenDisplay.resetHudElementsVisibility();
+                        // End cutscene
+                    }, 280);
+                }, 60);
             }, 20);
         }, 525);
 
@@ -45,14 +57,14 @@ function showCutscene() {
                 dimension,
                 {x: 115, y: 21, z: 50},
             );
-        }, 765);
+        }, 770);
     }
 
     const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
     for (const theentity of theentities) {
         system.runTimeout(() => {
             theentity.playAnimation("animation.theentity.jail_sequence");
-        }, 625);
+        }, 605);
     }
 }
 
