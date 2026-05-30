@@ -1,5 +1,5 @@
 // Global
-import "./handler//global/restart_event_handler";
+import "./handler/global/restart_event_handler";
 import "./handler/global/general_handler";
 
 // Music and teleport

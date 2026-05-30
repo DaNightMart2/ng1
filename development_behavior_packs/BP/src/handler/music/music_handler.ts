@@ -12,7 +12,7 @@ system.runInterval(() => {
                 music.coordinates[1],
             )) {
                 if (!player.hasTag(music.tag)) {
-                    player.playMusic(music.track, {"loop": true, fade: 1.0});
+                    player.playMusic(music.track, {"loop": true, fade: 1.0, "volume": 1.0});
                 }
                 player.addTag(music.tag);
 

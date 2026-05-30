@@ -103,15 +103,13 @@ function screenUnloaded() {
     );
     for (const screen of screens) {
         if (screen.getProperty("ng1:is_hidden")) {
-            system.runTimeout(() => {
-                if (!screen.isValid) return;
-                screen.playAnimation("animation.screen.is_hidden");
-            }, 36);
+            if (!screen.isValid) return;
+            screen.playAnimation("animation.screen.is_hidden");
         }
     }
 }
 
-function keepWoodenDoorOpen() {
+function woodenDoorUnloaded() {
     const wooden_doors = dimension.getEntities(
         {"type": "ng1:wooden_door"}
     );
@@ -219,7 +217,7 @@ system.runInterval(() => {
 
         screenUnloaded();
 
-        keepWoodenDoorOpen();
+        woodenDoorUnloaded();
         stopWoodenDoorSound();
         playWoodenDoorSound();
 
