@@ -35,6 +35,7 @@ function restartPlayer() {
         }
         player.camera.clear();
         player.stopMusic();
+        player.onScreenDisplay.resetHudElementsVisibility();
     }
 }
 
@@ -72,6 +73,12 @@ function restartStructures() {
         "ng1:theentity_chains/regular_chains",
         dimension,
         {x: 115, y: 21, z: 50},
+    );
+
+    world.structureManager.place(
+        "ng1:tv_structure/structure",
+        dimension,
+        {x: 124, y: 3, z: 47},
     );
 }
 
