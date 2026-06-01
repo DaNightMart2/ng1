@@ -90,6 +90,7 @@ system.runInterval(() => {
                 globalVariables?.addScore("timer", -1);
             } else {
                 globalVariables?.setScore("sectionConcat", 101);
+                sectionConcat = 101;
             }
         }
 

@@ -17,7 +17,7 @@ function showGlobalDialogue(): boolean {
  */
 function playersOnDialogueExt(addition?: boolean): number {
     if (addition) playersOnDialogue++;
-    else if (!addition) playersOnDialogue--;
+    else if (addition === false) playersOnDialogue--;
     return playersOnDialogue;
 }
 
@@ -49,7 +49,7 @@ function splitText(
     splitText.push(line_progress);
 
     if (splitText.length > maxLines) {
-        return "| [UI][error]-dialog_helper.ts.\n| Parameter 'text' is too long.\n| Error code: waffle.";
+        return "| [UI][error]-dialog_helper.ts.\n| Parameter 'text' is too long.\n| Error code: 67.";
     }
 
     return splitText.join("\n");

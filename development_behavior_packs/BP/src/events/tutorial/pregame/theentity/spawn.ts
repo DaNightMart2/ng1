@@ -124,7 +124,9 @@ system.runInterval(() => {
     if (typeof sectionConcat === "number" && typeof timer === "number") {
         if (sectionConcat >= 101 && sectionConcat <= 108) {
             if (timer > 0) {
-                globalVariables?.addScore("timer", -1);
+                if (!(sectionConcat === 101) || InExp >= world.getAllPlayers().length) {
+                    globalVariables?.addScore("timer", -1);
+                }
             } else {
                 globalVariables?.addScore("sectionConcat", 1);
                 sectionConcat++;

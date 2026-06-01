@@ -82,6 +82,11 @@ function showDialogue(
     })
 }
 
+/**
+ * Plays a sound while the dialog shows.
+ * @param player player to play the sound to.
+ * @param soundName sound to play to the player.
+ */
 function playSound(player: Player, soundName: string) {
     let soundPlayingIndex = 0;
     const dialogueSound = system.runInterval(() => {

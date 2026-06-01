@@ -61,11 +61,6 @@
                     "ng1:in_movement": true,
                     "ng1:is_open": false
                 }
-            },
-            "ng1:not_in_movement": {
-                "set_property": {
-                    "ng1:in_movement": false
-                }
             }
         }
     }
