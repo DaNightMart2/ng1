@@ -1,5 +1,5 @@
 import { EasingType, system, world, } from "@minecraft/server";
-import { setMovement, positionInAreCheck, } from "../../../helpers/global/global_functions";
+import { setMovement, positionInAreCheck, getGlobalVariables, } from "../../../helpers/global/global_functions";
 
 function showCutscene() {
     const dimension = world.getDimension("overworld");
@@ -65,39 +65,26 @@ system.runInterval(() => {
         }
     }
 
-    const globalVariables = world.scoreboard.getObjective("globalVariables");
-    let sectionConcat;
-    let timer;
+    const globalVariables = getGlobalVariables().globalVariables;
+    let sectionConcat = getGlobalVariables().sectionConcat;
+    const timer = getGlobalVariables().timer;
 
-    try {
-        sectionConcat = globalVariables?.getScore("sectionConcat");
-    } catch (_) {
-        sectionConcat = globalVariables?.addScore("sectionConcat", 100);
-    }
-    try {
-        timer = globalVariables?.getScore("timer");
-    } catch (_) {
-        timer = globalVariables?.addScore("timer", 1200);
+    if (sectionConcat !== 101) {
+        calledCutscene = false;
     }
 
-    if (typeof sectionConcat === "number" && typeof timer === "number") {
-        if (sectionConcat !== 101) {
-            calledCutscene = false;
+    if (InLimbo === world.getAllPlayers().length && sectionConcat === 100) {
+        if (timer > 0) {
+            globalVariables?.addScore("timer", -1);
+        } else {
+            globalVariables?.setScore("sectionConcat", 101);
+            sectionConcat = 101;
         }
+    }
 
-        if (InLimbo === world.getAllPlayers().length && sectionConcat === 100) {
-            if (timer > 0) {
-                globalVariables?.addScore("timer", -1);
-            } else {
-                globalVariables?.setScore("sectionConcat", 101);
-                sectionConcat = 101;
-            }
-        }
-
-        if (sectionConcat === 101 && calledCutscene === false) {
-            calledCutscene = true;
-            globalVariables?.setScore("timer", 1200);
-            showCutscene();
-        }
+    if (sectionConcat === 101 && calledCutscene === false) {
+        calledCutscene = true;
+        globalVariables?.setScore("timer", 1200);
+        showCutscene();
     }
 }, 1);

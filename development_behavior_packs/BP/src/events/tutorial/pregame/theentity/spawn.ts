@@ -1,13 +1,13 @@
-import { world, system, EasingType, HudVisibility, ScoreboardObjective, } from "@minecraft/server";
-import { positionInAreCheck, setMovement, } from "../../../../helpers/global/global_functions";
+import { world, system, EasingType, HudVisibility, } from "@minecraft/server";
+import { positionInAreCheck, setMovement, getGlobalVariables, } from "../../../../helpers/global/global_functions";
 
 /**
  * Depending on the current section, does a certain action of the cutscene.
  */
 function proceedCutscene() {
     const dimension = world.getDimension("overworld");
-    const globalVariables = getGlobalVariables()[0];
-    const sectionConcat = getGlobalVariables()[1];
+    const globalVariables = getGlobalVariables().globalVariables;
+    const sectionConcat = getGlobalVariables().sectionConcat;
 
     if (globalVariables) {
         for (const player of world.getAllPlayers()) {
@@ -39,7 +39,7 @@ function proceedCutscene() {
             }
 
             if (sectionConcat === 105) {
-                globalVariables?.setScore("timer", 165);
+                globalVariables?.setScore("timer", 160);
                 player.camera.setCamera("minecraft:free", {"location": {x: 136.0, y: 22.8, z: 51.0}, "rotation": {x: 0, y: 90}});
                 
                 const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
@@ -53,7 +53,7 @@ function proceedCutscene() {
             }
 
             if (sectionConcat === 106) {
-                globalVariables?.setScore("timer", 10);
+                globalVariables?.setScore("timer", 15);
                 world.structureManager.place(
                     "ng1:theentity_chains/no_chains",
                     dimension,
@@ -63,6 +63,9 @@ function proceedCutscene() {
                 player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 22.3, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 0.4, "easeType": EasingType.OutBounce}});
                 player.camera.setFov({"easeOptions": {"easeTime": 0.4, "easeType": EasingType.InBounce}, "fov": 40});
                 dimension.spawnParticle("minecraft:campfire_smoke_particle", {x: 117.5, y: 21.0, z: 51.0});
+                dimension.spawnParticle("minecraft:dragon_death_explosion_emitter", {x: 115.5, y: 23.0, z: 51.0});
+                dimension.spawnParticle("minecraft:camera_shoot_explosion", {x: 115.5, y: 23.0, z: 51.0});
+                player.playSound("random.explode", {"location": {x: 115.5, y: 23.0, z: 51.0}, "volume": 0.5});
                 // Chain breaking
             }
 
@@ -72,6 +75,7 @@ function proceedCutscene() {
             }
 
             if (sectionConcat === 108) {
+                globalVariables?.setScore("timer", 60);
                 setMovement(player, true);
                 player.camera.clear();
                 player.onScreenDisplay.resetHudElementsVisibility();
@@ -79,29 +83,6 @@ function proceedCutscene() {
             }
         }
     }
-}
-
-/** 
- * Gets the globalVariables and sectionConcat and timer from it and returns all that in an array. Returns [globalVariables, sectionConcat, timer], [ScoreboardObjective, number, number].
- */
-function getGlobalVariables(): [ScoreboardObjective | undefined, number | undefined, number | undefined] {
-    let sectionConcat;
-    let timer;
-
-    const globalVariables = world.scoreboard.getObjective("globalVariables");
-
-    try {
-        sectionConcat = globalVariables?.getScore("sectionConcat");
-    } catch (_) {
-        sectionConcat = globalVariables?.addScore("sectionConcat", 100);
-    }
-    try {
-        timer = globalVariables?.getScore("timer");
-    } catch (_) {
-        timer = globalVariables?.addScore("timer", 1200);
-    }
-
-    return [globalVariables, sectionConcat, timer];
 }
 
 let setTimer: [boolean, boolean, boolean, boolean, boolean, boolean, boolean, boolean];
@@ -117,31 +98,29 @@ system.runInterval(() => {
         }
     }
 
-    const globalVariables = getGlobalVariables()[0];
-    let sectionConcat = getGlobalVariables()[1];
-    const timer = getGlobalVariables()[2];
+    const globalVariables = getGlobalVariables().globalVariables;
+    let sectionConcat = getGlobalVariables().sectionConcat;
+    const timer = getGlobalVariables().timer;
 
-    if (typeof sectionConcat === "number" && typeof timer === "number") {
-        if (sectionConcat >= 101 && sectionConcat <= 108) {
-            if (timer > 0) {
-                if (!(sectionConcat === 101) || InExp >= world.getAllPlayers().length) {
-                    globalVariables?.addScore("timer", -1);
-                }
-            } else {
-                globalVariables?.addScore("sectionConcat", 1);
-                sectionConcat++;
+    if (sectionConcat >= 101 && sectionConcat <= 108) {
+        if (timer > 0) {
+            if (!(sectionConcat === 101) || InExp >= world.getAllPlayers().length) {
+                globalVariables?.addScore("timer", -1);
             }
-
-            if (setTimer) {
-                if (setTimer[sectionConcat-101] !== true) {
-                    proceedCutscene();
-                }
-            }
+        } else {
+            globalVariables?.addScore("sectionConcat", 1);
+            sectionConcat++;
         }
 
-        setTimer = [false, false, false, false, false, false, false, false];
-        for (let i = 0; i <= sectionConcat-101; i++) {
-            setTimer[i] = true;
+        if (setTimer) {
+            if (setTimer[sectionConcat-101] !== true) {
+                proceedCutscene();
+            }
         }
+    }
+
+    setTimer = [false, false, false, false, false, false, false, false];
+    for (let i = 0; i <= sectionConcat-101; i++) {
+        setTimer[i] = true;
     }
 }, 1);

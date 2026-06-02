@@ -82,6 +82,8 @@ function restartStructures() {
 }
 
 let restartedEntities = {
+    wooden_doors: false,
+    screens: false,
     screen: false,
     path_to_farm: false,
     path_to_outside: false,
@@ -90,11 +92,18 @@ let restartedEntities = {
 function restartEntities() {
     const dimension = world.getDimension("overworld");
 
-    for (const screen of dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]})) {
-        screen.remove();
+    if (!restartedEntities.wooden_doors) {
+        for (const wooden_door of dimension.getEntities({"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]})) {
+            wooden_door.remove();
+        }
+        restartedEntities.wooden_doors = true;
     }
-    for (const wooden_door of dimension.getEntities({"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]})) {
-        wooden_door.remove();
+
+    if (!restartedEntities.screens) {
+        for (const screen of dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]})) {
+            screen.remove();
+        }
+        restartedEntities.screens = true;
     }
 
     if (!restartedEntities.screen) {
@@ -151,11 +160,13 @@ system.runInterval(() => {
         if (player.hasTag("restart-event")) {
             restartScoreboard();
             restartStructures();
-            restartEntities();
             restartAllTags();
             restartPlayer();
             restartTeleportMusic();
             player.runCommand("tag @a remove restart-event");
+            system.runInterval(() => {
+                restartEntities();
+            });
         }
 
         if (player.hasTag("restart-lang")) {
