@@ -88,6 +88,7 @@ let restartedEntities = {
     path_to_farm: false,
     path_to_outside: false,
     path_to_limbo: false,
+    theentity: false,
 }
 function restartEntities() {
     const dimension = world.getDimension("overworld");
@@ -148,6 +149,20 @@ function restartEntities() {
             wooden_door_limbo.triggerEvent("ng1:close_door");
             wooden_door_limbo.setProperty("ng1:in_movement", false); // To disable sound
             restartedEntities.path_to_limbo = true;
+        } catch (_) {}
+    }
+
+    if (!restartedEntities.theentity) {
+        try {
+            const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+            for (const theentity of theentities) {
+                theentity.remove();
+            }
+
+            const theentity = dimension.spawnEntity("ng1:theentity", {x: 115.2, y: 21.0, z: 51.0}, {"initialRotation": -90});
+            theentity.addTag("ng1:theentity");
+
+            restartedEntities.theentity = true;
         } catch (_) {}
     }
 };

@@ -21,6 +21,7 @@ import "./dialogues/jonson/peter_dialogues";
 
 // Events
 import "./events/tutorial/global/doors";
+import "./events/tutorial/global/theentity_animations";
 
 import "./events/tutorial/pregame/limbo_sequence";
 
