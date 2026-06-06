@@ -52,7 +52,6 @@ function showCutscene() {
     }, 80);
 }
 
-let calledCutscene: boolean;
 system.runInterval(() => {
     let InLimbo = 0;
     for (const player of world.getAllPlayers()) {
@@ -66,11 +65,12 @@ system.runInterval(() => {
     }
 
     const globalVariables = getGlobalVariables().globalVariables;
-    let sectionConcat = getGlobalVariables().sectionConcat;
+    const sectionConcat = getGlobalVariables().sectionConcat;
     const timer = getGlobalVariables().timer;
 
-    if (sectionConcat !== 101) {
-        calledCutscene = false;
+    if (sectionConcat === 101) {
+        globalVariables?.setScore("timer", 300);
+        showCutscene();
     }
 
     if (InLimbo === world.getAllPlayers().length && sectionConcat === 100) {
@@ -78,13 +78,6 @@ system.runInterval(() => {
             globalVariables?.addScore("timer", -1);
         } else {
             globalVariables?.setScore("sectionConcat", 101);
-            sectionConcat = 101;
         }
-    }
-
-    if (sectionConcat === 101 && calledCutscene === false) {
-        calledCutscene = true;
-        globalVariables?.setScore("timer", 1200);
-        showCutscene();
     }
 }, 1);

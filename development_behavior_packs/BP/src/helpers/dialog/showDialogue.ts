@@ -1,6 +1,6 @@
 import { system, Player, } from "@minecraft/server";
 import { ActionFormData, } from "@minecraft/server-ui";
-import { tagDetection, splitText, playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { tagDetection, splitText, showGlobalDialogue, playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
 import { dialoguePackage, } from "../../handler/dialog/dialog_handler";
 
 export { showDialogue, };
@@ -14,14 +14,12 @@ let stopSound = false;
  * @param playAnimation if to play the open animation or not. Of type boolean.
  * Defaults to false.
  */
-function showDialogue(
+async function showDialogue(
     player: Player,
     dialoguePackage: dialoguePackage,
     playAnimation: boolean,
     tags?: string[][],
 ): Promise<number> {
-    playersOnDialogueExt(true);
-
     const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
 
     if (dialogue.type === "text" || playAnimation) {
@@ -79,7 +77,7 @@ function showDialogue(
         } else {
             return dialogue.payload.length;
         }
-    })
+    });
 }
 
 /**

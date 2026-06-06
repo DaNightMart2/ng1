@@ -1,5 +1,3 @@
-export { payloadTranslations, nameTranslations, };
-
 const payloadTranslations = {
     "1_hint1": {
     "en": ".eb llahs ffo thgil a erehW",

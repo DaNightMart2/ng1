@@ -1,22 +1,35 @@
 import { Player, } from "@minecraft/server";
-import { playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { playersOnDialogueExt, showGlobalDialogue, } from "../../helpers/dialog/dialog_helper";
 import { setMovement, } from "../../helpers/global/global_functions";
 import { showDialogue, } from "../../helpers/dialog/showDialogue";
 
 export { queueDialogue, dialoguePackage, dialogueText, dialogueOptions, };
 
-let dialogQueue: Record<string, dialogueTree[]> = {}
+let dialogQueue: Record<string, dialogueTree[]> = {};
 /**
  * Adds a dialogue tree to the queue of dialogues.
  * @param player player to add the tree to. Of type player.
  * @param dialogueTrue tree to add to the queue. Of type dialogueTree.
  */
-function queueDialogue(player: Player, dialogueTree: dialogueTree) {
-    if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
+function queueDialogue(player: Player, dialogueTree: dialogueTree, isGlobal: boolean = false) {
+    if (!isGlobal) {
+        if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
 
-    dialogQueue[player.id].push(dialogueTree);
-    if (dialogQueue[player.id].length === 1) {
-        traverseTree(player, 0);
+        dialogQueue[player.id].push(dialogueTree);
+        if (dialogQueue[player.id].length === 1) {
+            playersOnDialogueExt(true);
+            traverseTree(player, 0);
+        }
+    } else {
+        showGlobalDialogue().then(() => {
+            if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
+
+            dialogQueue[player.id].push(dialogueTree);
+            if (dialogQueue[player.id].length === 1) {
+                playersOnDialogueExt(true);
+                traverseTree(player, 0);
+            }
+        });
     }
 }
 
@@ -46,6 +59,7 @@ type dialogueNode = {
     dialoguePackage: dialoguePackage,
     next: string[],
     tags?: string[][],
+    isGlobal?: boolean,
 };
 
 type dialogueTree = dialogueNode[];
@@ -81,7 +95,9 @@ async function traverseTree(
 
     if (!player.isValid) return; // Return if player left the game
 
-    if (index === 0) setMovement(player, false);
+    if (index === 0) {
+        setMovement(player, false);
+    }
 
     const dialogueNode = dialogueTree[index];
     let playAnimation = (dialogueNode.dialoguePackage.dialogue.type === "text" && index === 0) ||
@@ -92,13 +108,13 @@ async function traverseTree(
             player,
             dialogueNode.dialoguePackage,
             playAnimation,
-            dialogueNode.tags
+            dialogueNode.tags,
         );
 
         if (dialogueNode.next[selection] === "") { // Empty dialogue means there're no dialogues left.
             setMovement(player, true);
-            playersOnDialogueExt(false);
             dialogQueue[player.id].splice(0, 1);
+            if (dialogQueue[player.id].length === 0) playersOnDialogueExt(false);
             if (dialogQueue[player.id].length > 0) {
                 traverseTree(player, 0);
             }
@@ -115,6 +131,7 @@ async function traverseTree(
             traverseTree(player, index, false);
         }
     } catch (_) {
-        playersOnDialogueExt(false);
+        dialogQueue[player.id].splice(0, 1);
+        if (dialogQueue[player.id].length === 0) playersOnDialogueExt(false);
     }
 }

@@ -10,14 +10,14 @@ import "./handler/teleport/teleport_handler";
 import "./handler/extras/volley_handler";
 
 // Dialogues
-import "./dialogues/config/config_dialogues";
+import "./dialogues/config_dialogs";
 
-import "./dialogues/introduction/lang/lang_dialogues";
-import "./dialogues/introduction/prologue/prologue_dialogues";
+import "./dialogues/lang_dialogs";
+import "./dialogues/prologue_dialogs";
 
-import "./dialogues/saul/saul_dialogues";
+import "./dialogues/saul_dialogs";
 
-import "./dialogues/jonson/peter_dialogues";
+import "./dialogues/peter_dialogs";
 
 // Events
 import "./events/tutorial/global/doors";

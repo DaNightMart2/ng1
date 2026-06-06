@@ -1,10 +1,15 @@
-import { Player, system, world, } from "@minecraft/server";
-import { queueDialogue, } from "../../../handler/dialog/dialog_handler";
+import { system, world, } from "@minecraft/server";
+import { queueDialogue, } from "../handler/dialog/dialog_handler";
 
+/**
+ * Calls choosing lang dialog to players who have not chosen a language.
+ */
 system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
         if (
-            showLangMenu(player, true)
+            !player.hasTag("en") &&
+            !player.hasTag("es") &&
+            !player.hasTag("choosing_lang")
         ) {
             player.addTag("choosing_lang");
 
@@ -28,17 +33,11 @@ system.runInterval(() => {
     }
 });
 
+/**
+ * Remove choosing lang tag from players who left and rejoined.
+ */
 world.afterEvents.playerSpawn.subscribe(data => {
     if (data.initialSpawn) {
         data.player.removeTag("choosing_lang");
     }
 });
-
-function showLangMenu(player: Player, includeChoosing: boolean): boolean {
-    if ((
-        !player.hasTag("en") &&
-        !player.hasTag("es")) &&
-        !player.hasTag("choosing_lang") || !includeChoosing
-    ) return true;
-    return false;
-}

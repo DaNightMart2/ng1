@@ -1,6 +1,8 @@
 import { world, system, EasingType, HudVisibility, } from "@minecraft/server";
 import { positionInAreCheck, setMovement, getGlobalVariables, } from "../../../../helpers/global/global_functions";
 
+// This cutscene works part by part, meaning that if the scoreboard is manually set it won't execute anything from the previous scoreboards, only the new one. (If you manually set the scoreboard to 104, it will only execute 104 and the following ones, ignoring 100, 101, 102 and 103).
+
 /**
  * Depending on the current section, does a certain action of the cutscene.
  */

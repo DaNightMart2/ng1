@@ -1,7 +1,13 @@
 import { world, Player, } from "@minecraft/server";
-import { queueDialogue, dialoguePackage, dialogueText, dialogueOptions, } from "../../handler/dialog/dialog_handler";
-import { lang, } from "../../helpers/dialog/dialog_helper";
-import { payloadTranslations, } from "./peter_translations";
+import { dialoguePackage, dialogueText, dialogueOptions, } from "../handler/dialog/dialog_handler";
+import { lang, } from "../helpers/dialog/dialog_helper";
+
+const payloadTranslations = {
+    "name": {
+        "en": "",
+        "es": "",
+    },
+}
 
 /**
  * Automatically defines the dialog package using the characters information and the provided text.

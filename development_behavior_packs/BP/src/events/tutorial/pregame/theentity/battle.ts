@@ -1,6 +1,6 @@
 import { EasingType, system, world, } from "@minecraft/server";
 import { getGlobalVariables, } from "../../../../helpers/global/global_functions";
-import { theentity_first_battle, } from "../../../../dialogues/theentity/theentity_dialogues";
+import { theentity_dialog_package, } from "../../../../dialogues/theentity_dialogs";
 
 let i = 0;
 system.runInterval(() => {
@@ -60,5 +60,13 @@ system.runInterval(() => {
         }
     }
 
-    // player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
+    if (sectionConcat === 111) {
+        globalVariables.setScore("timer", 100);
+        for (const player of world.getAllPlayers()) {
+            const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+            for (const theentity of theentities) {
+                player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
+            }
+        }
+    }
 });

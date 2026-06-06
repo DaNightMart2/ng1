@@ -4,11 +4,12 @@ export { splitText, lang, tagDetection, showGlobalDialogue, playersOnDialogueExt
 
 let playersOnDialogue = 0;
 /**
- * Returns true if no players have a dialog open in their screens.
+ * Returns true when no players have a dialog open in their screens.
  */
-function showGlobalDialogue(): boolean {
-    if (playersOnDialogue === 0) return true;
-    return false;
+async function showGlobalDialogue(): Promise<boolean> {
+    return new Promise((resolve) => {
+        if (playersOnDialogue === 0) resolve(true);
+    });
 }
 
 /**
