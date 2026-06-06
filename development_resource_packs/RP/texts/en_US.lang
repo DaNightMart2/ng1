@@ -1,6 +1,6 @@
 ﻿## Pack Information
-pack.name=Night Games 1™
-pack.description=The official Night Games 1™ add-on
+pack.name=Night Games 1
+pack.description=The official Night Games 1 add-on
 
 ## Blocks
 block.ng1:cloud_block=Cloud Block
@@ -13,7 +13,7 @@ item.ng1:coin=Coin
 item.ng1:screwdriver=Screwdriver
 item.ng1:cheese=Cheese...?
 item.ng1:milanesa=Milanesa
-item.ng1:vasquito=§cEl Vasquito
+item.ng1:vasquito=El Vasquito
 
 item.ng1:climbing_backpack=Climbing Backpack
 
@@ -90,7 +90,6 @@ ng1:itemGroup.name.tastyFish=Tasty Fish
 ## Titles
 title.ng1:volley_ball_far_away=§4You're too far away from volleyball area.
 
-title.ng1:theentity_description=§o§aGod of Commands
 title.ng1:time_left=§eTime Left:§r 
 title.ng1:no_explosion=§e(This bomb never did want to explode...)
 title.ng1:failed_attempt=§4Incorrect Code Inputed

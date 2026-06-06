@@ -1,5 +1,6 @@
 import { EasingType, system, world, } from "@minecraft/server";
 import { getGlobalVariables, } from "../../../../helpers/global/global_functions";
+import { theentity_first_battle, } from "../../../../dialogues/theentity/theentity_dialogues";
 
 let i = 0;
 system.runInterval(() => {
@@ -48,18 +49,16 @@ system.runInterval(() => {
             const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
             for (const theentity of theentities) {
                 theentity.teleport({x: 128.5, y: 25, z: 51.0}, {"rotation": {x: 0, y: 90}});
-                theentity.addEffect("slow_falling", 200, {"amplifier": 1.5, "showParticles": false});
+                theentity.addEffect("slow_falling", 200, {"amplifier": 10, "showParticles": false});
             }
-
-            system.runInterval(() => {
-                for (const player of world.getAllPlayers()) {
-                    for (const theentity of theentities) {
-                        player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.2}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.8, z: 51.0}});
-                    }
-                }
-            });
+            for (const player of world.getAllPlayers()) {
+                player.onScreenDisplay.setTitle("______");
+                player.onScreenDisplay.updateSubtitle("§l§2TheEntity");
+            }
         } else {
             globalVariables.addScore("timer", -1);
         }
     }
+
+    // player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
 });
