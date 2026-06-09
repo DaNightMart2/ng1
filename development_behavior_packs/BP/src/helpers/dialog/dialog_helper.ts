@@ -11,14 +11,17 @@ async function showGlobalDialogue(): Promise<boolean> {
         if (playersOnDialogue === 0) resolve(true);
     });
 }
-
 /**
  * Returns the playersOnDialogue function, and add or removes one from it.
  * @param addition defines if to add or remove one from the variable. Of type boolean. Is optional.
  */
 function playersOnDialogueExt(addition?: boolean): number {
-    if (addition) playersOnDialogue++;
-    else if (addition === false) playersOnDialogue--;
+    if (addition) {
+        playersOnDialogue++;
+    }
+    else if (addition === false) {
+        playersOnDialogue--;
+    }
     return playersOnDialogue;
 }
 

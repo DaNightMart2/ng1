@@ -1,11 +1,11 @@
 import { system, Player, } from "@minecraft/server";
 import { ActionFormData, } from "@minecraft/server-ui";
-import { tagDetection, splitText, showGlobalDialogue, playersOnDialogueExt, } from "../../helpers/dialog/dialog_helper";
+import { tagDetection, splitText, } from "../../helpers/dialog/dialog_helper";
 import { dialoguePackage, } from "../../handler/dialog/dialog_handler";
 
 export { showDialogue, };
 
-let stopSound = false;
+let stopSound: Record<string, boolean> = {};
 /**
  * Handles showing dialogues, playing SFX and enabling/disabling movement.
  * @param player player to show the dialogue to.
@@ -20,10 +20,12 @@ async function showDialogue(
     playAnimation: boolean,
     tags?: string[][],
 ): Promise<number> {
+    if (!Object.keys(stopSound).includes(player.id)) stopSound[player.id] = false;
+
     const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
 
     if (dialogue.type === "text" || playAnimation) {
-        stopSound = false;
+        stopSound[player.id] = false;
         playSound(player, soundName);
     }
 
@@ -56,7 +58,7 @@ async function showDialogue(
 
     let responsePromise = dialogueForm.show(player);
     return responsePromise.then((response) => {
-        stopSound = true;
+        stopSound[player.id] = true;
         if (tags) {
             if (dialogue.type === "text") {
                 for (const tag of tags[0]) {
@@ -88,7 +90,7 @@ async function showDialogue(
 function playSound(player: Player, soundName: string) {
     let soundPlayingIndex = 0;
     const dialogueSound = system.runInterval(() => {
-        if (stopSound) system.clearRun(dialogueSound);
+        if (stopSound[player.id]) system.clearRun(dialogueSound);
         if (soundPlayingIndex < 3) {
             player.playSound(soundName);
             soundPlayingIndex++;
