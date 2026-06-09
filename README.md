@@ -1,4 +1,4 @@
-# The official Night Games 1 Minecraft: Bedrock Edition resource pack, behavior pack and world.
+# The official Night Games 1 Minecraft: Bedrock Edition resource and behavior pack.
 
 ## Important side notes:
 - If the "/reload" command is used in-game, the dialog system will be reset. Therefore, if a player was mid-way through a dialogue sequence, all the dialogues that were scheduled to show after the current one would be removed.
