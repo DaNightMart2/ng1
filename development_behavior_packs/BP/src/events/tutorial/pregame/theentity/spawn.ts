@@ -125,4 +125,4 @@ system.runInterval(() => {
     for (let i = 0; i <= sectionConcat-101; i++) {
         setTimer[i] = true;
     }
-}, 1);
+});

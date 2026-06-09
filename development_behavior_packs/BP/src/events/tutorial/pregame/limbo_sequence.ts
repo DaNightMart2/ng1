@@ -65,19 +65,16 @@ system.runInterval(() => {
     }
 
     const globalVariables = getGlobalVariables().globalVariables;
-    const sectionConcat = getGlobalVariables().sectionConcat;
+    let sectionConcat = getGlobalVariables().sectionConcat;
     const timer = getGlobalVariables().timer;
-
-    if (sectionConcat === 101) {
-        globalVariables?.setScore("timer", 300);
-        showCutscene();
-    }
 
     if (InLimbo === world.getAllPlayers().length && sectionConcat === 100) {
         if (timer > 0) {
             globalVariables?.addScore("timer", -1);
         } else {
             globalVariables?.setScore("sectionConcat", 101);
+            globalVariables?.setScore("timer", 300);
+            showCutscene();
         }
     }
-}, 1);
+});
