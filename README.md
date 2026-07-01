@@ -9,6 +9,6 @@
 - If simple graphics is chosen in-game by a player, they may see some animations delayed or not see them at all. Based on my research, this happens because simple graphics only plays animations that are visible by the player, so they may start delayed if the animated entity is not in the render distance of a player.
 - If a player has the chat or exit menu open, dialogues do not play. As far as I know, there is no fix to this, as it is a Minecraft issue.
 
-## State of the project
+## State of the project:
 - The project is still in-development, so many things are unfinished.
 - There hasn't been any thorugh testing yet, so you may encounter bugs. Testing starts on november 2026.
