@@ -10,8 +10,8 @@ const payloadTranslations = {
     },
 
     "3_hint3": {
-    "en": "Where pink ends, a minute you shall wait, where the distance in width to the end five shall subtract.",
-    "es": "En donde rosa termina, un minuto deberán de esperar, donde las distancias en largo al final cinco deban de restar.",
+    "en": "Where pink ends, a minute you shall wait. Where the width distances to the end five result when subtracted.",
+    "es": "En donde rosa termina, un minuto deberán de esperar, donde las distancias en largo al final cinco resultan cuando son restadas.",
     },
 }
 

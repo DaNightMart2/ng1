@@ -1,6 +1,7 @@
 import { EasingType, system, world, } from "@minecraft/server";
 import { getGlobalVariables, } from "../../../../helpers/global/global_functions";
-import { theentity_dialog_package, } from "../../../../dialogues/theentity_dialogs";
+import { theentity_dialog_sequence, } from "../../../../dialogues/theentity_dialogs";
+import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
 
 let i = 0;
 system.runInterval(() => {
@@ -61,12 +62,26 @@ system.runInterval(() => {
     }
 
     if (sectionConcat === 111) {
-        globalVariables.setScore("timer", 100);
         for (const player of world.getAllPlayers()) {
             const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
             for (const theentity of theentities) {
-                player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
+                if (theentity.location.y > 4) {
+                    player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
+                } else {
+                    globalVariables.setScore("sectionConcat", 112);
+                }
             }
         }
+    }
+
+    if (sectionConcat === 112) {
+        theentity_dialog_sequence();
+        globalVariables.setScore("sectionConcat", 113);
+    }
+
+    if (sectionConcat === 113) {
+        showGlobalDialogue().then(() => {
+            globalVariables.setScore("sectionConcat", 113);
+        });
     }
 });

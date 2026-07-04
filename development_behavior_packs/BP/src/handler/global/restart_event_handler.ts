@@ -82,6 +82,7 @@ function restartStructures() {
 }
 
 let restartedEntities = {
+    volley_ball: false,
     wooden_doors: false,
     screens: false,
     screen: false,
@@ -92,6 +93,17 @@ let restartedEntities = {
 }
 function restartEntities() {
     const dimension = world.getDimension("overworld");
+
+    if (!restartedEntities.volley_ball) {
+        for (const ball of dimension.getEntities({"type": "ng1:volley_ball"})) {
+            ball.remove();
+        }
+        for (const player of world.getAllPlayers()) {
+            player.runCommand("clear @s ng1:volley_ball_spawn_egg");
+        }
+        dimension.spawnEntity("ng1:volley_ball", {x: 43.0, y: 8, z: 12.5});
+        restartedEntities.volley_ball = true;
+    }
 
     if (!restartedEntities.wooden_doors) {
         for (const wooden_door of dimension.getEntities({"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]})) {

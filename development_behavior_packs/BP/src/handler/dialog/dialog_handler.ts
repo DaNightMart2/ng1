@@ -52,7 +52,7 @@ type dialogueOptions = {
  * - Have one item (shows the indicated dialogue).
  * - Have two items (show one of the indicated dialogues based on response; if exited, it reopens the dialogue).
  * - Have three items (show one of the first two indicated dialogues based on response, and show the third indicated dialogue if exited).
- * @param tags the tags too add or remove when a certain action occurs. Of type array of arrays of strings. It follows the same format as next, only that each value can have more than one element. If the tag start with a +, it will be added, if it starts with a -, it will be removed, if it start with none, it will default to a +.
+ * @param tags the tags too add or remove when a certain action occurs. Of type array of arrays of strings. It follows the same format as next, only that each value can have more than one element. If the tag start with a +, it will be added, if it starts with a -, it will be removed, if it starts with none, it will default to a +.
  */
 type dialogueNode = {
     name: string,

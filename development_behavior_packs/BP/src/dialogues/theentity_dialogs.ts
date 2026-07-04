@@ -1,9 +1,8 @@
-import { Player, system, world, } from "@minecraft/server";
+import { Player, world, } from "@minecraft/server";
 import { queueDialogue, dialoguePackage, dialogueOptions, dialogueText, } from "../handler/dialog/dialog_handler";
-import { lang, } from "../helpers/dialog/dialog_helper";
-import { getGlobalVariables, } from "../helpers/global/global_functions";
+import { lang, showGlobalDialogue, } from "../helpers/dialog/dialog_helper";
 
-export { theentity_dialog_package, };
+export { theentity_dialog_sequence, };
 
 const payloadTranslations = {
     "1_initializing": {
@@ -23,7 +22,7 @@ const payloadTranslations = {
         "es": "",
     },
     "5_death": {
-        "en": "§oY o u  w i l l  d i e  w i t h o u t  m e e t i n g  t h e m .",
+        "en": "§oY o u  w i l l  d i e  w i t h o u t  \nm e e t i n g  t h e m .",
         "es": "§oM o r i r á s  s i n  c o n o c e r l o s .",
     },
 }
@@ -48,64 +47,62 @@ function theentity_dialog_package(
     return {
         dialogue: dialogue,
         characterName: "TheEntity",
-        characterImagePath: "textures/ui/faces/system/others/console",
+        characterImagePath: "textures/ui/faces/theentity/main",
         soundName: "click_on.metal_pressure_plate",
     };
 }
 
 /**
- * Call TheEntity dialogs when on the correct section.
+ * Calls TheEntity (first battle introduction) dialogs.
  */
-system.runInterval(() => {
-    const sectionConcat = getGlobalVariables().sectionConcat;
-
-    if (sectionConcat === 112) {
-        for (const player of world.getAllPlayers()) {
-            queueDialogue(
-                player,
-                [
-                    {
-                        name: "initializing",
-                        dialoguePackage: theentity_dialog_package(
-                            player,
-                            "1_initializing",
-                        ),
-                        next: ["welcome_players"],
-                    },
-                    {
-                        name: "welcome_players",
-                        dialoguePackage: theentity_dialog_package(
-                            player,
-                            "2_welcome_players",
-                        ),
-                        next: ["dp"],
-                    },
-                    {
-                        name: "dp",
-                        dialoguePackage: theentity_dialog_package(
-                            player,
-                            "3_dp",
-                        ),
-                        next: ["confusion"],
-                    },
-                    {
-                        name: "confusion",
-                        dialoguePackage: theentity_dialog_package(
-                            player,
-                            "4_confusion",
-                        ),
-                        next: ["death"],
-                    },
-                    {
-                        name: "death",
-                        dialoguePackage: theentity_dialog_package(
-                            player,
-                            "5_death",
-                        ),
-                        next: [""],
-                    },
-                ],
-            );
-        }
+function theentity_dialog_sequence() {
+    for (const player of world.getAllPlayers()) {
+        queueDialogue(
+            player,
+            [
+                {
+                    name: "initializing",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "1_initializing",
+                    ),
+                    next: ["welcome_players"],
+                },
+                {
+                    name: "welcome_players",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "2_welcome_players",
+                    ),
+                    next: ["dp"],
+                },
+                {
+                    name: "dp",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "3_dp",
+                    ),
+                    next: ["confusion"],
+                },
+                {
+                    name: "confusion",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "4_confusion",
+                    ),
+                    next: ["death"],
+                },
+                {
+                    name: "death",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "5_death",
+                    ),
+                    next: [""],
+                    tags: [["dialog-theentity_meeting"]],
+                },
+            ],
+            true,
+        );
     }
-});
+}
