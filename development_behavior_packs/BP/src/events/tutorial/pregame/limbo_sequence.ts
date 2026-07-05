@@ -1,6 +1,15 @@
 import { EasingType, system, world, } from "@minecraft/server";
 import { setMovement, positionInAreCheck, getGlobalVariables, } from "../../../helpers/global/global_functions";
+import { showGlobalDialogue, } from "../../../helpers/dialog/dialog_helper";
 
+enum sectionConcatValues {
+    WaitingForPlayers = 100,
+    Executed = 101,
+}
+
+/**
+ * Handles trapdoors cutscene.
+ */
 function showCutscene() {
     const dimension = world.getDimension("overworld");
 
@@ -52,29 +61,34 @@ function showCutscene() {
     }, 80);
 }
 
+/**
+ * Call showCutscene().
+ */
 system.runInterval(() => {
-    let InLimbo = 0;
-    for (const player of world.getAllPlayers()) {
-        if (positionInAreCheck(
-            player.location,
-            {x: 10, y: 3, z: -2},
-            {x: 63, y: 45, z: 53},
-        )) {
-            InLimbo++;
+    showGlobalDialogue().then(() => {
+        let InLimbo = 0;
+        for (const player of world.getAllPlayers()) {
+            if (positionInAreCheck(
+                player.location,
+                {x: 10, y: 3, z: -2},
+                {x: 63, y: 45, z: 53},
+            )) {
+                InLimbo++;
+            }
         }
-    }
 
-    const globalVariables = getGlobalVariables().globalVariables;
-    let sectionConcat = getGlobalVariables().sectionConcat;
-    const timer = getGlobalVariables().timer;
+        const globalVariables = getGlobalVariables().globalVariables;
+        let sectionConcat = getGlobalVariables().sectionConcat;
+        const timer = getGlobalVariables().timer;
 
-    if (InLimbo === world.getAllPlayers().length && sectionConcat === 100) {
-        if (timer > 0) {
-            globalVariables?.addScore("timer", -1);
-        } else {
-            globalVariables?.setScore("sectionConcat", 101);
-            globalVariables?.setScore("timer", 300);
-            showCutscene();
+        if (InLimbo === world.getAllPlayers().length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
+            if (timer > 0) {
+                globalVariables?.addScore("timer", -1);
+            } else {
+                globalVariables?.setScore("sectionConcat", sectionConcatValues.Executed);
+                globalVariables?.setScore("timer", 300);
+                showCutscene();
+            }
         }
-    }
+    });
 });

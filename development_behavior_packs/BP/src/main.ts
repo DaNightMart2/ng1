@@ -25,5 +25,5 @@ import "./events/tutorial/global/theentity_animations";
 
 import "./events/tutorial/pregame/limbo_sequence";
 
-import "./events/tutorial/pregame/theentity/spawn";
-import "./events/tutorial/pregame/theentity/battle";
+import "./events/tutorial/pregame/theentity/introduction";
+import "./events/tutorial/pregame/theentity/show";
