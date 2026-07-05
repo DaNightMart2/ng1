@@ -29,7 +29,7 @@ const payloadTranslations = {
         "es": "Entre estos humanos, estás tú, [PLAYERNAME].",
     },
     "7_long_day": {
-        "en": "I hope you're ready for a long, long day...",
+        "en": "I hope you are ready for a long, long day...",
         "es": "Espero que estés listo para un largo, largo día...",
     },
 }

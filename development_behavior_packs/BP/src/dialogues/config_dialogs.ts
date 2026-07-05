@@ -9,7 +9,7 @@ const payloadTranslations = {
     },
     "1_event": {
         "en": "Do you want to restart structures, scoreboards and entities?",
-        "es": "¿Quieres reiniciar todo el evento?",
+        "es": "¿Quieres reiniciar estructuras, scoreboards?",
     },
     "2_lang": {
         "en": "Do you want to restart language selection?",

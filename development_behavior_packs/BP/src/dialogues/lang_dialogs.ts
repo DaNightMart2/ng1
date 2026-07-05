@@ -20,7 +20,7 @@ system.runInterval(() => {
                         name: "eng__spa",
                         dialoguePackage: {
                             dialogue: { type: "options", payload: ["English", "Español"] },
-                            characterName: "§lS.",
+                            characterName: "§lSystem",
                             characterImagePath: "textures/ui/faces/system/others/console",
                             soundName: "click_on.metal_pressure_plate",
                         },

@@ -5,25 +5,21 @@ import { lang, showGlobalDialogue, } from "../helpers/dialog/dialog_helper";
 export { theentity_dialog_sequence, };
 
 const payloadTranslations = {
-    "1_initializing": {
-        "en": "(Initializing Systems)",
-        "es": "(Inicializando Sistemas)",
+    "1_welcome_players": {
+        "en": "Welcome, players. I see you are new to this place, so let me tell you something:",
+        "es": "Bienvenidos, jugadores. Veo que son nuevos a este lugar, así que déjenme decirles algo:",
     },
-    "2_welcome_players": {
-        "en": "Welcome, players. I see you're new to this place, let me get something straight:",
-        "es": "Bienvenidos, jugadores. Veo que son nuevos en este lugar, déjenme aclararles algo:",
-    },
-    "3_dp": {
+    "2_dp": {
         "en": "The people here, the people from P. D. do NOT want you here.",
         "es": "Las personas aquí, las personas de D. P. NO los quieren aquí.",
     },
-    "4_confusion": {
+    "3_confusion": {
         "en": "You seem confused, do you not know who P. D. is? Well, lucky you...",
-        "es": "",
+        "es": "Parecen confundidos, ¿qué no saben quién es D. P.? Qué suertudos...",
     },
-    "5_death": {
-        "en": "§oY o u  w i l l  d i e  w i t h o u t  \nm e e t i n g  t h e m .",
-        "es": "§oM o r i r á s  s i n  c o n o c e r l o s .",
+    "4_death": {
+        "en": "§o§4You will die without meeting them.",
+        "es": "§o§4Morirán sin conocerlos.",
     },
 }
 
@@ -64,7 +60,7 @@ function theentity_dialog_sequence() {
                     name: "initializing",
                     dialoguePackage: theentity_dialog_package(
                         player,
-                        "1_initializing",
+                        "1_welcome_players",
                     ),
                     next: ["welcome_players"],
                 },
@@ -72,7 +68,7 @@ function theentity_dialog_sequence() {
                     name: "welcome_players",
                     dialoguePackage: theentity_dialog_package(
                         player,
-                        "2_welcome_players",
+                        "2_dp",
                     ),
                     next: ["dp"],
                 },
@@ -80,15 +76,7 @@ function theentity_dialog_sequence() {
                     name: "dp",
                     dialoguePackage: theentity_dialog_package(
                         player,
-                        "3_dp",
-                    ),
-                    next: ["confusion"],
-                },
-                {
-                    name: "confusion",
-                    dialoguePackage: theentity_dialog_package(
-                        player,
-                        "4_confusion",
+                        "3_confusion",
                     ),
                     next: ["death"],
                 },
@@ -96,10 +84,9 @@ function theentity_dialog_sequence() {
                     name: "death",
                     dialoguePackage: theentity_dialog_package(
                         player,
-                        "5_death",
+                        "4_death",
                     ),
                     next: [""],
-                    tags: [["dialog-theentity_meeting"]],
                 },
             ],
             true,
