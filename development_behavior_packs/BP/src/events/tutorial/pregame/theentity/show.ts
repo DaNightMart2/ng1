@@ -1,11 +1,12 @@
-import { EasingType, system, world, } from "@minecraft/server";
+import { EasingType, system, world, Player, } from "@minecraft/server";
 import { getGlobalVariables, } from "../../../../helpers/global/global_functions";
-import { theentity_dialog_sequence, } from "../../../../dialogues/theentity_dialogs";
+import { theentity_dialog_sequence, theentity_initializing_dialog, } from "../../../../dialogues/theentity_dialogs";
 import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
 
 enum sectionConcatValues {
     WaitingForTheEntity = 103,
     Executed = 104,
+    StructurePlaced = 105,
 }
 
 /**
@@ -28,6 +29,8 @@ function showCutscene() {
         for (const screen of screens) {
             screen.remove();
         }
+
+        getGlobalVariables().globalVariables.setScore("sectionConcat", sectionConcatValues.StructurePlaced);
 
         dimension.spawnParticle("minecraft:dragon_death_explosion_emitter", {x: 129.0, y: 10.0, z: 51.0});
         for (const player of world.getAllPlayers()) {
@@ -71,10 +74,37 @@ function showCutscene() {
  * Calls showCutscene().
  */
 system.runInterval(() => {
+    const globalVariables = getGlobalVariables().globalVariables;
+    const sectionConcat = getGlobalVariables().sectionConcat;
+    const timer = getGlobalVariables().timer;
+
+    if (sectionConcat >= sectionConcatValues.StructurePlaced) {
+        const dimension = world.getDimension("overworld");
+
+        world.structureManager.place(
+            "ng1:tv_structure/empty",
+            dimension,
+            {x: 124, y: 3, z: 47},
+        );
+
+        const screens = dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]});
+        for (const screen of screens) {
+            screen.remove();
+        }
+    }
+
+    for (const player of world.getAllPlayers()) {
+        if (player.hasTag("dialog-theentity_meeting") && !player.hasTag("dialog-theentity_initialization")) {
+            if (world.getPlayers({"tags": ["dialog-theentity_meeting"]}).length < world.getAllPlayers().length) {
+                theentity_initializing_dialog(player);
+                player.addTag("dialog-theentity_initialization");
+            } else {
+                player.camera.clear();
+            }
+        }
+    }
+
     showGlobalDialogue().then(() => {
-        const globalVariables = getGlobalVariables().globalVariables;
-        let sectionConcat = getGlobalVariables().sectionConcat;
-        const timer = getGlobalVariables().timer;
 
         if (sectionConcat === sectionConcatValues.WaitingForTheEntity) {
             if (timer > 0) {

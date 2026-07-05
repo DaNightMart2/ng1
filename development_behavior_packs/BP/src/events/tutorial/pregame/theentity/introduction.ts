@@ -124,7 +124,7 @@ system.runInterval(() => {
         }
 
         const globalVariables = getGlobalVariables().globalVariables;
-        let sectionConcat = getGlobalVariables().sectionConcat;
+        const sectionConcat = getGlobalVariables().sectionConcat;
         const timer = getGlobalVariables().timer;
 
         if (InExp === world.getAllPlayers().length && sectionConcat === sectionConcatValues.WaitingForPlayers) {

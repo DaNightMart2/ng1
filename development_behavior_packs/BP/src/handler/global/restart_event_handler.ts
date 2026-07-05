@@ -15,6 +15,8 @@ function restartAllTags() {
     for (const player of world.getAllPlayers()) {
         player.removeTag("dialog-prologue_start");
         player.removeTag("dialog-prologue_end");
+        player.removeTag("dialog-theentity_meeting");
+        player.removeTag("dialog-theentity_initialization");
     }
 }
 

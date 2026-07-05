@@ -1,8 +1,8 @@
 import { Player, world, } from "@minecraft/server";
 import { queueDialogue, dialoguePackage, dialogueOptions, dialogueText, } from "../handler/dialog/dialog_handler";
-import { lang, showGlobalDialogue, } from "../helpers/dialog/dialog_helper";
+import { lang, } from "../helpers/dialog/dialog_helper";
 
-export { theentity_dialog_sequence, };
+export { theentity_dialog_sequence, theentity_initializing_dialog, };
 
 const payloadTranslations = {
     "1_welcome_players": {
@@ -20,6 +20,11 @@ const payloadTranslations = {
     "4_death": {
         "en": "§o§4You will die without meeting them.",
         "es": "§o§4Morirán sin conocerlos.",
+    },
+
+    "5_initializing": {
+        "en": "I will now prepare until all of you are ready.",
+        "es": "Ahora me prepararé hasta que todos ustedes estén listos.",
     },
 }
 
@@ -57,23 +62,23 @@ function theentity_dialog_sequence() {
             player,
             [
                 {
-                    name: "initializing",
-                    dialoguePackage: theentity_dialog_package(
-                        player,
-                        "1_welcome_players",
-                    ),
-                    next: ["welcome_players"],
-                },
-                {
                     name: "welcome_players",
                     dialoguePackage: theentity_dialog_package(
                         player,
-                        "2_dp",
+                        "1_welcome_players",
                     ),
                     next: ["dp"],
                 },
                 {
                     name: "dp",
+                    dialoguePackage: theentity_dialog_package(
+                        player,
+                        "2_dp",
+                    ),
+                    next: ["confussion"],
+                },
+                {
+                    name: "confussion",
                     dialoguePackage: theentity_dialog_package(
                         player,
                         "3_confusion",
@@ -87,9 +92,29 @@ function theentity_dialog_sequence() {
                         "4_death",
                     ),
                     next: [""],
+                    tags: [["dialog-theentity_meeting"]],
                 },
             ],
             true,
         );
     }
+}
+
+/**
+ * Calls TheEntity dialogue for when one player has not yet finished a dialogue.
+ */
+function theentity_initializing_dialog(player: Player) {
+    queueDialogue(
+        player,
+        [
+            {
+                name: "initializing",
+                dialoguePackage: theentity_dialog_package(
+                    player,
+                    "5_initializing",
+                ),
+                next: [""],
+            },
+        ],
+    );
 }
