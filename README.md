@@ -17,4 +17,4 @@ As far as I know, there is no fix to this, as it is a Minecraft issue.
 
 ## State of the project:
 - The project is still in-development, so many things are unfinished.
-- There hasn't been any thorugh testing yet, so you may encounter bugs. Testing should start on november 2026.
+- There hasn't been any thorough testing yet, so you may encounter bugs. Testing should start on november 2026.
