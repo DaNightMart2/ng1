@@ -92,7 +92,7 @@ system.runInterval(() => {
 
         const { globalVariables, sectionConcat, timer } = getGlobalVariables();
 
-        if (InExp === players.length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
+        if (InExp === players.length && sectionConcat === sectionConcatValues.WaitingForTheEntity) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {
