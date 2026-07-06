@@ -1,4 +1,4 @@
-import { world, system, Player, Vector3, Vector2, } from "@minecraft/server";
+import { world, system, Player, Vector3, Vector2, ScoreboardObjective, } from "@minecraft/server";
 import { positionInAreCheck, } from "../../helpers/global/global_functions";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 
@@ -7,15 +7,17 @@ function handleActions(player: Player, teleport: {
     fromCoordinates: Vector3[],
     toCoordinates: Vector3,
     rotation: Vector2,
-}) {
-    if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 0) {
+}, teleportTickObjective: ScoreboardObjective, infoObjective: ScoreboardObjective | undefined) {
+    const teleportTickCount = teleportTickObjective.getScore(player) ?? 0;
+
+    if (teleportTickCount === 0) {
         player.camera.fade({
             "fadeTime": {"fadeInTime": 1.0, "holdTime": 4.0, "fadeOutTime": 1.0},
             "fadeColor": {"red": 1, "green": 1, "blue": 1}
         });
     }
 
-    else if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 20) {
+    else if (teleportTickCount === 20) {
         player.teleport(
             teleport.toCoordinates,
             {"rotation": teleport.rotation}
@@ -24,7 +26,7 @@ function handleActions(player: Player, teleport: {
 
     player.runCommand("title @s times 10 100 20");
 
-    const level = world.scoreboard.getObjective("info")?.getScore("level") || 0;
+    const level = infoObjective?.getScore("level") || 0;
 
     if (level >= 1 && level <= 5) {
         player.runCommand(
@@ -46,7 +48,7 @@ function handleActions(player: Player, teleport: {
         );
     }
 
-    if (world.scoreboard.getObjective("teleportTickCount")?.getScore(player) === 15) {
+    if (teleportTickCount === 15) {
 
         player.runCommand(
             "titleraw @s title {\"rawtext\": [" + 
@@ -56,29 +58,28 @@ function handleActions(player: Player, teleport: {
         );
     }
 
-    world.scoreboard.getObjective("teleportTickCount")?.addScore(player, 1);
+    teleportTickObjective.addScore(player, 1);
 }
 
 function handleTags() {
-    if (!world.scoreboard.getObjective("teleportTickCount")) {
-        world.scoreboard.addObjective("teleportTickCount");
-    }
+    const teleportTickObjective = world.scoreboard.getObjective("teleportTickCount") ?? world.scoreboard.addObjective("teleportTickCount");
+    const infoObjective = world.scoreboard.getObjective("info");
+    const allPlayers = world.getAllPlayers();
 
-    for (const player of world.getAllPlayers()) {
-        const scoreboardIdentity = player.scoreboardIdentity
-        const playerScore = world.scoreboard.getObjective("teleportTickCount")?.getScore(player);
-        if (!scoreboardIdentity || (playerScore && playerScore > 150)) {
-            world.scoreboard.getObjective("teleportTickCount")?.setScore(player, 0);
+    for (const player of allPlayers) {
+        const scoreboardIdentity = player.scoreboardIdentity;
+        const playerScore = teleportTickObjective.getScore(player);
+        if (!scoreboardIdentity || (typeof playerScore === "number" && playerScore > 150)) {
+            teleportTickObjective.setScore(player, 0);
         }
     }
 
-    for (let player of world.getAllPlayers()) {
-        const timeTeleporting = world.scoreboard.
-        getObjective("teleportTickCount")?.getScore(player);
+    for (const player of allPlayers) {
+        const timeTeleporting = teleportTickObjective.getScore(player) ?? 0;
 
         for (const teleport of teleportInfo) {
             if (player.hasTag(teleport.tag)) {
-                handleActions(player, teleport);
+                handleActions(player, teleport, teleportTickObjective, infoObjective);
             }
 
             if (positionInAreCheck (
@@ -87,7 +88,7 @@ function handleTags() {
                 teleport.fromCoordinates[1],
             )) {
                 player.addTag(teleport.tag);
-            } else if (typeof timeTeleporting === "number" && timeTeleporting >= 150) {
+            } else if (timeTeleporting >= 150) {
                 player.removeTag(teleport.tag);
             }
         }

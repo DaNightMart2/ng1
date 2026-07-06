@@ -13,7 +13,7 @@ let dialogQueue: Record<string, dialogueTree[]> = {};
  */
 function queueDialogue(player: Player, dialogueTree: dialogueTree, isGlobal: boolean = false) {
     if (!isGlobal) {
-        if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
+        if (!(player.id in dialogQueue)) dialogQueue[player.id] = [];
 
         dialogQueue[player.id].push(dialogueTree);
         if (dialogQueue[player.id].length === 1) {
@@ -22,7 +22,7 @@ function queueDialogue(player: Player, dialogueTree: dialogueTree, isGlobal: boo
         }
     } else {
         showGlobalDialogue().then(() => {
-            if (!Object.keys(dialogQueue).includes(player.id)) dialogQueue[player.id] = [];
+            if (!(player.id in dialogQueue)) dialogQueue[player.id] = [];
 
             dialogQueue[player.id].push(dialogueTree);
             if (dialogQueue[player.id].length === 1) {

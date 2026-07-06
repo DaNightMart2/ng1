@@ -6,7 +6,7 @@ let playersOnDialogue = 0;
 /**
  * Returns true when no players have a dialog open in their screens.
  */
-async function showGlobalDialogue(): Promise<boolean> {
+function showGlobalDialogue(): Promise<boolean> {
     return new Promise((resolve) => {
         if (playersOnDialogue === 0) resolve(true);
     });

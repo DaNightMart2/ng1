@@ -1,6 +1,6 @@
-import { EasingType, system, world, Player, } from "@minecraft/server";
-import { getGlobalVariables, } from "../../../../helpers/global/global_functions";
-import { theentity_dialog_sequence, theentity_initializing_dialog, } from "../../../../dialogues/theentity_dialogs";
+import { EasingType, system, world, } from "@minecraft/server";
+import { getGlobalVariables, positionInAreCheck, } from "../../../../helpers/global/global_functions";
+import { theentity_dialog_sequence, } from "../../../../dialogues/theentity_dialogs";
 import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
 
 enum sectionConcatValues {
@@ -14,6 +14,7 @@ enum sectionConcatValues {
  */
 function showCutscene() {
     const dimension = world.getDimension("overworld");
+    const { globalVariables } = getGlobalVariables();
 
     /**
      * Explosion effect.
@@ -30,7 +31,7 @@ function showCutscene() {
             screen.remove();
         }
 
-        getGlobalVariables().globalVariables.setScore("sectionConcat", sectionConcatValues.StructurePlaced);
+        globalVariables.setScore("sectionConcat", sectionConcatValues.StructurePlaced);
 
         dimension.spawnParticle("minecraft:dragon_death_explosion_emitter", {x: 129.0, y: 10.0, z: 51.0});
         for (const player of world.getAllPlayers()) {
@@ -49,12 +50,14 @@ function showCutscene() {
         }
         for (const player of world.getAllPlayers()) {
             player.onScreenDisplay.setTitle("______");
-            player.onScreenDisplay.updateSubtitle("§l§2TheEntity");
+            player.onScreenDisplay.updateSubtitle("Â§lÂ§2TheEntity");
         }
 
         const cameraOnTheEntity = system.runInterval(() => {
-            for (const player of world.getAllPlayers()) {
-                const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+            const currentPlayers = world.getAllPlayers();
+            const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+
+            for (const player of currentPlayers) {
                 for (const theentity of theentities) {
                     if (theentity.location.y > 4) {
                         player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
@@ -74,39 +77,22 @@ function showCutscene() {
  * Calls showCutscene().
  */
 system.runInterval(() => {
-    const globalVariables = getGlobalVariables().globalVariables;
-    const sectionConcat = getGlobalVariables().sectionConcat;
-    const timer = getGlobalVariables().timer;
-
-    if (sectionConcat >= sectionConcatValues.StructurePlaced) {
-        const dimension = world.getDimension("overworld");
-
-        world.structureManager.place(
-            "ng1:tv_structure/empty",
-            dimension,
-            {x: 124, y: 3, z: 47},
-        );
-
-        const screens = dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]});
-        for (const screen of screens) {
-            screen.remove();
-        }
-    }
-
-    for (const player of world.getAllPlayers()) {
-        if (player.hasTag("dialog-theentity_meeting") && !player.hasTag("dialog-theentity_initialization")) {
-            if (world.getPlayers({"tags": ["dialog-theentity_meeting"]}).length < world.getAllPlayers().length) {
-                theentity_initializing_dialog(player);
-                player.addTag("dialog-theentity_initialization");
-            } else {
-                player.camera.clear();
+    showGlobalDialogue().then(() => {
+        const players = world.getAllPlayers();
+        let InExp = 0;
+        for (const player of players) {
+            if (positionInAreCheck(
+                player.location,
+                {x: 102, y: 3, z: 27},
+                {x: 156, y: 18, z: 74},
+            )) {
+                InExp++;
             }
         }
-    }
 
-    showGlobalDialogue().then(() => {
+        const { globalVariables, sectionConcat, timer } = getGlobalVariables();
 
-        if (sectionConcat === sectionConcatValues.WaitingForTheEntity) {
+        if (InExp === players.length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {

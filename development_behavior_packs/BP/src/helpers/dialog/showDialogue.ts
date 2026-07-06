@@ -20,7 +20,7 @@ async function showDialogue(
     playAnimation: boolean,
     tags?: string[][],
 ): Promise<number> {
-    if (!Object.keys(stopSound).includes(player.id)) stopSound[player.id] = false;
+    if (!(player.id in stopSound)) stopSound[player.id] = false;
 
     const { dialogue, characterName, characterImagePath, soundName } = dialoguePackage;
 

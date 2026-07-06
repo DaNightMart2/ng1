@@ -1,11 +1,11 @@
-import { system, world, HudElement, Dimension, } from "@minecraft/server";
+import { system, world, HudElement, Dimension, Entity, Player, } from "@minecraft/server";
 import { positionInAreCheck, } from "../../helpers/global/global_functions";
 
 /**
  * Hides some HUD elements from all players.
  */
-function hideHudElements() {
-    for (const player of world.getAllPlayers()) {
+function hideHudElements(players: Player[]) {
+    for (const player of players) {
 
         player.onScreenDisplay.setHudVisibility(
             0, [HudElement.AirBubbles, HudElement.Hunger]
@@ -16,8 +16,8 @@ function hideHudElements() {
 /**
  * Give players saturation so they don't have to eat food to survive (anti-starvation).
  */
-function saturation() {
-    for (const player of world.getAllPlayers()) {
+function saturation(players: Player[]) {
+    for (const player of players) {
         player.addEffect("saturation", 1, {
             "showParticles": false, "amplifier": 1
         });
@@ -27,8 +27,8 @@ function saturation() {
 /**
  * Give players in spawn invisibility.
  */
-function invisibilityInSpawn() {
-    for (const player of world.getAllPlayers()) {
+function invisibilityInSpawn(players: Player[]) {
+    for (const player of players) {
         if (positionInAreCheck(
             player.location,
             {x: -19, y: 3, z: 6},
@@ -57,10 +57,7 @@ world.afterEvents.playerInteractWithEntity.subscribe(data => {
 /**
  * Makes it so whenever a bomb is loaded it automatically updates its animation.
  */
-function bombUnloaded() {
-    const bombs = dimension.getEntities(
-        { "type": "ng1:bomb", "tags": ["ng1:bomb"]}
-    );
+function bombUnloaded(bombs: Entity[]) {
     for (const bomb of bombs) {
         if (bomb.getProperty("ng1:bomb_on")) {
             bomb.playAnimation("animation.bomb_on");
@@ -72,14 +69,10 @@ let bombParticleTimers: Record<string, number> = {};
 /**
  * Makes bomb which are on emit particles depending on their rotation.
  */
-function bombParticle() {
-    const bombs = dimension.getEntities(
-        {"type": "ng1:bomb", "tags": ["ng1:bomb"]}
-    );
-
+function bombParticle(bombs: Entity[]) {
     for (const bomb of bombs) {
         if (bomb.getProperty("ng1:bomb_on")) {
-            if (!Object.keys(bombParticleTimers).includes(bomb.id)) {
+            if (!(bomb.id in bombParticleTimers)) {
                 bombParticleTimers[bomb.id] = 5;
             }
 
@@ -129,10 +122,7 @@ function bombParticle() {
 /**
  * Makes it so whenever a screen is loaded it automatically updates its animation.
  */
-function screenUnloaded() {
-    const screens = dimension.getEntities(
-        {"type": "ng1:screen", "tags": ["ng1:screen"]}
-    );
+function screenUnloaded(screens: Entity[]) {
     for (const screen of screens) {
         if (screen.getProperty("ng1:is_hidden")) {
             screen.playAnimation("animation.screen.is_hidden");
@@ -143,11 +133,8 @@ function screenUnloaded() {
 /**
  * Makes it so whenever a wooden door is loaded it automatically updates its animation.
  */
-function woodenDoorUnloaded() {
-    const wooden_doors = dimension.getEntities(
-        {"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]}
-    );
-    for (const wooden_door of wooden_doors) {
+function woodenDoorUnloaded(woodenDoors: Entity[]) {
+    for (const wooden_door of woodenDoors) {
         if (wooden_door.getProperty("ng1:is_open") && !wooden_door.getProperty("ng1:in_movement")) {
             wooden_door.playAnimation("animation.wooden_door.is_open");
         }
@@ -158,14 +145,10 @@ let woodenDoorsStopSound: Record<string, number> = {};
 /**
  * Makes it so when a wooden door finishes opening it sets its "in_movement" property to false.
  */
-function stopWoodenDoorSound() {
-    const wooden_doors = dimension.getEntities(
-        {"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]}
-    );
-
-    for (const wooden_door of wooden_doors) {
+function stopWoodenDoorSound(woodenDoors: Entity[]) {
+    for (const wooden_door of woodenDoors) {
         if (wooden_door.getProperty("ng1:in_movement")) {
-            if (!Object.keys(woodenDoorsStopSound).includes(wooden_door.id)) {
+            if (!(wooden_door.id in woodenDoorsStopSound)) {
                 woodenDoorsStopSound[wooden_door.id] = 112.5;
             }
 
@@ -184,18 +167,14 @@ let woodenDoorsMultipliers: Record<string, number> = {};
 /**
  * Plays a sound when a wooden door is opening or closing.
  */
-function playWoodenDoorSound() {
-    const wooden_doors = dimension.getEntities(
-        {"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]}
-    );
-
-    for (const wooden_door of wooden_doors) {
-        if (!wooden_door.getProperty("ng1:in_movement")) return;
-        if (!Object.keys(woodenDoorsSoundTimer).includes(wooden_door.id)) {
+function playWoodenDoorSound(woodenDoors: Entity[]) {
+    for (const wooden_door of woodenDoors) {
+        if (!wooden_door.getProperty("ng1:in_movement")) continue;
+        if (!(wooden_door.id in woodenDoorsSoundTimer)) {
             woodenDoorsSoundTimer[wooden_door.id] = 12.5;
         }
 
-        if (!Object.keys(woodenDoorsMultipliers).includes(wooden_door.id)) {
+        if (!(wooden_door.id in woodenDoorsMultipliers)) {
             woodenDoorsMultipliers[wooden_door.id] = 1;
         }
 
@@ -221,13 +200,9 @@ let peterJonsonAnimationCooldowns: Record<string, number> = {};
 /**
  * Handles playing Peter Jonsons' idle animation.
  */
-function playPeterJonsonIdleAnimation() {
-    const peter_jonsons = dimension.getEntities(
-        {"type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"]}
-    );
-
-    for (const peter_jonson of peter_jonsons) {
-        if (!Object.keys(peterJonsonAnimationCooldowns).includes(peter_jonson.id)) {
+function playPeterJonsonIdleAnimation(peterJonsons: Entity[]) {
+    for (const peter_jonson of peterJonsons) {
+        if (!(peter_jonson.id in peterJonsonAnimationCooldowns)) {
             peterJonsonAnimationCooldowns[peter_jonson.id] = 0;
         }
 
@@ -244,20 +219,12 @@ let sentFailMessage = false;
 /**
  * Handles Peter Jonsons' position based on his hitbox's position.
  */
-function peterJonsonPosition() {
-    const peter_jonson_hitboxes = dimension.getEntities(
-        {"type": "ng1:interact_hitbox", "name": "ng1:peter_hitbox"}
-    );
-
-    const peter_jonsons = dimension.getEntities(
-        {"type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"]}
-    );
-
-    for (const peter_jonson of peter_jonsons) {
-        if (peter_jonson_hitboxes.length === 1) {
+function peterJonsonPosition(peterJonsons: Entity[], peterJonsonHitboxes: Entity[]) {
+    for (const peter_jonson of peterJonsons) {
+        if (peterJonsonHitboxes.length === 1) {
             sentFailMessage = false;
-            peter_jonson.teleport(peter_jonson_hitboxes[0].location);
-        } else if (peter_jonson_hitboxes.length > 1 && !sentFailMessage) {
+            peter_jonson.teleport(peterJonsonHitboxes[0].location);
+        } else if (peterJonsonHitboxes.length > 1 && !sentFailMessage) {
             sentFailMessage = true;
             console.warn("Failed to teleport \"Peter Jonson\" to \"Peter Jonson Hitbox\" > Multiple \"Peter Jonson Hitbox\"es found > This message will be disabled until the teleport works. Then, it can reappear.");
         }
@@ -271,20 +238,36 @@ system.runTimeout(() => {
 
 system.runInterval(() => {
     if (dimension) {
-        hideHudElements();
-        saturation();
-        invisibilityInSpawn();
+        const players = world.getAllPlayers();
+        hideHudElements(players);
+        saturation(players);
+        invisibilityInSpawn(players);
 
-        bombUnloaded();
-        bombParticle();
+        const bombs = dimension.getEntities(
+            {"type": "ng1:bomb", "tags": ["ng1:bomb"]}
+        );
+        bombUnloaded(bombs);
+        bombParticle(bombs);
 
-        screenUnloaded();
+        const screens = dimension.getEntities(
+            {"type": "ng1:screen", "tags": ["ng1:screen"]}
+        );
+        screenUnloaded(screens);
 
-        woodenDoorUnloaded();
-        stopWoodenDoorSound();
-        playWoodenDoorSound();
+        const woodenDoors = dimension.getEntities(
+            {"type": "ng1:wooden_door", "tags": ["ng1:wooden_door"]}
+        );
+        woodenDoorUnloaded(woodenDoors);
+        stopWoodenDoorSound(woodenDoors);
+        playWoodenDoorSound(woodenDoors);
 
-        playPeterJonsonIdleAnimation();
-        peterJonsonPosition();
+        const peterJonsons = dimension.getEntities(
+            {"type": "ng1:peter_jonson", "tags": ["ng1:peter_jonson"]}
+        );
+        const peterJonsonHitboxes = dimension.getEntities(
+            {"type": "ng1:interact_hitbox", "name": "ng1:peter_hitbox"}
+        );
+        playPeterJonsonIdleAnimation(peterJonsons);
+        peterJonsonPosition(peterJonsons, peterJonsonHitboxes);
     }
 });

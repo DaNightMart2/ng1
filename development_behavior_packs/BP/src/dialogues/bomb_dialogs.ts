@@ -17,7 +17,7 @@ const payloadTranslations = {
 
 const nameTranslations = {
     "bomb": {
-        "en": "Bomba",
-        "es": "Bomb",
+        "en": "Bomb",
+        "es": "Bomba",
     },
 }

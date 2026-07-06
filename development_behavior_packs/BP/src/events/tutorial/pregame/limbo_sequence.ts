@@ -66,8 +66,9 @@ function showCutscene() {
  */
 system.runInterval(() => {
     showGlobalDialogue().then(() => {
+        const players = world.getAllPlayers();
         let InLimbo = 0;
-        for (const player of world.getAllPlayers()) {
+        for (const player of players) {
             if (positionInAreCheck(
                 player.location,
                 {x: 10, y: 3, z: -2},
@@ -77,11 +78,9 @@ system.runInterval(() => {
             }
         }
 
-        const globalVariables = getGlobalVariables().globalVariables;
-        let sectionConcat = getGlobalVariables().sectionConcat;
-        const timer = getGlobalVariables().timer;
+        const { globalVariables, sectionConcat, timer } = getGlobalVariables();
 
-        if (InLimbo === world.getAllPlayers().length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
+        if (InLimbo === players.length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {

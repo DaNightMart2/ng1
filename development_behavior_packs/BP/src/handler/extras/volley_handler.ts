@@ -56,7 +56,7 @@ function ballKnockback(player: Entity, ball: Entity, force?: boolean) {
 
         if (!ball.tryTeleport({
             x: ball.location.x + x_rotation_add,
-            y: ball.location.y + y_addition * Math.max(0, (-world.getAllPlayers()[0].getRotation().x + 20) / 50),
+            y: ball.location.y + y_addition * Math.max(0, (-player.getRotation().x + 20) / 50),
             z: ball.location.z + (x_addition - (x_addition*2 / 180) * Math.abs(ballY))
         }, {"checkForBlocks": true})) {
             system.clearRun(knockBack);

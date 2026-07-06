@@ -1,11 +1,12 @@
 import { world, system, EasingType, HudVisibility, } from "@minecraft/server";
 import { positionInAreCheck, setMovement, getGlobalVariables, } from "../../../../helpers/global/global_functions";
 import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
+import { theentity_dialog_sequence, theentity_initializing_dialog, } from "../../../../dialogues/theentity_dialogs";
 
 enum sectionConcatValues {
-    WaitingForPlayers = 101,
-    Executed = 102,
-    Finished = 103,
+    WaitingForTheEntity = 103,
+    Executed = 104,
+    StructurePlaced = 105,
 }
 
 /**
@@ -13,107 +14,77 @@ enum sectionConcatValues {
  */
 function showCutscene() {
     const dimension = world.getDimension("overworld");
+    const { globalVariables } = getGlobalVariables();
 
-    for (const player of world.getAllPlayers()) {
-        player.stopMusic();
-        player.playMusic("ng1:gogys_sacrifice", {"loop": true, "fade": 1.0, "volume": 1.0});
+    /**
+     * Explosion effect.
+     */
+    system.runTimeout(() => {
+        world.structureManager.place(
+            "ng1:tv_structure/empty",
+            dimension,
+            {x: 124, y: 3, z: 47},
+        );
 
         const screens = dimension.getEntities({"type": "ng1:screen", "tags": ["ng1:screen"]});
         for (const screen of screens) {
-            screen.triggerEvent("ng1:show_screen");
+            screen.remove();
         }
 
-        /**
-         * Camera looking at screen and on it.
-         */
-        system.runTimeout(() => {
-            setMovement(player, false);
-            player.onScreenDisplay.setHudVisibility(HudVisibility.Hide);
-            player.camera.setFov({"fov": 70});
-            player.camera.setCamera("minecraft:free", {"location": {x: 122.0, y: 8.0, z: 51.0}, "rotation": {x: 0, y: -90}});
-            // Camera looking at screen
+        globalVariables.setScore("sectionConcat", sectionConcatValues.StructurePlaced);
 
-            /**
-             * Camera to screen.
-             */
-            system.runTimeout(() => {
-                player.camera.setCamera("minecraft:free", {"location": {x: 127.8, y: 8.0, z: 51.0}, "rotation": {x: 0, y: -90}, "easeOptions": {"easeTime": 3.0, "easeType": EasingType.InCubic}});
-                // Camera on screen
-            }, 20);
+        dimension.spawnParticle("minecraft:dragon_death_explosion_emitter", {x: 129.0, y: 10.0, z: 51.0});
+        for (const player of world.getAllPlayers()) {
+            player.playSound("random.explode", {"location": {x: 129.0, y: 18.0, z: 51.0}, "volume": 50.0});
+        }
+    }, 40);
 
-        }, 525);
+    /**
+     * TheEntity fall
+     */
+    system.runTimeout(() => {
+        const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+        for (const theentity of theentities) {
+            theentity.teleport({x: 128.5, y: 25, z: 51.0}, {"rotation": {x: 0, y: 90}});
+            theentity.addEffect("slow_falling", 200, {"amplifier": 10, "showParticles": false});
+        }
 
-        /**
-         * Camera looking at TheEntity and on them.
-         */
-        system.runTimeout(() => {
-            const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
-            for (const theentity of theentities) {
-                theentity.playAnimation("animation.theentity.jail_sequence");
+        const players = world.getAllPlayers();
+        for (const player of players) {
+            player.onScreenDisplay.setTitle("______");
+            player.onScreenDisplay.updateSubtitle("Â§lÂ§2TheEntity");
+        }
+
+        const cameraOnTheEntity = system.runInterval(() => {
+            const currentPlayers = world.getAllPlayers();
+            const currentTheentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
+
+            for (const player of currentPlayers) {
+                for (const theentity of currentTheentities) {
+                    if (theentity.location.y > 4) {
+                        player.camera.setCamera("minecraft:free", {"easeOptions": {"easeType": EasingType.OutCubic, "easeTime": 0.3}, "rotation": {x: 0, y: -90}, "location": {x: 125, y: theentity.location.y + 1.0, z: 51.0}});
+                    } else {
+                        system.clearRun(cameraOnTheEntity);
+                        system.runTimeout(() => {
+                            theentity_dialog_sequence();
+                        }, 20);
+                    }
+                }
             }
-
-            player.camera.setCamera("minecraft:free", {"location": {x: 136.0, y: 22.8, z: 51.0}, "rotation": {x: 0, y: 90}});
-            // Camera looking at TheEntity
-
-            player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 22.8, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 5.0, "easeType": EasingType.OutCubic}});
-            // Camera on TheEntity
-        }, 605);
-
-        /**
-         * TheEntity escape.
-         */
-        system.runTimeout(() => {
-
-            world.structureManager.place(
-                "ng1:theentity_chains/no_chains",
-                dimension,
-                {x: 115, y: 21, z: 50},
-            );
-
-            player.playSound("dig.chain", {"volume": 1.0, "location": {x: 115.2, y: 22.8, z: 51.0}});
-
-            player.camera.setCamera("minecraft:free", {"location": {x: 118.5, y: 22.3, z: 51.0}, "rotation": {x: 0, y: 90}, "easeOptions": {"easeTime": 0.4, "easeType": EasingType.OutBounce}});
-
-            player.camera.setFov({"easeOptions": {"easeTime": 0.4, "easeType": EasingType.InBounce}, "fov": 40});
-
-            dimension.spawnParticle("minecraft:campfire_smoke_particle", {x: 117.5, y: 21.0, z: 51.0});
-
-            dimension.spawnParticle("minecraft:dragon_death_explosion_emitter", {x: 115.5, y: 23.0, z: 51.0});
-
-            dimension.spawnParticle("minecraft:camera_shoot_explosion", {x: 115.5, y: 23.0, z: 51.0});
-
-            player.playSound("random.explode", {"location": {x: 115.5, y: 23.0, z: 51.0}, "volume": 0.5});
-
-            // Chain breaking
-
-            /**
-             * Juggle FOV
-             */
-            system.runTimeout(() => {
-                player.camera.setFov({"easeOptions": {"easeTime": 0.2, "easeType": EasingType.OutBounce}, "fov": 70});
-            }, 15);
-
-        }, 765);
-
-        /**
-         * End cutscene.
-         */
-        system.runTimeout(() => {
-            setMovement(player, true);
-            player.camera.clear();
-            player.onScreenDisplay.resetHudElementsVisibility();
-            getGlobalVariables().globalVariables.setScore("sectionConcat", sectionConcatValues.Finished);
-        }, 880);
-    }
-}
+        });
+    }, 60);
+};
 
 /**
  * Calls showCutscene().
  */
 system.runInterval(() => {
     showGlobalDialogue().then(() => {
+        const players = world.getAllPlayers();
+        const meetingPlayers = world.getPlayers({"tags": ["dialog-theentity_meeting"]});
         let InExp = 0;
-        for (const player of world.getAllPlayers()) {
+
+        for (const player of players) {
             if (positionInAreCheck(
                 player.location,
                 {x: 102, y: 3, z: 27},
@@ -123,11 +94,20 @@ system.runInterval(() => {
             }
         }
 
-        const globalVariables = getGlobalVariables().globalVariables;
-        const sectionConcat = getGlobalVariables().sectionConcat;
-        const timer = getGlobalVariables().timer;
+        const { globalVariables, sectionConcat, timer } = getGlobalVariables();
 
-        if (InExp === world.getAllPlayers().length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
+        for (const player of players) {
+            if (player.hasTag("dialog-theentity_meeting") && !player.hasTag("dialog-theentity_initialization")) {
+                if (meetingPlayers.length < players.length) {
+                    theentity_initializing_dialog(player);
+                    player.addTag("dialog-theentity_initialization");
+                } else {
+                    player.camera.clear();
+                }
+            }
+        }
+
+        if (InExp === players.length && sectionConcat === sectionConcatValues.WaitingForTheEntity) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {

@@ -75,10 +75,10 @@ function theentity_dialog_sequence() {
                         player,
                         "2_dp",
                     ),
-                    next: ["confussion"],
+                    next: ["confusion"],
                 },
                 {
-                    name: "confussion",
+                    name: "confusion",
                     dialoguePackage: theentity_dialog_package(
                         player,
                         "3_confusion",

@@ -16,7 +16,7 @@ system.runInterval(() => {
             if (theEntitiesAnimationCooldown[theentity.id] <= 0) {
                 theentity.playAnimation("animation.theentity.idle");
             }
-            if (!Object.keys(theEntitiesAnimationCooldown).includes(theentity.id) || theEntitiesAnimationCooldown[theentity.id] === 0) {
+            if (!(theentity.id in theEntitiesAnimationCooldown) || theEntitiesAnimationCooldown[theentity.id] === 0) {
                 theEntitiesAnimationCooldown[theentity.id] = 25;
             } else {
                 theEntitiesAnimationCooldown[theentity.id]--;

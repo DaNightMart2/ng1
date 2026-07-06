@@ -30,12 +30,12 @@ const payloadTranslations = {
         "es": "(Ahora está feliz)",
     },
     "6_why_happy": {
-        "en": "(He does not know why he is happy, maybe you have a trustable person face?)",
+        "en": "(He does not know why he is happy, maybe you have a trustworthy face?)",
         "es": "(No sabe por qué está feliz, quizás tienes cara de persona confiable?)",
     },
 
     "7_greeting": {
-        "en": "> H- Hello! My name is Saúl, oink. I can not believe you can see me, it has been years since someone last saw me, oink.",
+        "en": "> H- Hello! My name is Saul, oink. I cannot believe you can see me, it has been years since someone last saw me, oink.",
         "es": "> ¡H- Hola! Soy Saúl, oink. No puedo creer que me puedas ver, fueron años desde que alguien me vio por última vez, oink.",
     },
     "8_explanation": {
@@ -74,7 +74,7 @@ const payloadTranslations = {
 
 const nameTranslations = {
     saul: {
-        "en": "King Saúl",
+        "en": "King Saul",
         "es": "Rey Saúl",
     },
 }
@@ -106,8 +106,8 @@ function saul_dialog_package(
 }
 
 enum Expression {
-    DISSAPOINTED = "dissapointed",
-    EMBARASSED = "embarassed",
+    DISAPPOINTED = "disappointed",
+    EMBARRASSED = "embarrassed",
     EXCITED_QUESTIONING = "excited-questioning",
     EXCITED = "excited",
     EXTREMELY_SCARED_QUESTIONING = "extremely_scared-questioning",
