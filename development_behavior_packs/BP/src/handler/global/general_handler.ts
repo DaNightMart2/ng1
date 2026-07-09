@@ -1,5 +1,5 @@
 import { system, world, HudElement, Dimension, Entity, Player, } from "@minecraft/server";
-import { positionInAreCheck, } from "../../helpers/global/global_functions";
+import { positionInAreaCheck, } from "../../helpers/global/global_functions";
 
 /**
  * Hides some HUD elements from all players.
@@ -29,7 +29,7 @@ function saturation(players: Player[]) {
  */
 function invisibilityInSpawn(players: Player[]) {
     for (const player of players) {
-        if (positionInAreCheck(
+        if (positionInAreaCheck(
             player.location,
             {x: -19, y: 3, z: 6},
             {x: -7, y: 49, z: 18},

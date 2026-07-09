@@ -1,7 +1,7 @@
 import { InputPermissionCategory, Player, system, world, } from "@minecraft/server";
 import { dialoguePackage, dialogueText, dialogueOptions, queueDialogue, } from "../handler/dialog/dialog_handler";
 import { lang, } from "../helpers/dialog/dialog_helper";
-import { positionInAreCheck, } from "../helpers/global/global_functions";
+import { positionInAreaCheck, } from "../helpers/global/global_functions";
 
 const payloadTranslations = {
     "1_blancuivre_tragedy": {
@@ -65,7 +65,7 @@ function prologue_dialog_package(
  */
 system.runInterval(() => {
     for (const player of world.getAllPlayers()) {
-        if (positionInAreCheck(player.location, {x: -19, y: 4.1, z: 8}, {x: -7, y: 4.1, z: 18})) {
+        if (positionInAreaCheck(player.location, {x: -19, y: 4.1, z: 8}, {x: -7, y: 4.1, z: 18})) {
             if (!player.hasTag("dialog-prologue_end")) {
                 player.teleport({x: player.location.x, y: 4.1, z: player.location.z});
                 player.camera.fade({"fadeColor": {"red": 1, "green": 1, "blue": 1}, "fadeTime": {"fadeInTime": 1, "fadeOutTime": 1, "holdTime": 1}});

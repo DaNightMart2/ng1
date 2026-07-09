@@ -1,5 +1,5 @@
 import { EasingType, system, world, } from "@minecraft/server";
-import { getGlobalVariables, positionInAreCheck, } from "../../../../helpers/global/global_functions";
+import { getGlobalVariables, positionInAreaCheck, } from "../../../../helpers/global/global_functions";
 import { theentity_dialog_sequence, } from "../../../../dialogues/theentity_dialogs";
 import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
 
@@ -81,7 +81,7 @@ system.runInterval(() => {
         const players = world.getAllPlayers();
         let InExp = 0;
         for (const player of players) {
-            if (positionInAreCheck(
+            if (positionInAreaCheck(
                 player.location,
                 {x: 102, y: 3, z: 27},
                 {x: 156, y: 18, z: 74},

@@ -1,5 +1,5 @@
 import { EasingType, system, world, } from "@minecraft/server";
-import { setMovement, positionInAreCheck, getGlobalVariables, } from "../../../helpers/global/global_functions";
+import { setMovement, positionInAreaCheck, getGlobalVariables, } from "../../../helpers/global/global_functions";
 import { showGlobalDialogue, } from "../../../helpers/dialog/dialog_helper";
 
 enum sectionConcatValues {
@@ -14,7 +14,7 @@ function showCutscene() {
     const dimension = world.getDimension("overworld");
 
     for (const player of world.getAllPlayers()) {
-        if (positionInAreCheck(
+        if (positionInAreaCheck(
             player.location,
             {x: 34, y: 8, z: 23},
             {x: 35, y: 8, z: 24},
@@ -69,7 +69,7 @@ system.runInterval(() => {
         const players = world.getAllPlayers();
         let InLimbo = 0;
         for (const player of players) {
-            if (positionInAreCheck(
+            if (positionInAreaCheck(
                 player.location,
                 {x: 10, y: 3, z: -2},
                 {x: 63, y: 45, z: 53},

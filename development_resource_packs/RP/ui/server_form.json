@@ -215,7 +215,7 @@
 
     "dialogue_form": {
         "type": "panel",
-        "offset": [0, "90%"],
+        "offset": [0, 110],
         "size": ["600px", "120px"],
         "controls": [
             {

@@ -1,0 +1,4 @@
+Fixes:
+- Fixed typo in function name ("positionInAreCheck" to "positionInAreaCheck").
+- Added wind effect. For now, it will always be on, no matter if the battle has started or not.
+- Changed dialogue menu offset from pixels to value so that it is visible the same way in all screens. (Not tested.)

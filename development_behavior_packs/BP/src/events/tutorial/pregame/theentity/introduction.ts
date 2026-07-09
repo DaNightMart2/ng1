@@ -1,5 +1,5 @@
 import { world, system, EasingType, HudVisibility, } from "@minecraft/server";
-import { positionInAreCheck, setMovement, getGlobalVariables, } from "../../../../helpers/global/global_functions";
+import { positionInAreaCheck, getGlobalVariables, } from "../../../../helpers/global/global_functions";
 import { showGlobalDialogue, } from "../../../../helpers/dialog/dialog_helper";
 import { theentity_dialog_sequence, theentity_initializing_dialog, } from "../../../../dialogues/theentity_dialogs";
 
@@ -85,7 +85,7 @@ system.runInterval(() => {
         let InExp = 0;
 
         for (const player of players) {
-            if (positionInAreCheck(
+            if (positionInAreaCheck(
                 player.location,
                 {x: 102, y: 3, z: 27},
                 {x: 156, y: 18, z: 74},

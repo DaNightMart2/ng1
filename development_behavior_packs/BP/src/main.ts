@@ -27,3 +27,5 @@ import "./events/tutorial/pregame/limbo_sequence";
 
 import "./events/tutorial/pregame/theentity/introduction";
 import "./events/tutorial/pregame/theentity/show";
+
+import "./events/tutorial/pregame/theentity/battle/wind";

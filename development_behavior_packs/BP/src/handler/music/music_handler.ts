@@ -1,12 +1,12 @@
 import { world, system, } from "@minecraft/server";
-import { positionInAreCheck, } from "../../helpers/global/global_functions";
+import { positionInAreaCheck, } from "../../helpers/global/global_functions";
 import { musicInfo, } from "../../helpers/music/music_helper";
 
 system.runInterval(() => {
     const allPlayers = world.getAllPlayers();
     for (let player of allPlayers) {
         for (let music of musicInfo) {
-            if (positionInAreCheck(
+            if (positionInAreaCheck(
                 player.location,
                 music.coordinates[0],
                 music.coordinates[1],

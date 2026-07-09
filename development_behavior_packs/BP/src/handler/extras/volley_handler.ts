@@ -1,5 +1,5 @@
 import { world, system, Dimension, Entity, EntitySwingSource, } from "@minecraft/server";
-import { positionInAreCheck, } from "../../helpers/global/global_functions";
+import { positionInAreaCheck, } from "../../helpers/global/global_functions";
 
 let dimension: Dimension;
 system.runTimeout(() => {
@@ -99,7 +99,7 @@ world.afterEvents.playerSwingStart.subscribe(data => {
  */
 function volleyBallHandling() {
     for (const player of world.getAllPlayers()) {
-        if (player.runCommand("execute if entity @s[hasitem={item=ng1:volley_ball_spawn_egg}]").successCount && !positionInAreCheck(player.location, {x: 34, y: 7, z: -1}, {x: 59, y: 16, z: 15})) {
+        if (player.runCommand("execute if entity @s[hasitem={item=ng1:volley_ball_spawn_egg}]").successCount && !positionInAreaCheck(player.location, {x: 34, y: 7, z: -1}, {x: 59, y: 16, z: 15})) {
             player.runCommand("clear @s ng1:volley_ball_spawn_egg 0 1");
             player.onScreenDisplay.setActionBar({"translate": "title.ng1:volley_ball_far_away"});
             dimension.spawnEntity("ng1:volley_ball", {x: 43.0, y: 8, z: 12.5});
@@ -108,7 +108,7 @@ function volleyBallHandling() {
 
     for (const ball of dimension.getEntities({"type": "ng1:volley_ball"})) {
         ball.addEffect("slow_falling", 1, {"amplifier": 0.5, "showParticles": true});
-        if (!positionInAreCheck(ball.location, {x: 34, y: 7, z: -1}, {x: 59, y: 45, z: 15})) {
+        if (!positionInAreaCheck(ball.location, {x: 34, y: 7, z: -1}, {x: 59, y: 45, z: 15})) {
             ball.remove();  
             dimension.spawnEntity("ng1:volley_ball", {x: 43.0, y: 8, z: 12.5});
         }

@@ -1,6 +1,6 @@
 import { Vector3, Player, world, ScoreboardObjective, } from "@minecraft/server";
 
-export { positionInAreCheck, setMovement, getGlobalVariables, };
+export { positionInAreaCheck, setMovement, getGlobalVariables, };
 
 /**
  * Checks if a position is inside a certain area.
@@ -8,7 +8,7 @@ export { positionInAreCheck, setMovement, getGlobalVariables, };
  * @param firstPoint beginning of area, must be the minimum of each axis.
  * @param secondPoint end of area, must be the maximum number of each axis.
  */
-function positionInAreCheck(
+function positionInAreaCheck(
     position: Vector3,
     firstPoint: Vector3,
     secondPoint: Vector3,

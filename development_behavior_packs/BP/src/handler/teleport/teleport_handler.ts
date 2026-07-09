@@ -1,5 +1,5 @@
 import { world, system, Player, Vector3, Vector2, ScoreboardObjective, } from "@minecraft/server";
-import { positionInAreCheck, } from "../../helpers/global/global_functions";
+import { positionInAreaCheck, } from "../../helpers/global/global_functions";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 
 function handleActions(player: Player, teleport: {
@@ -82,7 +82,7 @@ function handleTags() {
                 handleActions(player, teleport, teleportTickObjective, infoObjective);
             }
 
-            if (positionInAreCheck (
+            if (positionInAreaCheck (
                 player.location,
                 teleport.fromCoordinates[0],
                 teleport.fromCoordinates[1],
