@@ -56,4 +56,4 @@
 ## For Testers -
 - All cutscenes and most events work with various checks, so manually changing a scoreboard value may break some things, as that was not intended to happen.
 
-- If you want to have the "admin" role, write the following command in chat: ```tag @s add admin```. This will add a tag to yourself that I used, while coding, to give myself some admin priviliges, the main one being that when an admin uses the command "/reload" in chat they can choose wether to reset the event, reset the language choosing and teleport everyone back to the start.
+- If you want to have the "admin" role, write the following command in chat: ```/tag @s add admin```. This will add a tag to yourself that I used, while coding, to give myself some admin priviliges, the main one being that when an admin uses the command "/reload" in chat they can choose wether to reset the event, reset the language choosing and teleport everyone back to the start.
