@@ -1,0 +1,22 @@
+Major changed + Major additions:
+- Renamed TheEntity files to appearance and screen for more clarity.
+- Fixed a REALLY weird bug caused by the AI where appearance and screen files were mixed up and did not make any sense at all.
+- Fixed a bug where TheEntity animation would start a few ticks late.
+- Made wind only run when in battle.
+- More specific with main.ts comments.
+- Expanded README.md.
+- Added world download.
+- Fixed a bug where if a player had no teleportTickCount it would not be added and throw errors.
+- Made players be teleported back to beginning of the room after TheEntity appears.
+- Disabled player movements when TheEntity appears.
+- Made TheEntity be teleported when the battle starts.
+- Made TheEntity have an attack cooldown that spawns thunder if it will not kill the player.
+
+Next update/s:
+- Making TheEntity attack animation play when summoning thunders.
+- Adding visual and text queues for players to better understand what is going on (for wind and thunder).
+- Adding TheEntity turning off after a while.
+- Adding ability to hit TheEntity.
+- Adding a visual and text queue to indicate when to hit TheEntity and when it was hit.
+- Adding ending of the battle when TheEntity is hit for the third time.
+- Adding ending cutscene.

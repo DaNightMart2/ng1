@@ -68,7 +68,7 @@ function handleTags() {
 
     for (const player of allPlayers) {
         const scoreboardIdentity = player.scoreboardIdentity;
-        const playerScore = teleportTickObjective.getScore(player);
+        const playerScore = teleportTickObjective.addScore(player, 0);
         if (!scoreboardIdentity || (typeof playerScore === "number" && playerScore > 150)) {
             teleportTickObjective.setScore(player, 0);
         }

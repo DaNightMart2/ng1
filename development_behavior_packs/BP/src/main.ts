@@ -1,15 +1,17 @@
-// Global
+// Enable restart event
 import "./handler/global/restart_event_handler";
+
+// Enable handling of entities and such
 import "./handler/global/general_handler";
 
-// Music and teleport
+// Enable music and teleport
 import "./handler/music/music_handler";
 import "./handler/teleport/teleport_handler";
 
-// Extras
+// Enable volley ball
 import "./handler/extras/volley_handler";
 
-// Dialogues
+// Enable self-calling entity dialogues
 import "./dialogues/config_dialogs";
 
 import "./dialogues/lang_dialogs";
@@ -19,13 +21,16 @@ import "./dialogues/saul_dialogs";
 
 import "./dialogues/peter_dialogs";
 
-// Events
+// Enable handling of doors
 import "./events/tutorial/global/doors";
-import "./events/tutorial/global/theentity_animations";
 
+// Enable limbo sequence
 import "./events/tutorial/pregame/limbo_sequence";
 
-import "./events/tutorial/pregame/theentity/introduction";
-import "./events/tutorial/pregame/theentity/show";
-
+// Enable TheEntity battle
+import "./events/tutorial/global/theentity_animations";
 import "./events/tutorial/pregame/theentity/battle/wind";
+
+import "./events/tutorial/pregame/theentity/screen";
+import "./events/tutorial/pregame/theentity/appearance";
+import "./events/tutorial/pregame/theentity/battle/attacks";

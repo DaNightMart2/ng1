@@ -1,4 +1,4 @@
-import { system, world, } from "@minecraft/server";
+import { system, world, EntityComponentTypes, } from "@minecraft/server";
 import { musicInfo, } from "../../helpers/music/music_helper";
 import { teleportInfo, } from "../../helpers/teleport/teleport_helper";
 import { setMovement, } from "../../helpers/global/global_functions";
@@ -37,6 +37,10 @@ function restartPlayer() {
         player.camera.clear();
         player.stopMusic();
         player.onScreenDisplay.resetHudElementsVisibility();
+        const movementSpeed = player.getComponent(EntityComponentTypes.Movement);
+        movementSpeed?.resetToDefaultValue();
+        const health = player.getComponent(EntityComponentTypes.Health);
+        health?.resetToDefaultValue();
     }
 }
 
