@@ -13,13 +13,13 @@ system.runInterval(() => {
         const theentities = dimension.getEntities({"type": "ng1:theentity", "tags": ["ng1:theentity"]});
 
         for (const theentity of theentities) {
-            if (theEntitiesAnimationCooldown[theentity.id] <= 0) {
-                theentity.playAnimation("animation.theentity.idle");
-            }
             if (!(theentity.id in theEntitiesAnimationCooldown) || theEntitiesAnimationCooldown[theentity.id] === 0) {
                 theEntitiesAnimationCooldown[theentity.id] = 25;
             } else {
                 theEntitiesAnimationCooldown[theentity.id]--;
+            }
+            if (theEntitiesAnimationCooldown[theentity.id] <= 0) {
+                theentity.playAnimation("animation.theentity.idle");
             }
         }
     }
