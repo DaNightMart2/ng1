@@ -23,7 +23,7 @@ function restartAllTags() {
 function restartTeleportMusic() {
     for (const player of world.getAllPlayers()) {
         for (const music of musicInfo) {
-            player.removeTag(music.tag);
+            player.removeTag(music.track);
         }
         for (const teleport of teleportInfo) {
             player.removeTag(teleport.tag);

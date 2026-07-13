@@ -1,0 +1,8 @@
+Title:
+- Fixed a bug where the player would be out of range in attacks.ts.
+- Changed TheEntity's attack time from 2 to 10 to 4 to 10.
+- Made players' speed be reset when they leave wind area (so they do not have a speed bost.)
+- Removed music from repository for copyright issues.
+- Modified music handler and helper (because of the above change).
+- Renamed and changed directory for all music.
+- Renamed BP to NG1_BP and RP to NG1_RP.

@@ -5,6 +5,7 @@ minecraftpe
 resource_packs
 skin_packs
 world_templates
-development_behavior_packs/BP/backup
-development_behavior_packs/BP/scripts
-development_behavior_packs/BP/node_modules
+development_behavior_packs/NG1_BP/backup
+development_behavior_packs/NG1_BP/scripts
+development_behavior_packs/NG1_BP/node_modules
+development_resource_packs/NG1_RP/sounds

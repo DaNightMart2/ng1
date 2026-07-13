@@ -15,7 +15,7 @@
 
 - All the code, UI and some textures were made by me.
 
-- All music is taken from UNDERTALE, DELTARUNE or Dream Productions.
+- I am currently using UNDERTALE, DELTARUNE and Dream Productions' music (which I did not add to the project to avoid copyright issues). Slowly, I am going to make my own music and add it to the project.
 
 ## How to Use It Yourself -
 * This may be obvious, but you must have Minecraft: Bedrock Edition installed for this to work. On Android, the process is a little different, as there is no %AppData% folder, but once you reach the com.mojang folder the process is the same.
@@ -33,8 +33,6 @@
 - Place the behavior pack folder inside ```%AppData%/Minecraft Bedrock/Users/Shared/games/com.mojang/development_behavior_packs```.
 
 - Place the resource pack folder inside ```%AppData%/Minecraft Bedrock/Users/Shared/games/com.mojang/development_resource_packs```.
-
-- If needed, rename the folders "BP" and "RP" to whatever you want, it does not matter.
 
 - Open the world file (.mcworld) with Minecraft: Bedrock Edition or open the game and go to Play > Import world and select the world file.
 

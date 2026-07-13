@@ -28,7 +28,6 @@ import "./events/tutorial/global/doors";
 import "./events/tutorial/pregame/limbo_sequence";
 
 // Enable TheEntity battle
-import "./events/tutorial/global/theentity_animations";
 import "./events/tutorial/pregame/theentity/battle/wind";
 
 import "./events/tutorial/pregame/theentity/screen";

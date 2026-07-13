@@ -17,12 +17,12 @@ system.runInterval(() => {
         const players = world.getAllPlayers();
 
         for (const player of players) {
+            const movementSpeed = player.getComponent(EntityComponentTypes.Movement);
             if (positionInAreaCheck(
                 player.location,
                 {x: 135, y: 3, z: 27},
                 {x: 156, y: 18, z: 74},
             )) {
-                const movementSpeed = player.getComponent(EntityComponentTypes.Movement);
                 const calculatedSpeed = (149-player.location.x)/140;
 
                 if (calculatedSpeed > 0) {
@@ -52,6 +52,8 @@ system.runInterval(() => {
                 if (!(player.id in antiJumpSticking) || antiJumpSticking[player.id] === false) {
                     antiJumpSticking[player.id] = true;
                     player.inputPermissions.setPermissionCategory(InputPermissionCategory.Jump, true);
+                    movementSpeed?.resetToDefaultValue();
+
                 }
             }
         }
