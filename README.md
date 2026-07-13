@@ -1,4 +1,4 @@
-# The official Night Games 1 Minecraft: Bedrock Edition resource and behavior pack.
+# The official Night Games 1 Minecraft: Bedrock Edition resource pack, behavior pack and world download.
 
 ## Side Note -
 - This is a passion project made by an intermediate programmer. Therefore, the code, writing, etc. may not be the greatest.
@@ -15,7 +15,7 @@
 
 - All the code, UI and some textures were made by me.
 
-- I am currently using UNDERTALE, DELTARUNE and Dream Productions' music (which I did not add to the project to avoid copyright issues). Slowly, I am going to make my own music and add it to the project.
+- I am currently using, as placeholders, UNDERTALE, DELTARUNE and Dream Productions' music (which I removed from the repository's history to avoid copyright issues). Slowly, I am going to make my own music and add it to the project.
 
 ## How to Use It Yourself -
 * This may be obvious, but you must have Minecraft: Bedrock Edition installed for this to work. On Android, the process is a little different, as there is no %AppData% folder, but once you reach the com.mojang folder the process is the same.
