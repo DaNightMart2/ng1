@@ -15,16 +15,16 @@
 
 - All the code, UI and some textures were made by me.
 
-- I am currently using, as placeholders, UNDERTALE, DELTARUNE and Dream Productions' music (which I removed from the repository's history to avoid copyright issues). Slowly, I am going to make my own music and add it to the project.
+- Slowly, I am going to make my own music and add it to the project.
 
-## How to Use It Yourself -
-* This may be obvious, but you must have Minecraft: Bedrock Edition installed for this to work. On Android, the process is a little different, as there is no %AppData% folder, but once you reach the com.mojang folder the process is the same.
+## How to Test/Play Yourself -
+* This may be obvious, but you must have Minecraft: Bedrock Edition installed for this to work. On Android, the process is a little different, as there is no ```%AppData%``` folder, but once you reach the ```com.mojang``` folder the rest is the same.
 
 * You must have version 1.21.60 or higher for the add-on to work properly.
 
 * The world was made in version 1.21.111 (if I am not mistaken), so you must be in that version or higher for the world to load properly.
 
-* It is not required to use the world for everything to work, but the event is made to work with this specific world and its coordinates for everything, so I recommend it is used.
+* It is not required to use the world for everything to work, but the event is made to work with some specific coordinates, so I recommend it is used.
 
 * Last update to the world: Thursday 09/07/2026.
 
@@ -40,18 +40,33 @@
 
 - Open the world and make sure that both resource and behavior packs enabled.
 
-- Remember to set all players to "Visitor", including yourself if you plan to play.
+- When actually playing, remember to set all players to Visitor (including yourself if you are a player).
+
+## How to Modify -
+- Open the resource, behavior pack or both in your preferred IDE. I use VSCode (Visual Studio Code), but anything works.
+
+- Open your IDE's terminal on the project folder and run the following commands: ```npm i @minecraft/server``` and ```npm i @minecraft/server-ui```.
+
+* All your code should you inside the ```src``` folder, with the file extension .ts (TypeScript).
+
+- Lastly, whenever you want your ```src``` changes to apply to the game, you must first translate them to JavaScript and add them to the ```scripts``` folder. For that, open the terminal in the ```src``` folder (inside the behavior pack) and run the following command: ```tsc --watch```.
+
+* Keep this terminal open for as long as you code, as it is constantly updating your ```scripts``` folder to match your ```src``` folder.
+
+- You can now make all your changes in the ```src``` folder and then use the ```/reload``` command in game to reload the ```scripts``` folder.
+
+* When you make changes to any file (besides those inside ```src``` and ```scripts```), you must use the command ```/reload all``` for the whole add-on to reload.
 
 ## Issues -
-- If the "/reload" command is used in-game, the dialog system will be reset. Therefore, if a player was mid-way through a dialogue sequence, all the dialogues that were scheduled to show after the current one would be removed.
+- If the ```/reload``` command is used in-game, the dialog system will be reset. Therefore, if a player was mid-way through a dialogue sequence, all the dialogues that were scheduled to show after the current one would be removed.
 
 - If simple graphics is chosen in-game by a player, some animations may play with a small delay for them, or not be played at all. This also happens with others graphic types but very occasionally.
 
 - If a player has the chat or exit menu open, dialogues do not play. This could be considered as a way to skip dialogues rather than a bug, but I am adding it here because I do not want to people to believe it is on purpose, as if I ever find a fix to this I will add it.
 
-- Cutscenes work on system.runTimeouts, which work on runTime, so the "/reload" command will stop all cutscenes from continuing.
+- Cutscenes work on system.runTimeouts, which work on runTime, so the ```/reload``` command will stop all cutscenes from continuing.
 
 ## For Testers -
 - All cutscenes and most events work with various checks, so manually changing a scoreboard value may break some things, as that was not intended to happen.
 
-- If you want to have the "admin" role, write the following command in chat: ```/tag @s add admin```. This will add a tag to yourself that I used, while coding, to give myself some admin priviliges, the main one being that when an admin uses the command "/reload" in chat they can choose wether to reset the event, reset the language choosing and teleport everyone back to the start.
+- If you want to have the admin role, write the following command in chat: ```/tag @s add admin```. This will add a tag to yourself that I used, while coding, to give myself some admin priviliges, the main one being that when an admin uses the command ```/reload``` in chat they can choose wether to reset the event, reset the language choosing and teleport everyone back to the start.
