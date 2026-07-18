@@ -16,7 +16,7 @@ function showCutscene() {
 
     for (const player of world.getAllPlayers()) {
         player.stopMusic();
-        player.playMusic("ng1:gogys_sacrifice", { "loop": true, "fade": 1.0, "volume": 1.0 });
+        player.playMusic("ng1:theentity_battle1", { "loop": true, "fade": 1.0, "volume": 1.0 });
 
         const screens = dimension.getEntities({ "type": "ng1:screen", "tags": ["ng1:screen"] });
         for (const screen of screens) {
