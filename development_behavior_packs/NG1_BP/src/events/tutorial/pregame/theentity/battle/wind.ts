@@ -17,7 +17,7 @@ system.runInterval(() => {
         const players = world.getAllPlayers();
 
         for (const player of players) {
-            const movementSpeed = player.getComponent(EntityComponentTypes.Movement);
+            const movementSpeed = player.getComponent(EntityComponentTypes.Movement) as any;
             if (positionInAreaCheck(
                 player.location,
                 {x: 135, y: 3, z: 27},

@@ -33,7 +33,8 @@ system.runInterval(() => {
                 const randomPlayer = Math.round(Math.random() * (world.getAllPlayers().length-1));
                 const player = world.getAllPlayers()[randomPlayer];
 
-                const Health = player.getComponent(EntityComponentTypes.Health)?.currentValue;
+                const HealthRef = player.getComponent(EntityComponentTypes.Health) as any;
+                const Health = HealthRef?.currentValue;
                 if (typeof Health === "number" && Health > 5) {
                     dimension.spawnEntity("minecraft:lightning_bolt", player.location);
                 } else {
