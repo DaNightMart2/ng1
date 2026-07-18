@@ -46,17 +46,16 @@ system.runInterval(() => {
                     const randomPlayer = Math.round(Math.random() * (world.getAllPlayers().length-1));
                     const player = world.getAllPlayers()[randomPlayer];
 
-                    const Health = player.getComponent(EntityComponentTypes.Health)?.currentValue;
+                    const HealthRef = player.getComponent(EntityComponentTypes.Health) as any;
+                    const Health = HealthRef?.currentValue;
                     if (typeof Health === "number" && Health > 5) {
                         dimension.spawnEntity("minecraft:lightning_bolt", player.location);
                     } else {
-                        AttackCooldown = AttackCooldownSpecialValues.DisableSet;
+                        dimension.spawnEntity("minecraft:lightning_bolt", {x: 136.0, y: 21.0, z: 51.0});
                     }
                 }
 
-                if (AttackCooldown !== AttackCooldownSpecialValues.DisableSet) {
-                    AttackCooldown = (Math.round(Math.random() * 6) + 4) * 20;
-                }
+                AttackCooldown = (Math.round(Math.random() * 6) + 4) * 20;
             }
         }
     }
