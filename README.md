@@ -57,12 +57,13 @@
 
 * When you make changes to any file (besides those inside ```src``` and ```scripts```), you must use the command ```/reload all``` for the whole add-on to reload.
 
-## Issues -
-- If the ```/reload``` command is used in-game, the dialog system will be reset. Therefore, if a player was mid-way through a dialogue sequence, all the dialogues that were scheduled to show after the current one would be removed.
-
+## Issues (for everyone) -
 - If simple graphics is chosen in-game by a player, some animations may play with a small delay for them, or not be played at all. This also happens with others graphic types but very occasionally.
 
 - If a player has the chat or exit menu open, dialogues do not play. This could be considered as a way to skip dialogues rather than a bug, but I am adding it here because I do not want to people to believe it is on purpose, as if I ever find a fix to this I will add it.
+
+## Issues (for testers) -
+- If the ```/reload``` command is used in-game, the dialog system will be reset. Therefore, if a player was mid-way through a dialogue sequence, all the dialogues that were scheduled to show after the current one would be removed.
 
 - Cutscenes work on system.runTimeouts, which work on runTime, so the ```/reload``` command will stop all cutscenes from continuing.
 
