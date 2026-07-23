@@ -7,7 +7,7 @@
         "uuid": "5b90ad8d-b5d8-4918-a0f0-67cfeb90a11a",
         "name": "pack.name",
         "description": "pack.description",
-        "version": [ 1, 5, 0 ],
+        "version": [ 1, 0, 0 ],
 		"min_engine_version": [ 1, 21, 40 ]
 
     },
@@ -18,7 +18,7 @@
 
             "type": "resources",
             "uuid": "75c4b4b9-9583-4cc9-9ec8-baec2c720299",
-            "version": [ 1, 5, 0 ]
+            "version": [ 1, 0, 0 ]
 
         }
 
@@ -29,7 +29,7 @@
         {
 
             "uuid": "b7bba7e5-3751-4b0a-a952-0838a517d327",
-            "version":  [1, 5, 0 ]
+            "version":  [1, 0, 0 ]
 
         }
 

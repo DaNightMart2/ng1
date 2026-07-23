@@ -9,7 +9,25 @@ let dialogQueue: Record<string, dialogueTree[]> = {};
 /**
  * Adds a dialogue tree to the queue of dialogues.
  * @param player player to add the tree to. Of type player.
- * @param dialogueTrue tree to add to the queue. Of type dialogueTree.
+ * @param dialogueTree tree to add to the queue. Of type dialogueTree (specified below). This is also a dialogue node array.
+ *
+ * @argument name the name of the node, which represents the dialogue. Of type string.
+ * @argument dialoguePackage the dialogue package it shows. Of type dialoguePackage (specified below).
+ * 
+ * @argument payload text or options to show in the dialog box.
+ * Of type string (for text) or two element string array (for options).
+ * @argument characterName the name of the character to show in the dialog box. 
+ * Of type string.
+ * @argument characterImagePath texture file path for the character's image to show
+ * in the dialog box. Of type string.
+ * @argument soundName sound name reference to play when showing the dialogue. Of type string.
+ * 
+ * @argument next the list of possible continuations from each dialogue. Of type array of strings. The array can either:
+ * - Have no items (end the sequence).
+ * - Have one item (shows the indicated dialogue).
+ * - Have two items (show one of the indicated dialogues based on response; if exited, it reopens the dialogue).
+ * - Have three items (show one of the first two indicated dialogues based on response, and show the third indicated dialogue if exited).
+ * @argument tags the tags too add or remove when a certain action occurs. Of type array of arrays of strings. It follows the same format as next, only that each value can have more than one element. If the tag start with a +, it will be added, if it starts with a -, it will be removed, if it starts with none, it will default to a +.
  */
 function queueDialogue(player: Player, dialogueTree: dialogueTree, isGlobal: boolean = false) {
     if (!isGlobal) {

@@ -6,25 +6,25 @@ export { theentity_dialog_sequence, theentity_initializing_dialog, };
 
 const payloadTranslations = {
     "1_welcome_players": {
-        "en": "Welcome, players. I see you are new to this place, so let me tell you something:",
-        "es": "Bienvenidos, jugadores. Veo que son nuevos a este lugar, así que déjenme decirles algo:",
+        "en": "> Welcome, players. I see you are new to this place, so let me tell you something:",
+        "es": "> Bienvenidos, jugadores. Veo que son nuevos en este lugar, así que déjenme decirles algo:",
     },
     "2_dp": {
-        "en": "The people here, the people from P. D. do NOT want you here.",
-        "es": "Las personas aquí, las personas de D. P. NO los quieren aquí.",
+        "en": "> The people here, the people from P. D., do NOT want you here.",
+        "es": "> Las personas aquí, las personas de D. P., NO los quieren aquí.",
     },
     "3_confusion": {
-        "en": "You seem confused, do you not know who P. D. is? Well, lucky you...",
-        "es": "Parecen confundidos, ¿qué no saben quién es D. P.? Qué suertudos...",
+        "en": "> You seem confused. Do you not know who P. D. is? Well, lucky you...",
+        "es": "> Parecen confundidos. ¿No saben quién es D. P.? Qué afortunados...",
     },
     "4_death": {
-        "en": "§o§4You will die without meeting them.",
-        "es": "§o§4Morirán sin conocerlos.",
+        "en": "> §o§4You will die without meeting them.",
+        "es": "> §o§4Morirán sin conocerlos.",
     },
 
     "5_initializing": {
-        "en": "I will now prepare until all of you are ready.",
-        "es": "Ahora me prepararé hasta que todos ustedes estén listos.",
+        "en": "> (I will now proceed to prepare until all of you have finished reading my dialogues.)",
+        "es": "> (Ahora procederé a prepararme hasta que todos ustedes hayan terminado de leer mis diálogos.)",
     },
 }
 
@@ -114,6 +114,7 @@ function theentity_initializing_dialog(player: Player) {
                     "5_initializing",
                 ),
                 next: [""],
+                tags: [["dialog-theentity_initialization_closed"]],
             },
         ],
     );

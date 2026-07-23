@@ -26,7 +26,7 @@
 
 * It is not required to use the world for everything to work, but the event is made to work with some specific coordinates, so I recommend it is used.
 
-* Last update to the world: Thursday 09/07/2026.
+* Last update to the world: Thursday 23/07/2026.
 
 - Download the behavior and resource packs from this repository, and if you want everything to work as expected also download the world (I will continue the guide supposing you have downloaded the world as well).
 

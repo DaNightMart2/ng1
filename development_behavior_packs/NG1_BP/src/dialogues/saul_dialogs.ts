@@ -4,43 +4,43 @@ import { lang, } from "../helpers/dialog/dialog_helper";
 
 const payloadTranslations = {
     "1_no": {
-        "en": "> NOOOOOOOOOOO!",
-        "es": "> ¡NOOOOOOOOOOO!",
+        "en": "> NOOOOOOOOOOO, OINK!",
+        "es": "> ¡NOOOOOOOOOOO, OINK!",
     },
     "2_wondering": {
-        "en": "> ?",
-        "es": "> ¿?",
+        "en": "> ? Oink?",
+        "es": "> ¿? ¿Oink?",
     },
     "3_wondering_why_not_exploded": {
-        "en": "(This little pig questions why he has not exploded)",
-        "es": "(Este cerdito se pregunta por qué no ha explotado)",
+        "en": "* This little pig questions why he has not exploded",
+        "es": "* Este cerdito se pregunta por qué no ha explotado",
     },
 
     "1_2_3_happy_not_exploded": {
-        "en": "(This little pig is happy not to have exploded)",
-        "es": "(Este cerdito está contento de no haber explotado)",
+        "en": "* This little pig is happy not to have exploded",
+        "es": "* Este cerdito está contento de no haber explotado",
     },
 
     "4_noticed_you": {
-        "en": "(He just noticed your presence and got scared)",
-        "es": "(Acaba de notar tu presencia y se asustó)",
+        "en": "* He just noticed your presence and got scared",
+        "es": "* Acaba de notar tu presencia y se asustó",
     },
     "5_happy": {
-        "en": "(Now he is happy)",
-        "es": "(Ahora está feliz)",
+        "en": "* Now he is happy",
+        "es": "* Ahora está feliz",
     },
     "6_why_happy": {
-        "en": "(He does not know why he is happy, maybe you have a trustworthy face?)",
-        "es": "(No sabe por qué está feliz, quizás tienes cara de persona confiable?)",
+        "en": "* He does not know why he is happy, maybe you have a trustworthy face?",
+        "es": "* No sabe por qué está feliz, quizás tienes cara de persona confiable?",
     },
 
     "7_greeting": {
-        "en": "> H- Hello! My name is Saul, oink. I cannot believe you can see me, it has been years since someone last saw me, oink.",
-        "es": "> ¡H- Hola! Soy Saúl, oink. No puedo creer que me puedas ver, fueron años desde que alguien me vio por última vez, oink.",
+        "en": "> H-Hello! My name is Saul, oink. I cannot believe you can see me. It has been years since someone last saw me, oink.",
+        "es": "> ¡H-Hola! Soy Saúl, oink. No puedo creer que me veas. Han pasado años desde que alguien me vio por última vez, oink.",
     },
     "8_explanation": {
-        "en": "> Let me explain:",
-        "es": "> Te explico:",
+        "en": "> Let me explain, oink:",
+        "es": "> Te explico, oink:",
     },
 
     // TO ADD
@@ -54,8 +54,8 @@ const payloadTranslations = {
         "es": "> ¡Muchas gracias, oink! Sé quién nos puede ayudar: Peter, el granjero, oink!",
     },
     "12_farm_half_hour": {
-        "en": "> Though he will open his farm in half an hour, so we must wait to ask him, oink...",
-        "es": "> Aunque él va a abrir su granja en media hora, así que tenemos que esperar para preguntarle, oink...",
+        "en": "> He will open his farm in half an hour, so we must wait to ask him, oink...",
+        "es": "> Él abrirá su granja en media hora, así que tenemos que esperar para preguntarle, oink...",
     },
     "13_explore": {
         "en": "> Meanwhile, we can explore this place, oink!",
@@ -67,7 +67,7 @@ const payloadTranslations = {
     },
 
     "15_explore_trauma": {
-        "en": "> Explore.. yeah, last time I did that it did not end well, oink, so I better stay right here, oink!",
+        "en": "> Explore... yeah, last time I did that, it did not end well, oink, so I'd better stay right here, oink!",
         "es": "> Explorar... sí, la última vez que hice eso no terminó bien, oink, ¡así que mejor me quedo aquí mismo, oink!",
     },
 };

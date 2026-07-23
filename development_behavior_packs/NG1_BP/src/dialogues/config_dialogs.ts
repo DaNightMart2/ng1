@@ -1,4 +1,4 @@
-import { Player, system, world, } from "@minecraft/server";
+import { Player, PlayerCursorInventoryComponent, system, world, } from "@minecraft/server";
 import { queueDialogue, dialoguePackage, dialogueOptions, dialogueText, } from "../handler/dialog/dialog_handler";
 import { lang, } from "../helpers/dialog/dialog_helper";
 
@@ -8,16 +8,16 @@ const payloadTranslations = {
         "es": ["Sí", "No"],
     },
     "1_event": {
-        "en": "Do you want to restart structures, scoreboards and entities?",
-        "es": "¿Quieres reiniciar estructuras, scoreboards?",
+        "en": "* Do you want to restart structures, scoreboards and entities?",
+        "es": "* ¿Quieres reiniciar las estructuras, los marcadores y las entidades?",
     },
     "2_lang": {
-        "en": "Do you want to restart language selection?",
-        "es": "¿Quieres reiniciar la selección de idiomas?",
+        "en": "* Do you want to restart language selection?",
+        "es": "* ¿Quieres reiniciar la selección de idiomas?",
     },
     "3_pos": {
-        "en": "Do you want to restart positions?",
-        "es": "¿Quieres reiniciar las posiciones?",
+        "en": "* Do you want to restart positions?",
+        "es": "* ¿Quieres reiniciar las posiciones?",
     },
 }
 
@@ -58,6 +58,7 @@ function config_dialog_package(
  */
 system.runTimeout(() => {
     for (const player of world.getPlayers({"tags": ["admin"]})) {
+        player.addTag("dialog-on_restart");
         queueDialogue(
             player,
             [
@@ -76,7 +77,7 @@ system.runTimeout(() => {
                         "0_yes_no",
                     ),
                     next: ["lang", "lang", ""],
-                    tags: [["restart-event"], []],
+                    tags: [["restart-event"], [], ["-dialog-on_restart"]],
                 },
 
                 {
@@ -94,7 +95,7 @@ system.runTimeout(() => {
                         "0_yes_no",
                     ),
                     next: ["pos", "pos", ""],
-                    tags: [["restart-lang"], []],
+                    tags: [["restart-lang"], [], ["-dialog-on_restart"]],
                 },
 
                 {
@@ -112,7 +113,7 @@ system.runTimeout(() => {
                         "0_yes_no",
                     ),
                     next: ["", "", ""],
-                    tags: [["restart-pos"], []],
+                    tags: [["restart-pos", "-dialog-on_restart"], ["-dialog-on_restart"], ["-dialog-on_restart"]],
                 },
             ],
         );

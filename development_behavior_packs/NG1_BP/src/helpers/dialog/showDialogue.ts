@@ -38,7 +38,7 @@ async function showDialogue(
     }
 
     if (dialogue.type === "text") {
-        dialogueForm.body(splitText(dialogue.payload, 40, 3));
+        dialogueForm.body(splitText(dialogue.payload));
         dialogueForm.button(""); // Empty buttons (otherwise it bugs)
         dialogueForm.button("");
         dialogueForm.button("");

@@ -42,37 +42,39 @@ function getGlobalVariables(): {
     globalVariables: ScoreboardObjective,
     sectionConcat: number,
     timer: number,
+    mission: number,
 } {
     let globalVariables: ScoreboardObjective;
-    let sectionConcat = 100;
-    let timer: number = 1200;
+    let sectionConcat: number;
+    let timer: number;
+    let mission: number;
 
-    let globalVariablesTemp = world.scoreboard.getObjective("globalVariables");
-
-    if (globalVariablesTemp?.isValid) {
+    const globalVariablesTemp = world.scoreboard.getObjective("globalVariables");
+    if (!globalVariablesTemp) {
+        globalVariables = world.scoreboard.addObjective("globalVariables");
+        sectionConcat = globalVariables.addScore("sectionConcat", 100);
+        timer = globalVariables.addScore("timer", 1200);
+        mission = globalVariables.addScore("mission", 0);
+    } else {
         globalVariables = globalVariablesTemp;
-    } else {
-        globalVariables = world.scoreboard.addObjective("globalVariables")
-    }
+        mission = globalVariables.addScore("mission", 0);
 
-    let sectionConcatTemp = globalVariablesTemp?.getScore("sectionConcat");
-    let timerTemp = globalVariablesTemp?.getScore("timer");
-
-    if (typeof sectionConcatTemp === "number") {
-        sectionConcat = sectionConcatTemp;
-    } else {
-        globalVariables.addScore("sectionConcat", 100);
-    }
-
-    if (typeof timerTemp === "number") {
-        timer = timerTemp;
-    } else {
-        globalVariables.addScore("timer", 1200);
+        try {
+            sectionConcat = globalVariables.getScore("sectionConcat") ?? 100;
+        } catch (_) {
+            sectionConcat = globalVariables.addScore("sectionConcat", 100);
+        }
+        try {
+            timer = globalVariables.getScore("timer") ?? 1200;
+        } catch (_) {
+            timer = globalVariables.addScore("timer", 1200);
+        }
     }
 
     return {
         globalVariables: globalVariables,
         sectionConcat: sectionConcat,
-        timer: timer
+        timer: timer,
+        mission: mission,
     };
 }

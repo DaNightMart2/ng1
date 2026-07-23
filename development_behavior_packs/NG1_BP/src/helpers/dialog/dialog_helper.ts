@@ -34,7 +34,7 @@ function playersOnDialogueExt(addition?: boolean): number {
  */
 function splitText(
     text: string,
-    maxLengthPerLine = 40,
+    maxLengthPerLine = 50,
     maxLines = 3,
 ): string {
     let splitText: string[] = [];

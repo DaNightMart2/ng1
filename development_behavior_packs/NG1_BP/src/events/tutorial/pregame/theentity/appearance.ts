@@ -20,12 +20,6 @@ function showCutscene() {
      * Explosion effect.
      */
     system.runTimeout(() => {
-        world.structureManager.place(
-            "ng1:tv_structure/empty",
-            dimension,
-            { x: 124, y: 3, z: 47 },
-        );
-
         const screens = dimension.getEntities({ "type": "ng1:screen", "tags": ["ng1:screen"] });
         for (const screen of screens) {
             screen.remove();
@@ -53,8 +47,10 @@ function showCutscene() {
             player.onScreenDisplay.updateSubtitle("§l§2TheEntity");
         }
 
+        const playerActor = world.getAllPlayers()[0];
+        playerActor.runCommand("spreadplayers 128 51 5 15 @a 3");
+
         for (const player of world.getAllPlayers()) {
-            player.teleport({x: 109.0, y: 3.0, z: 51.0}, {"rotation": {x: 0, y: -90}});
             setMovement(player, false);
         }
 
@@ -98,14 +94,14 @@ system.runInterval(() => {
     }
 
     const allPlayers = world.getAllPlayers();
-    if (world.getPlayers({ "tags": ["dialog-theentity_meeting"] }).length < world.getAllPlayers().length) {
+    if (world.getPlayers({ "tags": ["dialog-theentity_initialization_closed"] }).length < world.getAllPlayers().length-1) {
         for (const player of allPlayers) {
             if (player.hasTag("dialog-theentity_meeting") && !player.hasTag("dialog-theentity_initialization")) {
                 theentity_initializing_dialog(player);
                 player.addTag("dialog-theentity_initialization");
             }
         }
-    } else if (sectionConcat <= sectionConcatValues.StartBattle) {
+    } else if (sectionConcat === sectionConcatValues.StructurePlaced) {
         showGlobalDialogue().then(() => {
             for (const player of allPlayers) {
                 player.camera.clear();

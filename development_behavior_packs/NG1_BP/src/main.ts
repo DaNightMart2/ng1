@@ -1,5 +1,6 @@
 // Enable restart event
 import "./handler/global/restart_event_handler";
+import "./handler/global/restart_entities";
 
 // Enable handling of entities and such
 import "./handler/global/general_handler";
@@ -28,8 +29,17 @@ import "./events/tutorial/global/doors";
 import "./events/tutorial/pregame/limbo_sequence";
 
 // Enable TheEntity battle
+import "./events/tutorial/pregame/theentity/global/theentity_animations";
 import "./events/tutorial/pregame/theentity/battle/wind";
 
 import "./events/tutorial/pregame/theentity/screen";
 import "./events/tutorial/pregame/theentity/appearance";
 import "./events/tutorial/pregame/theentity/battle/attacks";
+import "./events/tutorial/pregame/theentity/battle/disable_system";
+import "./events/tutorial/pregame/theentity/battle/separate_players";
+
+// Enable mission indicator
+import "./events/global/mission";
+
+// Enable tutorial computer
+import "./events/global/tutorial_computer";

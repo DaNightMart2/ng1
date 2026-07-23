@@ -16,6 +16,11 @@
             "minecraft:health": {
                 "value": 100,
                 "max": 1000
+            },
+            "minecraft:interact": {
+                "interactions": [
+                    {}
+                ]
             }
         }
     }

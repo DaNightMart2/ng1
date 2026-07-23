@@ -7,11 +7,16 @@ enum sectionConcatValues {
     Executed = 101,
 }
 
+enum missionValues {
+    OpenedTrapdoors = 1,
+}
+
 /**
  * Handles trapdoors cutscene.
  */
 function showCutscene() {
     const dimension = world.getDimension("overworld");
+    const globalVariables = getGlobalVariables().globalVariables;
 
     for (const player of world.getAllPlayers()) {
         if (positionInAreaCheck(
@@ -49,15 +54,12 @@ function showCutscene() {
         system.runTimeout(() => {
             player.camera.clear();
             setMovement(player, true);
+            globalVariables.setScore("mission", missionValues.OpenedTrapdoors);
         }, 100);
     }
 
     system.runTimeout(() => {
-        world.structureManager.place(
-            "ng1:lobby_trapdoors/open",
-            dimension,
-            {x: 34, y: 7, z: 23},
-        );
+        globalVariables?.setScore("sectionConcat", sectionConcatValues.Executed);
     }, 80);
 }
 
@@ -78,14 +80,14 @@ system.runInterval(() => {
             }
         }
 
-        const { globalVariables, sectionConcat, timer } = getGlobalVariables();
+        const { globalVariables, sectionConcat, timer, } = getGlobalVariables();
 
         if (InLimbo === players.length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {
-                globalVariables?.setScore("sectionConcat", sectionConcatValues.Executed);
-                globalVariables?.setScore("timer", 300);
+                globalVariables?.setScore("timer", 380);
+                // Extra 80 due to the cutscene adding time.
                 showCutscene();
             }
         }

@@ -8,6 +8,11 @@ enum sectionConcatValues {
     Finished = 103,
 }
 
+enum missionValues {
+    SpawnedTheEntity = 2,
+    BattleRegular = 3,
+}
+
 /**
  * Depending on the current section, does a certain action of the cutscene.
  */
@@ -84,6 +89,8 @@ function showCutscene() {
 
             player.playSound("random.explode", { "location": { x: 115.5, y: 23.0, z: 51.0 }, "volume": 0.5 });
 
+            getGlobalVariables().globalVariables.setScore("mission", missionValues.BattleRegular);
+
             // Chain breaking
 
             /**
@@ -123,13 +130,14 @@ system.runInterval(() => {
             }
         }
 
-        const { globalVariables, sectionConcat, timer } = getGlobalVariables();
+        const { globalVariables, sectionConcat, timer, } = getGlobalVariables();
 
         if (InExp === world.getAllPlayers().length && sectionConcat === sectionConcatValues.WaitingForPlayers) {
             if (timer > 0) {
                 globalVariables?.addScore("timer", -1);
             } else {
                 globalVariables?.setScore("sectionConcat", sectionConcatValues.Executed);
+                globalVariables?.setScore("mission", missionValues.SpawnedTheEntity);
                 showCutscene();
             }
         }
